@@ -1,7 +1,6 @@
-[![Deployment](https://github.com/vself-project/vself-beta/actions/workflows/firebase-hosting-merge.yml/badge.svg)](https://github.com/vself-project/vself-beta/actions)
+[![Deployment](https://github.com/vself-project/vself-beta/actions/workflows/firebase-hosting-deploy.yml/badge.svg)](https://github.com/vself-project/vself-beta/actions)
 
-[![Tests](https://github.com/vself-project/vself-beta/actions/workflows/predeploy-testing.yml/badge.svg)](https://github.com/vself-project/vself-beta/actions)
-
+[![Tests](https://github.com/vself-project/vself-beta/actions/workflows/pre-deploy-test.yml/badge.svg)](https://github.com/vself-project/vself-beta/actions)
 
 ### vSelf Metabuild Event Management Frontend
 
