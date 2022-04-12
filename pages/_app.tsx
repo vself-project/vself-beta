@@ -1,7 +1,7 @@
 import '../styles/globals.css';
 import 'react-datepicker/dist/react-datepicker.css';
 import styles from '../styles/Home.module.css';
-import type { AppProps } from 'next/app';
+import type { AppProps, NextWebVitalsMetric } from 'next/app';
 import { Provider } from 'react-redux';
 import Head from 'next/head';
 
@@ -29,4 +29,9 @@ function MyApp({ Component, pageProps }: AppProps) {
     </Provider>
   );
 }
+
+export function reportWebVitals(metric: NextWebVitalsMetric) {
+  console.log('metric: ', metric);
+}
+
 export default MyApp;
