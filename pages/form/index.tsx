@@ -6,6 +6,8 @@ import UploadImage from '../../components/uploadImage';
 import { uploadImageToFirebase } from '../../utils/firebase';
 import MapComponent from '../../components/mapcomponent';
 import Spinner from '../../components/spinner';
+import { getPOWAccountAndContract } from '../../utils';
+import { useAppSelector } from '../../hooks';
 
 interface ImageLocation {
   latitude: number;
@@ -13,28 +15,39 @@ interface ImageLocation {
 }
 
 const WebImageUploadForm: NextPage = () => {
+  const { account_id } = useAppSelector((state) => state.userAccountReducer);
   const [metaData, setMetaData] = useState(null);
   const [location, setImgLocation] = useState<ImageLocation | null>(null);
   const [imgFile, setNewImgFile] = useState<File>();
   const onImageChange = async (file: File): Promise<void> => {
     const output = await exifr.parse(file, true);
     const { latitude, longitude } = output;
-    if (latitude !== undefined) {
-      setImgLocation({ latitude, longitude });
-    }
+    setImgLocation(latitude !== undefined ? { latitude, longitude } : null);
     setNewImgFile(file);
     setMetaData(output);
   };
   const sendImage = async () => {
     if (imgFile !== undefined) {
       const downloadUrl = await uploadImageToFirebase(imgFile);
-      console.log('downloadUrl: ', downloadUrl);
+      const { contract } = await getPOWAccountAndContract(account_id);
+      await contract.upload_evidence({
+        evidence: {
+          media_hash: String(downloadUrl),
+          metadata: String(new Date()),
+        },
+      });
     }
+  };
+  const getEvidences = async () => {
+    const { contract } = await getPOWAccountAndContract(account_id);
+    const evidences = await contract.get_evidences({ from_index: 0, limit: 10 });
+    console.log('evidences: ', evidences);
   };
   const renderMap = (status: Status): React.ReactElement => {
     if (status === Status.FAILURE) return <></>;
     return <Spinner />;
   };
+
   return (
     <div>
       <UploadImage onImageChange={onImageChange} />
@@ -70,6 +83,14 @@ const WebImageUploadForm: NextPage = () => {
         onClick={sendImage}
       >
         Send
+      </button>
+      <button
+        className="inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
+        type="button"
+        disabled={!metaData}
+        onClick={getEvidences}
+      >
+        Get
       </button>
     </div>
   );
