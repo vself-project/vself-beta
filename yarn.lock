@@ -752,6 +752,20 @@
     stream-events "^1.0.4"
     xdg-basedir "^4.0.0"
 
+"@googlemaps/js-api-loader@^1.13.2":
+  version "1.14.0"
+  resolved "https://registry.yarnpkg.com/@googlemaps/js-api-loader/-/js-api-loader-1.14.0.tgz#7a1d3f0b7b53eabf797977ad0714b45069d5972e"
+  integrity sha512-J6xBJ39LPgafGiOaq7jX8KaThX4/G2nqP9DCwXHawB66K4U5KxAzVJi0H5Q6/NgjF2bAubhKd6rDmvoDgIXldg==
+  dependencies:
+    fast-deep-equal "^3.1.3"
+
+"@googlemaps/react-wrapper@^1.1.30":
+  version "1.1.30"
+  resolved "https://registry.yarnpkg.com/@googlemaps/react-wrapper/-/react-wrapper-1.1.30.tgz#4d749abd853abf589d851e75dd5a236008a13d93"
+  integrity sha512-uSvBpCcC6i+4qzV9BdgAseQlXrWYfxZFiHlF98aJxBJa/hG1ZrwCUsHXzDYLKVtekT2Fxe3fGgwx0GcODQHqeg==
+  dependencies:
+    "@googlemaps/js-api-loader" "^1.13.2"
+
 "@grpc/grpc-js@^1.3.2", "@grpc/grpc-js@~1.5.0":
   version "1.5.9"
   resolved "https://registry.yarnpkg.com/@grpc/grpc-js/-/grpc-js-1.5.9.tgz#df44b3d6bc1d5eb4779aab96e00f6084fd07a3c8"
@@ -1331,6 +1345,11 @@
     "@types/body-parser" "*"
     "@types/express-serve-static-core" "*"
     "@types/serve-static" "*"
+
+"@types/google.maps@^3.48.5":
+  version "3.48.5"
+  resolved "https://registry.yarnpkg.com/@types/google.maps/-/google.maps-3.48.5.tgz#ab2ef4add490a108cdb5149d3df81dafb159528e"
+  integrity sha512-sI3EOhGHvzbitC/iLOf2nQ+TijsXqbV2nQi9twpRWy0p6q6vbwRnIy7PQKjmpFQewjTVNa1MfY2BL76MU1lOWA==
 
 "@types/graceful-fs@^4.1.2":
   version "4.1.5"
