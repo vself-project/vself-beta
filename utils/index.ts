@@ -4,6 +4,7 @@ const { createHash } = require('crypto');
 const { providers } = require('near-api-js');
 const { encode } = require('js-base64');
 import { connect, ConnectConfig, keyStores, Contract, WalletConnection } from 'near-api-js';
+import Resizer from 'react-image-file-resizer';
 
 import { Endpoints } from '../constants/endpoints';
 
@@ -126,3 +127,21 @@ export const formatTimeStampToLocaleDateString = (timestamp: number) => {
 export const formatTimeStampToLocaleTimeString = (timestamp: number) => {
   return new Date(timestamp / 1000000).toLocaleTimeString();
 };
+
+export const resizeFile = (file: File): Promise<File> =>
+  new Promise((resolve) => {
+    Resizer.imageFileResizer(
+      file,
+      450,
+      450,
+      'PNG',
+      100,
+      0,
+      (uri: any) => {
+        resolve(uri);
+      },
+      'file',
+      450,
+      450
+    );
+  });

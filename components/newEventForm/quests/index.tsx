@@ -41,7 +41,7 @@ const QuestComponent: React.FC<QuestProps> = ({
 
   return (
     <div className="flex flex-col p-5 mb-2 rounded-lg shadow-lg bg-white max-w-md">
-      <UploadImage onImageChange={onImageChange} imgInProcess={quest.reward_uri} />
+      <UploadImage onImageChange={onImageChange} />
       <input
         autoComplete="off"
         type="text"
