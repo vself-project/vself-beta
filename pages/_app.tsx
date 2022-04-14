@@ -21,8 +21,10 @@ function MyApp({ Component, pageProps }: AppProps) {
       <AppLayout>
         <>
           <Header />
-          <div className={`${styles.container} relative`}>
-            <Component {...pageProps} />
+          <div className="grid place-items-center h-screen">
+            <div className={`${styles.container} relative`}>
+              <Component {...pageProps} />
+            </div>
           </div>
         </>
       </AppLayout>

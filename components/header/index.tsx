@@ -37,7 +37,7 @@ const Header: React.FC = () => {
           flex flex-wrap
           items-center
           justify-between
-          sticky top-0 z-50
+          absolute top-0 z-50
           py-4
           bg-gray-100
           text-gray-500

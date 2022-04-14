@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import type { NextPage } from 'next';
 import { Wrapper, Status } from '@googlemaps/react-wrapper';
 import exifr from 'exifr';
-import UploadImage from '../../components/uploadImage';
+import { sha3_256 } from 'js-sha3';
+import { useAppSelector } from '../../hooks';
+import { getPOWAccountAndContract } from '../../utils';
 import { uploadImageToFirebase } from '../../utils/firebase';
+// Components
+import UploadImage from '../../components/uploadImage';
 import MapComponent from '../../components/mapcomponent';
 import Spinner from '../../components/spinner';
-import { getPOWAccountAndContract } from '../../utils';
-import { useAppSelector } from '../../hooks';
 
 interface ImageLocation {
   latitude: number;
@@ -16,9 +18,10 @@ interface ImageLocation {
 
 const WebImageUploadForm: NextPage = () => {
   const { account_id } = useAppSelector((state) => state.userAccountReducer);
-  const [metaData, setMetaData] = useState(null);
+  const [metaData, setMetaData] = useState<Record<string, unknown> | null>(null);
   const [location, setImgLocation] = useState<ImageLocation | null>(null);
-  const [imgFile, setNewImgFile] = useState<File>();
+  const [imgFile, setNewImgFile] = useState<File | null>();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const onImageChange = async (file: File): Promise<void> => {
     const output = await exifr.parse(file, true);
     const { latitude, longitude } = output;
@@ -27,15 +30,25 @@ const WebImageUploadForm: NextPage = () => {
     setMetaData(output);
   };
   const sendImage = async () => {
-    if (imgFile !== undefined) {
+    if (imgFile) {
+      setIsLoading(true);
       const downloadUrl = await uploadImageToFirebase(imgFile);
       const { contract } = await getPOWAccountAndContract(account_id);
+      const arrayBuffer = await imgFile.arrayBuffer();
+      const hash = sha3_256(arrayBuffer);
       await contract.upload_evidence({
         evidence: {
-          media_hash: String(downloadUrl),
-          metadata: String(new Date()),
+          media_hash: hash,
+          metadata: JSON.stringify({
+            downloadUrl,
+            ...metaData,
+          }),
         },
       });
+      setIsLoading(false);
+      setImgLocation(null);
+      setNewImgFile(null);
+      setMetaData(null);
     }
   };
   const getEvidences = async () => {
@@ -47,6 +60,18 @@ const WebImageUploadForm: NextPage = () => {
     if (status === Status.FAILURE) return <></>;
     return <Spinner />;
   };
+
+  if (isLoading) {
+    return (
+      <div className="grid place-items-center h-screen">
+        <div className="text-center">
+          <h2 className="mb-4">Uploading your photo</h2>
+          <Spinner />
+          <h3 className="mt-4">Please wait</h3>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div>
