@@ -2,7 +2,6 @@ import { initializeApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
 import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
 import { sha3_256 } from 'js-sha3';
-// import 'firebase/storage';
 
 // Set the configuration for your app
 // TODO: Replace with your app's config object
@@ -18,7 +17,6 @@ const firebaseConfig = {
 };
 
 export const firebaseApp = initializeApp(firebaseConfig);
-// export const storage = firebaseApp.storage();
 // Get a reference to the storage service, which is used to create references in your storage bucket
 export const storage = getStorage(firebaseApp);
 
@@ -31,4 +29,11 @@ export const uploadImageToFirebase = async (file: File): Promise<unknown> => {
   return uploadTask.then(() => {
     return getDownloadURL(uploadTask.snapshot.ref);
   });
+};
+
+export const renderFirebaseImage = (hash: string): string => {
+  // const storageRef = ref(storage, `images ${hash}`);
+  // const url = await getDownloadURL(ref(storage, `images/${hash}`));
+  // console.log('url: ', url);
+  return 'storageRef';
 };
