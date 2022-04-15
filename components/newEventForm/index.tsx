@@ -1,13 +1,10 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
-import Resizer from 'react-image-file-resizer';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setAppLoadingState } from '../../store/reducers/appStateReducer/actions';
 import { setEventStatus, stopCreateEvent } from '../../store/reducers/eventReducer/actions';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
-import { storage } from '../../utils/firebase';
-import { getNearAccountAndContract, hash } from '../../utils';
+import { getNearAccountAndContract, hash, resizeFile } from '../../utils';
 // Models and types
 import { Quest, EventData } from '../../models/Event';
 import QuestComponent, { QuestChangeCallback } from './quests';
@@ -17,6 +14,7 @@ import EventCard from '../eventsTable/eventCard';
 import Modal from '../modal';
 import Accordion from '../accordion';
 import { mockEvent } from '../../mockData/mockEvents';
+import { uploadImageToFirebase } from '../../utils/firebase';
 
 const initialQuest: Quest = {
   qr_prefix_enc: '',
@@ -119,70 +117,29 @@ const NewEventForm: React.FC = () => {
 
   // Uploading Images to Firebase and Start New Event after success
   useEffect(() => {
-    // Resize Images Before Upload
-    const resizeImages = async () => {
-      const resizeFile = (file: File) =>
-        new Promise((resolve) => {
-          Resizer.imageFileResizer(
-            file,
-            450,
-            450,
-            'PNG',
-            100,
-            0,
-            (uri) => {
-              resolve(uri);
-            },
-            'file',
-            450,
-            450
-          );
-        });
-      const promises = files.map(async (file: File) => {
-        const image = await resizeFile(file);
-        return image;
-      });
-      Promise.all(promises).then((resizedFiles: any[]) => {
-        // Upload Images After Resize
-        uploadImages(resizedFiles);
-      });
-    };
-    // Upload Images To Firebase And Getiing Download URLS
-    const uploadImages = async (files: any) => {
-      const promises = files.map((file: File) => {
-        if (file === undefined) return;
-        const randomcrctrs = (Math.random() + 1).toString(36).substring(7);
-        const storageRef = ref(storage, `images/${randomcrctrs + file.name.replace(/ /g, '_')}`);
-        const uploadTask = uploadBytesResumable(storageRef, file);
-        return uploadTask.then(() => {
-          return getDownloadURL(uploadTask.snapshot.ref);
-        });
-      });
-
-      Promise.all(promises)
-        .then((urls) => {
-          dispatch(setAppLoadingState(true));
-          // Getting URLS of Uploaded Images
-          startNewEvent(urls);
-        })
-        .catch((err) => console.log(err));
-    };
-    // Starting New Event In NEAR
-    const startNewEvent = async (urls: any[]) => {
-      const questsWithUrls = quests.map((quest: Quest, index: number) => {
-        if (urls[index] === undefined) return;
-        // Setting URLS of Uploaded Images To Quests
-        const hashedPrefix = hash(quest.qr_prefix_enc);
-        const prefixLength = hashedPrefix.length;
-        return {
-          ...quest,
-          qr_prefix_enc: hashedPrefix,
-          qr_prefix_len: prefixLength,
-          reward_uri: urls[index],
-        };
-      });
-      if (questsWithUrls === undefined) return;
+    const startNewEvent = async () => {
       try {
+        // Resize Images Before Upload
+        const resizedImgsPromises = files.map(resizeFile);
+        const resizedFiles = await Promise.all(resizedImgsPromises);
+        // Upload Images To Firebase And Getiing Download URLS
+        const promises = resizedFiles.map(uploadImageToFirebase);
+        const urls = await Promise.all(promises);
+        dispatch(setAppLoadingState(true));
+        // Placing URLS of Images to Request
+        const questsWithUrls = quests.map((quest: Quest, index: number) => {
+          if (urls[index] === undefined) return;
+          // Setting URLS of Uploaded Images To Quests
+          const hashedPrefix = hash(quest.qr_prefix_enc);
+          const prefixLength = hashedPrefix.length;
+          return {
+            ...quest,
+            qr_prefix_enc: hashedPrefix,
+            qr_prefix_len: prefixLength,
+            reward_uri: urls[index],
+          };
+        });
+        // Starting New Event In NEAR
         const { contract } = await getNearAccountAndContract(account_id);
         await contract.start_event({
           event: {
@@ -201,7 +158,7 @@ const NewEventForm: React.FC = () => {
       }
     };
     if (is_starting) {
-      resizeImages();
+      startNewEvent();
     }
   }, [account_id, dispatch, event_description, event_name, files, finish_time, is_starting, quests, start_time]);
 

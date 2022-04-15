@@ -4,7 +4,6 @@ import UploadIcon from '../icons/UploadIcon';
 
 interface UploadImageProps {
   onImageChange: (file: File) => void;
-  imgInProcess: string;
 }
 
 const UploadImage: React.FC<UploadImageProps> = ({ onImageChange }) => {
