@@ -16,6 +16,7 @@ import Header from '../components/header';
 import AppLayout from '../components/appLayout';
 
 function MyApp({ Component, pageProps }: AppProps) {
+  const AnyComponent = Component as any;
   return (
     <Provider store={store}>
       <Head>
@@ -28,7 +29,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Header />
           <div className="grid place-items-center h-screen">
             <div className={`${styles.container} relative`}>
-              <Component {...pageProps} />
+              <AnyComponent {...pageProps} />
             </div>
           </div>
         </>
