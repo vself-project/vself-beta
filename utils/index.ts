@@ -66,7 +66,7 @@ export const getNearWallet = async () => {
   };
 
   const signIn = () => {
-    wallet.requestSignIn({ contractId: contractEndPoint });
+    wallet.requestSignIn({ contractId: Endpoints.TESTNET_POW_CONTRACT_NAME });
   };
 
   return { wallet, accountId, isSignedIn, signOut, signIn };
@@ -92,6 +92,32 @@ export const getNearAccountAndContract = async (account_id: string): Promise<any
       // name of contract you're connecting to
       viewMethods: ['is_active', 'get_actions', 'get_event_data', 'get_event_stats'], // view methods do not change state but usually return a value
       changeMethods: ['start_event', 'stop_event'], // change methods modify state
+    }
+  );
+
+  return { account, contract };
+};
+
+export const getPOWAccountAndContract = async (account_id: string): Promise<any> => {
+  const config: ConnectConfig = {
+    networkId: 'testnet',
+    keyStore: new keyStores.BrowserLocalStorageKeyStore(),
+    nodeUrl: 'https://rpc.testnet.near.org',
+    walletUrl: 'https://wallet.testnet.near.org',
+    helperUrl: 'https://helper.testnet.near.org',
+    headers: {},
+  };
+  const near = await connect(config);
+
+  const account = await near.account(account_id);
+
+  const contract = new Contract(
+    account, // the account object that is connecting
+    Endpoints.TESTNET_POW_CONTRACT_NAME,
+    {
+      // name of contract you're connecting to
+      viewMethods: ['get_evidences'], // view methods do not change state but usually return a value
+      changeMethods: ['upload_evidence'], // change methods modify state
     }
   );
 
