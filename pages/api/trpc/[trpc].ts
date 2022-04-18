@@ -34,8 +34,7 @@ const credentials = JSON.parse(
 
 // Create keyStore object
 const keyStore = new InMemoryKeyStore();
-const nearConfig = getConfig('testnet');
-const { nodeUrl, networkId } = nearConfig;
+const { nodeUrl, networkId } = getConfig('testnet');
 keyStore.setKey(
   networkId,
   accountName,
@@ -43,12 +42,11 @@ keyStore.setKey(
 );
 
 // Add access key into calling contract account
-const near = new Near({
+const { connection } = new Near({
   networkId,
   nodeUrl,
   deps: { keyStore },
 });
-const { connection } = near;
 const contractAccount = new Account(connection, accountName);
 contractAccount.addAccessKey = (publicKey) =>
   contractAccount.addKey(
@@ -78,32 +76,30 @@ export const appRouter = trpc
   })
 
   // Second endpoint
+  // Request example http://localhost:3000/api/trpc/upload-evidence?data='{"hash":"lkhqwfbwemnkjeh12hef98","name":"Alex","time":"4/12/2022 10:22:04 PM","location":"unknown"}'
   .query('upload-evidence', {
-    input: z
-      .object({
-        text: z.string().nullish(),
-      })
-      .nullish(),
-    async resolve({ input }) {
-      await contract.upload_evidence(
-        {
-          evidence: {
-            media_hash: 'hashhash8',
-            metadata: JSON.stringify({
-              author: 'Serg',
-              uploadThrough: 'server',
-            }),
-          },
-        },
-        "300000000000000" // attached GAS (optional)
-      );
-      let response = await contract.get_evidences({
-        from_index: 5,
-        limit: 10
-      });
-      console.log(response);
+    input: String,
+    async resolve(req) {
+      console.log(req);
+      // await contract.upload_evidence(
+      //   {
+      //     evidence: {
+      //       media_hash: 'hashhash9',
+      //       metadata: JSON.stringify({
+      //         author: 'Serg',
+      //         uploadThrough: 'server',
+      //       }),
+      //     },
+      //   },
+      //   "300000000000000" // attached GAS (optional)
+      // );
+      // let response = await contract.get_evidences({
+      //   from_index: 5,
+      //   limit: 10
+      // });
+      // console.log(response);
       return {
-        greeting: `hello ${input?.text ?? 'world 2'}`,
+        success: true,
       };
     },
   });
