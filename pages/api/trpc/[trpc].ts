@@ -2,16 +2,12 @@ import * as trpc from '@trpc/server';
 import * as trpcNext from '@trpc/server/adapters/next';
 import { z } from 'zod';
 import * as nearAPI from 'near-api-js';
-
 import getConfig from '../../../config/near';
 import { Endpoints } from '../../../constants/endpoints';
 
-//let nearConfig = getConfig('testnet');
-//const { nodeUrl, networkId } = nearConfig;
-const networkId = "testnet";
 const contractName = Endpoints.TESTNET_POW_CONTRACT_NAME;
-const ACCOUNT_NAME = 'pow_v1.sergantche.testnet';
-const CONTRACT_METHODS = 
+const accountName = 'pow_v1.sergantche.testnet';
+const contractMethods = 
 {
   viewMethods: ['get_evidences', 'version'],
   changeMethods: ['upload_evidence'],
@@ -19,8 +15,6 @@ const CONTRACT_METHODS =
 
 const {
   keyStores: { InMemoryKeyStore },
-  connect,
-  WalletConnection,
   Near,
   Account,
   Contract,
@@ -34,63 +28,38 @@ const {
 const fs = require("fs");
 const credentials = JSON.parse(
   fs.readFileSync(
-    `./creds/${ACCOUNT_NAME}.json`    
+    `./creds/${accountName}.json`    
   )
 );
 
 // Create keyStore object
 const keyStore = new InMemoryKeyStore();
+const nearConfig = getConfig('testnet');
+const { nodeUrl, networkId } = nearConfig;
 keyStore.setKey(
   networkId,
-  ACCOUNT_NAME,
+  accountName,
   KeyPair.fromString(credentials.private_key)
 );
 
-// NEAR config object
-const config = {
-  networkId,
-  keyStore, 
-  nodeUrl: "https://rpc.testnet.near.org",
-  walletUrl: "https://wallet.testnet.near.org",
-  helperUrl: "https://helper.testnet.near.org",
-  explorerUrl: "https://explorer.testnet.near.org",
-};
-
+// Add access key into calling contract account
 const near = new Near({
-  networkId: 'testnet',
-  nodeUrl: "https://rpc.testnet.near.org",
+  networkId,
+  nodeUrl,
   deps: { keyStore },
 });
-
 const { connection } = near;
-const contractAccount = new Account(connection, ACCOUNT_NAME);
+const contractAccount = new Account(connection, accountName);
 contractAccount.addAccessKey = (publicKey) =>
   contractAccount.addKey(
     publicKey,
     contractName,
-    CONTRACT_METHODS.changeMethods,
+    contractMethods.changeMethods,
     parseNearAmount("0.1")
   );
 
-const contract = new Contract(contractAccount, contractName, CONTRACT_METHODS);
-
-// Connect to NEAR and create wallet connection
-const createContract = async (nearConfig: any) => {
-  const near = await connect(nearConfig);
-  const account = await near.account(ACCOUNT_NAME);
-  const contract = new Contract(
-    account, // the account object that is connecting
-    contractName,
-    {
-      // name of contract you're connecting to
-      viewMethods: ['get_evidences', 'version'],
-      changeMethods: ['upload_evidence'],
-      sender: account, // account object to initialize and sign transactions.
-    }
-  );
-  return contract;
-  //const wallet = new WalletConnection(near, null);
-}
+// Create callable contract instance
+const contract = new Contract(contractAccount, contractName, contractMethods);
 
 export const appRouter = trpc
   .router()
@@ -107,6 +76,7 @@ export const appRouter = trpc
       };
     },
   })
+
   // Second endpoint
   .query('upload-evidence', {
     input: z
@@ -115,28 +85,20 @@ export const appRouter = trpc
       })
       .nullish(),
     async resolve({ input }) {
-      //const contract = await createContract(config);
+      await contract.upload_evidence(
+        {
+          evidence: {
+            media_hash: 'hashhash8',
+            metadata: JSON.stringify({
+              author: 'Serg',
+              uploadThrough: 'server',
+            }),
+          },
+        },
+        "300000000000000" // attached GAS (optional)
+      );
       let response = await contract.get_evidences({
-        from_index: 0,
-        limit: 2
-      });
-      console.log(credentials);
-      console.log(near);
-      //console.log(response);
-      // await contract.upload_evidence(
-      //   {
-      //     evidence: {
-      //       media_hash: 'hashhash2',
-      //       metadata: JSON.stringify({
-      //         author: 'Serg',
-      //         uploadThrough: 'server',
-      //       }),
-      //     },
-      //   },
-      //   "300000000000000" // attached GAS (optional)
-      // );
-      response = await contract.get_evidences({
-        from_index: 4,
+        from_index: 5,
         limit: 10
       });
       console.log(response);
