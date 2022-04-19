@@ -2,9 +2,10 @@
 import React from 'react';
 // Models and types
 import { Quest } from '../../../models/Event';
-// Icons
-import RemoveIcon from '../../icons/RemoveIcon';
-import UploadImage from '../../uploadImage';
+// Components And Styles
+import RemoveIcon from '../../../components/icons/RemoveIcon';
+import UploadImageButton from '../../../components/uploadImageButton';
+import { StylesCSS } from '../../../constants/styles';
 
 export type QuestChangeCallback = (index: number, field: string, value: string, file?: File) => void;
 
@@ -35,34 +36,20 @@ const QuestComponent: React.FC<QuestProps> = ({
 
   const deleteQuest = (): void => removeQuest(index);
 
-  const onImageChange = (file: File): void => {
+  const onImageSet = (file: File): void => {
     setFilesArray(file, index);
   };
 
   return (
     <div className="flex flex-col p-5 mb-2 rounded-lg shadow-lg bg-white max-w-md">
-      <UploadImage onImageChange={onImageChange} />
+      <UploadImageButton onImageSet={onImageSet} />
       <input
         autoComplete="off"
         type="text"
         name="qr_prefix_enc"
         onChange={onInputChange}
         value={quest.qr_prefix_enc}
-        className="form-control block
-        w-full
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        border border-solid border-gray-300
-        rounded
-        transition
-        ease-in-out
-        m-0
-        mb-2
-        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+        className={StylesCSS.INPUT}
         placeholder="qr_prefix_enc"
       />
       <input
@@ -71,43 +58,14 @@ const QuestComponent: React.FC<QuestProps> = ({
         name="reward_title"
         onChange={onInputChange}
         value={quest.reward_title}
-        className="form-control block
-        w-full
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        border border-solid border-gray-300
-        rounded
-        transition
-        ease-in-out
-        mb-2
-        m-0
-        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+        className={StylesCSS.INPUT}
         placeholder="reward_title"
       />
       <textarea
         name="reward_description"
         onChange={onTextAreaChange}
         value={quest.reward_description}
-        className="form-control
-        block
-        w-full
-        px-3
-        py-1.5
-        text-base
-        font-normal
-        text-gray-700
-        bg-white bg-clip-padding
-        border border-solid border-gray-300
-        rounded
-        transition
-        ease-in-out
-        mb-2
-        m-0
-        focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+        className={StylesCSS.TEXTAREA}
         placeholder="reward_description"
       />
       {removable && (

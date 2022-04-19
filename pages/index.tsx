@@ -1,6 +1,6 @@
 import type { NextPage } from 'next';
-import EventsTable from '../components/eventsTable';
-import NewEventForm from '../components/newEventForm';
+import EventsTable from '../features/eventsTable';
+import NewEventForm from '../features/newEventForm';
 import { useAppSelector } from '../hooks';
 
 const Home: NextPage = () => {

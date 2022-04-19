@@ -9,12 +9,13 @@ import { getNearAccountAndContract, hash, resizeFile } from '../../utils';
 import { Quest, EventData } from '../../models/Event';
 import QuestComponent, { QuestChangeCallback } from './quests';
 // Components
-import Spinner from '../spinner';
+import Spinner from '../../components/spinner';
 import EventCard from '../eventsTable/eventCard';
-import Modal from '../modal';
-import Accordion from '../accordion';
+import Modal from '../../components/modal';
+import Accordion from '../../components/accordion';
 import { mockEvent } from '../../mockData/mockEvents';
 import { uploadImageToFirebase } from '../../utils/firebase';
+import { StylesCSS } from '../../constants/styles';
 
 const initialQuest: Quest = {
   qr_prefix_enc: '',
@@ -173,53 +174,24 @@ const NewEventForm: React.FC = () => {
         </>
       )}
 
-      <form onSubmit={onNewEventSubmit} className="flex-row flex flex-wrap container">
-        <div className="flex-0 form-group mb-6 p-6 pb-0 rounded-lg shadow-lg bg-white max-w-md w-1/2 relative">
+      <form onSubmit={onNewEventSubmit} className="flex-row flex container">
+        <div className="mb-6 p-5 rounded-lg shadow-lg bg-white w-1/3 relative">
           <h5 className="text-gray-900 text-xl font-medium mb-2">New Event</h5>
-          <img className="rounded mb-4" src="/meta.jpg" alt="" />
+          <img className="rounded mb-4" src="/meta.jpg" alt="" style={{ maxWidth: 300 }} />
           <input
             autoComplete="off"
             type="text"
             name="title"
             onChange={onEventTitleChange}
             value={event_name}
-            className="form-control block
-            w-full
-            px-3
-            py-1.5
-            text-base
-            font-normal
-            text-gray-700
-            bg-white bg-clip-padding
-            border border-solid border-gray-300
-            rounded
-            transition
-            ease-in-out
-            m-0
-            mb-2
-            focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            className={`${StylesCSS.INPUT}`}
             placeholder="Event title"
           />
           <textarea
             name="description"
             value={event_description}
             onChange={onEventDescriptionChange}
-            className="form-control
-            block
-            w-full
-            mb-2
-            px-3
-            py-1.5
-            text-base
-            font-normal
-            text-gray-700
-            bg-white bg-clip-padding
-            border border-solid border-gray-300
-            rounded
-            transition
-            ease-in-out
-            m-0
-            focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+            className={`${StylesCSS.TEXTAREA}`}
             placeholder="Event description"
           />
           <span className="mb-2 ">Start Date:</span>
@@ -228,7 +200,7 @@ const NewEventForm: React.FC = () => {
               onChange={onStartTimeChange}
               selected={new Date(start_time / 1000000)}
               dateFormat="dd/MM/yyyy"
-              className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              className={`${StylesCSS.DATEPICKER}`}
             />
             {/* <CalendarIcon /> */}
           </span>
@@ -238,21 +210,18 @@ const NewEventForm: React.FC = () => {
               onChange={onFinishTimeChange}
               selected={new Date(finish_time / 1000000)}
               dateFormat="dd/MM/yyyy"
-              className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              className={`${StylesCSS.DATEPICKER}`}
             />
             {/* <CalendarIcon /> */}
           </span>
           <div className="mt-5 absolute bottom-6 left-6">
-            <button
-              type="submit"
-              className="inline-block px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase rounded-full hover:bg-blue-200 hover:bg-opacity-6 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
-            >
+            <button type="submit" className={StylesCSS.PRIMARY_BUTTON}>
               Create New Event
             </button>
           </div>
         </div>
 
-        <div className="flex-1 flex-row ml-4 form-group mb-6 p-6">
+        <div className="flex-row ml-4 mb-6 p-6  w-1/2 ">
           <h5 className="text-gray-900 text-xl font-medium mb-2">Quests</h5>
           <div className="flex flex-col overflow-y-scroll h-screen relative" style={{ maxHeight: 520 }}>
             {quests.map((quest, index) => (
@@ -275,11 +244,7 @@ const NewEventForm: React.FC = () => {
             ))}
           </div>
           <div className="mt-5 border-t-2 pt-5">
-            <button
-              type="button"
-              onClick={addNewQuest}
-              className="inline-block px-6 py-2 border-2 border-blue-600 text-blue-600 font-medium text-xs leading-tight uppercase rounded-full hover:bg-blue-200 hover:bg-opacity-6 focus:outline-none focus:ring-0 transition duration-150 ease-in-out"
-            >
+            <button type="button" onClick={addNewQuest} className={StylesCSS.PRIMARY_BUTTON}>
               Add New Quest
             </button>
           </div>

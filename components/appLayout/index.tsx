@@ -1,12 +1,16 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getNearAccountAndContract, getNearWallet, getPOWAccountAndContract } from '../../utils';
-import { setEventStatus } from '../../store/reducers/eventReducer/actions';
+import {
+  //  getNearAccountAndContract,
+  getNearWallet,
+  //  getPOWAccountAndContract
+} from '../../utils';
+// import { setEventStatus } from '../../store/reducers/eventReducer/actions';
 import { getUserAccountData } from '../../store/reducers/userAccountReducer/actions';
 import { setAppLoadingState, signInApp } from '../../store/reducers/appStateReducer/actions';
 
-import Loader from '../../components/loader';
+import Loader from '../loader';
 import LoginForm from './loginForm';
 
 interface AppLayoutProps {

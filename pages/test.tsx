@@ -10,7 +10,7 @@ const Test: NextPage = () => {
     <div>
       <p>{hello.data.greeting}</p>
     </div>
-  );  
+  );
 };
 
 export default Test;
