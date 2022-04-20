@@ -78,7 +78,12 @@ export const appRouter = trpc
   // Second endpoint
   // Request example http://localhost:3000/api/trpc/upload-evidence?data='{"hash":"lkhqwfbwemnkjeh12hef98","name":"Alex","time":"4/12/2022 10:22:04 PM","location":"unknown"}'
   .query('upload-evidence', {
-    input: String,
+    input: (val: unknown) => {
+      //if (typeof val === 'string') return val;
+      console.log(val);
+      return val;
+      throw new Error(`Invalid input: ${typeof val}`);
+    },
     async resolve(req) {
       console.log(req);
       // await contract.upload_evidence(
