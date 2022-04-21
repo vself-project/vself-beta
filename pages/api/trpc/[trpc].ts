@@ -27,7 +27,7 @@ const {
 
 // Read wallet credentials
 const creds = readFileSync(`./creds/${accountName}.json`);
-const credentials = JSON.parse(JSON.stringify(creds));
+const credentials = JSON.parse(String(creds));
 
 // Create keyStore object
 const keyStore = new InMemoryKeyStore();

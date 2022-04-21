@@ -26,7 +26,7 @@ export const getConnectedContract = async () => {
   // } = nearAPI;
 
   // Read wallet credentials
-  const credentials = JSON.parse(JSON.stringify(fs.readFileSync(`./creds/${accountName}.json`)));
+  const credentials = JSON.parse(String(fs.readFileSync(`./creds/${accountName}.json`)));
 
   // Create keyStore object
   const keyStore = new InMemoryKeyStore();

@@ -5,7 +5,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   try {
     const { query } = req;
     const { data } = query;
-    let parsedData = JSON.parse(JSON.stringify(data.slice(1, -1)));
+    let parsedData = JSON.parse(String(data.slice(1, -1)));
     const { hash } = parsedData;
     parsedData['uploadThrough'] = 'server';
     delete parsedData.hash;
