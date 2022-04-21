@@ -165,14 +165,13 @@ const NewEventForm: React.FC = () => {
 
   return (
     <>
-      {submitedEvent && (
-        <>
-          <div className="bg-black fixed top-0 left-0 w-full h-full flex bg-opacity-60 z-50"></div>
-          <Modal closeCallBack={closeModal} modalTitle={is_starting ? 'Creating New Event' : 'Confirm New Event'}>
-            {is_starting ? <Spinner /> : <EventCard eventData={submitedEvent} detailed files={files} />}
-          </Modal>
-        </>
-      )}
+      <Modal
+        isOpened={!!submitedEvent}
+        closeCallBack={closeModal}
+        title={is_starting ? 'Creating New Event' : 'Confirm New Event'}
+      >
+        {is_starting ? <Spinner /> : <EventCard eventData={submitedEvent} detailed files={files} />}
+      </Modal>
 
       <form onSubmit={onNewEventSubmit} className="flex-row flex container">
         <div className="mb-6 p-5 rounded-lg shadow-lg bg-white w-1/3 relative">

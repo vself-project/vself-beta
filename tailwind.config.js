@@ -9,6 +9,24 @@ module.exports = {
   darkMode: 'media',
   theme: {
     extend: {
+      animation: {
+        fadein: 'fadein .5s',
+        fadeout: 'fadeout .5s',
+      },
+      keyframes: {
+        fadein: {
+          from: { opacity: 0 },
+          to: { opacity: 1 },
+        },
+        fadeout: {
+          from: {
+            opacity: 1,
+          },
+          to: {
+            opacity: 0,
+          },
+        },
+      },
       colors: {
         'background-dark': '#00000099',
       },

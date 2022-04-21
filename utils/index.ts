@@ -87,7 +87,7 @@ export const getNearAccountAndContract = async (account_id: string): Promise<any
 
   const contract = new Contract(
     account, // the account object that is connecting
-    contractEndPoint,
+    Endpoints.TESTNET_POW_CONTRACT_NAME,
     {
       // name of contract you're connecting to
       viewMethods: ['is_active', 'get_actions', 'get_event_data', 'get_event_stats'], // view methods do not change state but usually return a value

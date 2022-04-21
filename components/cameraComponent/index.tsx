@@ -9,13 +9,17 @@ const CameraComponent: React.FC = () => {
     const startCamera = async () => {
       if (videoref !== null) {
         if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          const stream = await navigator.mediaDevices.getUserMedia({
-            video: true,
-            audio: false,
-          });
-          mediaStream = stream;
-          videoref.srcObject = stream;
-          videoref.play();
+          try {
+            const stream = await navigator.mediaDevices.getUserMedia({
+              video: true,
+              audio: false,
+            });
+            mediaStream = stream;
+            videoref.srcObject = stream;
+            videoref.play();
+          } catch (err) {
+            console.log('errr');
+          }
         }
       }
     };
@@ -34,7 +38,9 @@ const CameraComponent: React.FC = () => {
 
   return (
     <>
-      <video className="h-full w-full mx-auto" id="video" ref={ref} autoPlay muted />
+      <video className="h-full w-full mx-auto" id="video" ref={ref} autoPlay muted playsInline>
+        Video stream not available.
+      </video>
       <button>Take picture</button>
     </>
   );

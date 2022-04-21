@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import React, { useState } from 'react';
-import { Wrapper, Status } from '@googlemaps/react-wrapper';
 import exifr from 'exifr';
 import { sha3_256 } from 'js-sha3';
 import { useAppSelector } from '../../hooks';
@@ -77,11 +76,6 @@ const WebImageUploadForm = () => {
     setEvidences(evidencesArray);
   };
 
-  const renderMap = (status: Status): React.ReactElement => {
-    if (status === Status.FAILURE) return <></>;
-    return <Spinner />;
-  };
-
   if (isLoading) {
     return (
       <div className="grid place-items-center h-screen">
@@ -95,36 +89,34 @@ const WebImageUploadForm = () => {
   }
 
   return (
-    <div>
-      {isModal && (
-        <Modal closeCallBack={cameraCloseCallback}>
-          <CameraComponent />
-        </Modal>
-      )}
-      <CameraButton callback={cameraButtonCallback} />
-      <UploadImageButton onImageSet={onImageSet} />
-      {metaData && <JSONcomponent json={metaData} title="EXIF Data:" />}
-      {location && (
-        <>
-          <h2 className="mb-4 pb-2 border-b-2">Location:</h2>
-          <Wrapper apiKey={String(process.env.GOOGLE_MAPS_API_KEY)} render={renderMap}>
+    <>
+      <Modal isOpened={isModal} closeCallBack={cameraCloseCallback}>
+        <CameraComponent />
+      </Modal>
+      <div>
+        <CameraButton callback={cameraButtonCallback} />
+        <UploadImageButton onImageSet={onImageSet} />
+        {metaData && <JSONcomponent json={metaData} title="EXIF Data:" />}
+        {location && (
+          <>
+            <h2 className="mb-4 pb-2 border-b-2">Location:</h2>
             <MapComponent center={{ lat: location.latitude, lng: location.longitude }} zoom={8} />
-          </Wrapper>
-        </>
-      )}
-      {evidences.length !== 0 &&
-        evidences.map((evidence, index) => (
-          <div key={index}>
-            <img src={renderFirebaseImage(String(evidence.media_hash))} />
-          </div>
-        ))}
-      <button className={StylesCSS.PRIMARY_BUTTON} type="button" disabled={!metaData} onClick={sendImage}>
-        Send
-      </button>
-      <button className={StylesCSS.PRIMARY_BUTTON} type="button" onClick={getEvidences}>
-        Get
-      </button>
-    </div>
+          </>
+        )}
+        {evidences.length !== 0 &&
+          evidences.map((evidence, index) => (
+            <div key={index}>
+              <img src={renderFirebaseImage(String(evidence.media_hash))} />
+            </div>
+          ))}
+        <button className={StylesCSS.PRIMARY_BUTTON} type="button" disabled={!metaData} onClick={sendImage}>
+          Send
+        </button>
+        <button className={StylesCSS.PRIMARY_BUTTON} type="button" onClick={getEvidences}>
+          Get
+        </button>
+      </div>
+    </>
   );
 };
 
