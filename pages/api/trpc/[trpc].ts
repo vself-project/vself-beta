@@ -2,6 +2,8 @@ import * as trpc from '@trpc/server';
 import * as trpcNext from '@trpc/server/adapters/next';
 import { z } from 'zod';
 import * as nearAPI from 'near-api-js';
+import { readFileSync } from 'fs';
+
 import getConfig from '../../../config/near';
 import { Endpoints } from '../../../constants/endpoints';
 
@@ -24,8 +26,8 @@ const {
 } = nearAPI;
 
 // Read wallet credentials
-const fs = require('fs');
-const credentials = JSON.parse(fs.readFileSync(`./creds/${accountName}.json`));
+const creds = readFileSync(`./creds/${accountName}.json`);
+const credentials = JSON.parse(JSON.stringify(creds));
 
 // Create keyStore object
 const keyStore = new InMemoryKeyStore();
@@ -37,10 +39,9 @@ const { connection } = new Near({
   networkId,
   nodeUrl,
   deps: { keyStore },
+  headers: {},
 });
 const contractAccount = new Account(connection, accountName);
-contractAccount.addAccessKey = (publicKey) =>
-  contractAccount.addKey(publicKey, contractName, contractMethods.changeMethods, parseNearAmount('0.1'));
 
 // Create callable contract instance
 const contract = new Contract(contractAccount, contractName, contractMethods);
