@@ -1,10 +1,8 @@
 import '../styles/globals.css';
 import 'react-datepicker/dist/react-datepicker.css';
-import styles from '../styles/Home.module.css';
 import type { AppProps, NextWebVitalsMetric } from 'next/app';
 
 import { withTRPC } from '@trpc/next';
-import { AppType } from 'next/dist/shared/lib/utils';
 import { AppRouter } from './api/trpc/[trpc]';
 
 import { Provider } from 'react-redux';
@@ -28,9 +26,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <>
           <Header />
           <div className="grid place-items-center h-screen">
-            <div className={`${styles.container} relative`}>
-              <AnyComponent {...pageProps} />
-            </div>
+            <AnyComponent {...pageProps} />
           </div>
         </>
       </AppLayout>

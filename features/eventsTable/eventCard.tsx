@@ -2,7 +2,7 @@
 import React from 'react';
 import { EventData } from '../../models/Event';
 import { formatTimeStampToLocaleDateString } from '../../utils';
-import StartEventButton from '../startEventButton';
+import StartEventButton from '../../components/startEventButton';
 
 interface EventCardProps {
   eventData: EventData | undefined;
@@ -26,7 +26,9 @@ const EventCard: React.FC<EventCardProps> = ({ eventData, detailed, files }) => 
                 className="flex flex-col rounded-lg shadow-lg bg-white mb-2 p-10 hover:bg-gray-200 cursor-pointer"
               >
                 <h3 className="font-bold">Quest #{index + 1}</h3>
-                <img className="rounded mb-4" src={files && URL.createObjectURL(files[index])} alt="" />
+                {files !== undefined && files?.length > 0 && (
+                  <img className="rounded mb-4" src={URL.createObjectURL(files[index])} alt="" />
+                )}
                 <span className="mb-2">
                   <b>reward_title:</b> {quest.reward_title}
                 </span>

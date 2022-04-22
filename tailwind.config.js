@@ -1,12 +1,35 @@
 module.exports = {
+  mode: 'jit',
   purge: [
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
+    './features/**/*.{js,ts,jsx,tsx}',
     './node_modules/tw-elements/dist/js/**/*.js',
   ],
-  darkMode: false, // or 'media' or 'class'
+  darkMode: 'media',
   theme: {
     extend: {
+      animation: {
+        fadein: 'fadein .5s',
+        fadeout: 'fadeout .5s',
+      },
+      keyframes: {
+        fadein: {
+          from: { opacity: 0 },
+          to: { opacity: 1 },
+        },
+        fadeout: {
+          from: {
+            opacity: 1,
+          },
+          to: {
+            opacity: 0,
+          },
+        },
+      },
+      colors: {
+        'background-dark': '#00000099',
+      },
       transitionProperty: {
         height: 'height',
       },
