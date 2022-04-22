@@ -3,11 +3,11 @@ import { StylesCSS } from '../../constants/styles';
 
 interface ModalProps {
   title?: string;
-  closeCallBack?: () => void;
+  closeCallback?: () => void;
   isOpened?: boolean;
 }
 
-const Modal: React.FC<ModalProps> = ({ children, title, closeCallBack, isOpened }) => {
+const Modal: React.FC<ModalProps> = ({ children, title, closeCallback, isOpened }) => {
   const animationEventHandle = (event: AnimationEvent<HTMLDivElement>) => {
     console.log('event: ', event);
   };
@@ -31,7 +31,7 @@ const Modal: React.FC<ModalProps> = ({ children, title, closeCallBack, isOpened 
             className={`${StylesCSS.MODAL_CLOSE_BUTTON} right-2 top-0 `}
             data-bs-dismiss="modal"
             aria-label="Close"
-            onClick={closeCallBack}
+            onClick={closeCallback}
           >
             &times;
           </button>

@@ -90,8 +90,8 @@ const WebImageUploadForm = () => {
 
   return (
     <>
-      <Modal isOpened={isModal} closeCallBack={cameraCloseCallback}>
-        <CameraComponent />
+      <Modal isOpened={isModal} closeCallback={cameraCloseCallback}>
+        <CameraComponent cameraCallback={onImageSet} closeCallback={cameraCloseCallback} />
       </Modal>
       <div>
         <CameraButton callback={cameraButtonCallback} />
