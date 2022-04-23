@@ -14,16 +14,6 @@ const contractMethods = {
 
 export const getConnectedContract = async () => {
   const { InMemoryKeyStore } = keyStores;
-  // const {
-  //   keyStores: { InMemoryKeyStore },
-  //   Near,
-  //   Account,
-  //   Contract,
-  //   KeyPair,
-  //   utils: {
-  //     format: { parseNearAmount },
-  //   },
-  // } = nearAPI;
 
   // Read wallet credentials
   const credentials = JSON.parse(String(fs.readFileSync(`./creds/${accountName}.json`)));
@@ -40,11 +30,9 @@ export const getConnectedContract = async () => {
     deps: { keyStore },
     headers: {},
   });
-  const contractAccount = new Account(connection, accountName);
-  // contractAccount.addAccessKey = (publicKey) =>
-  //   contractAccount.addKey(publicKey, contractName, contractMethods.changeMethods, parseNearAmount('0.1'));
+  const account = new Account(connection, accountName);
 
   // Create callable contract instance
-  const contract = new Contract(contractAccount, contractName, contractMethods);
-  return contract;
+  const contract = new Contract(account, contractName, contractMethods);
+  return { contract, account };
 };
