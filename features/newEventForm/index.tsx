@@ -167,7 +167,7 @@ const NewEventForm: React.FC = () => {
     <>
       <Modal
         isOpened={!!submitedEvent}
-        closeCallBack={closeModal}
+        closeCallback={closeModal}
         title={is_starting ? 'Creating New Event' : 'Confirm New Event'}
       >
         {is_starting ? <Spinner /> : <EventCard eventData={submitedEvent} detailed files={files} />}
