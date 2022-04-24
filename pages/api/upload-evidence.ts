@@ -16,14 +16,14 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { contract, account } = connection;
     const { transaction } = await account.functionCall({
       contractId: contract.contractId,
-      methodName: "upload_evidence",
+      methodName: 'upload_evidence',
       args: {
         evidence: {
           media_hash: hash,
           metadata: parsedData,
-        }
+        },
       },
-      gas: "300000000000000",
+      gas: '300000000000000',
     });
     res.status(200).json({ result: true, trxHash: transaction.hash });
   } catch (err) {
