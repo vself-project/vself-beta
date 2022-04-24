@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       },
       gas: '300000000000000',
     });
-    res.status(200).json({ result: true, trxHash: transaction.hash });
+    res.status(200).json({ result: transaction.hash });
   } catch (err) {
     console.log(err);
     res.status(500).json({ result: false, error: 'failed to save evidence' });
