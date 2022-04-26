@@ -1,12 +1,11 @@
 import React, { useRef, useEffect, useState } from 'react';
-import { StylesCSS } from '../../constants/styles';
+import PictureButtonIcon from '../icons/PictureButton';
 
 interface CameraComponentProps {
   cameraCallback?: (file: File) => void;
-  closeCallback?: () => void;
 }
 
-const CameraComponent: React.FC<CameraComponentProps> = ({ cameraCallback, closeCallback }) => {
+const CameraComponent: React.FC<CameraComponentProps> = ({ cameraCallback }) => {
   const [isCaptured, setIsCaptured] = useState<boolean>(false);
   const [imgFile, setImgFile] = useState<File | null>(null);
   const ref = useRef<HTMLVideoElement | null>(null);
@@ -27,9 +26,8 @@ const CameraComponent: React.FC<CameraComponentProps> = ({ cameraCallback, close
   };
 
   const acceptPicture = () => {
-    if (imgFile && imgFile !== undefined && cameraCallback && closeCallback) {
+    if (imgFile && imgFile !== undefined && cameraCallback) {
       cameraCallback(imgFile);
-      closeCallback();
     }
   };
 
@@ -43,19 +41,21 @@ const CameraComponent: React.FC<CameraComponentProps> = ({ cameraCallback, close
     const videoref = ref.current;
     const startCamera = async () => {
       if (videoref !== null) {
-        if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-          try {
-            const stream = await navigator.mediaDevices.getUserMedia({
-              video: true,
-              audio: false,
-            });
-            mediaStream = stream;
-            videoref.srcObject = stream;
-            videoref.play();
-          } catch (err) {
-            console.log('errr');
-          }
+        // if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+        try {
+          const stream = await navigator.mediaDevices.getUserMedia({
+            video: {
+              aspectRatio: 9 / 16,
+            },
+            audio: false,
+          });
+          mediaStream = stream;
+          videoref.srcObject = stream;
+          videoref.play();
+        } catch (err) {
+          console.log('errr');
         }
+        // }
       }
     };
     startCamera();
@@ -72,33 +72,41 @@ const CameraComponent: React.FC<CameraComponentProps> = ({ cameraCallback, close
   }, [isCaptured]);
 
   return (
-    <>
+    <div className="flex flex-wrap h-screen flex-col justify-center">
       {!isCaptured && (
-        <>
-          <video className="h-full w-full mx-auto" id="video" ref={ref} autoPlay muted playsInline>
+        <div>
+          <video
+            className="h-full mx-auto"
+            id="video"
+            ref={ref}
+            style={{ objectFit: 'initial', height: 500, width: 281 }}
+            autoPlay
+            muted
+            playsInline
+          >
             Video stream not available.
           </video>
-        </>
+        </div>
       )}
-
-      <canvas id="canvas" ref={canvas} height={265} width={465} style={{ display: !isCaptured ? 'none' : 'block' }} />
-      <div className="text-center mt-2">
-        {isCaptured ? (
-          <>
-            <button type="button" className={StylesCSS.PRIMARY_BUTTON} onClick={acceptPicture}>
-              Accept
+      <div style={{ display: !isCaptured ? 'none' : 'block', alignSelf: 'center' }}>
+        <canvas id="canvas" ref={canvas} height={500} width={281} />
+      </div>
+      <div className="text-center mt-2 flex-col">
+        <button type="button" onClick={takePicture} disabled={isCaptured}>
+          <PictureButtonIcon />
+        </button>
+        {isCaptured && (
+          <div>
+            <button type="button" className="text-white uppercase px-5" onClick={cancelPicture}>
+              Retake
             </button>
-            <button type="button" className={StylesCSS.PRIMARY_BUTTON} onClick={cancelPicture}>
-              Cancel
+            <button type="button" className="bg-white text-black uppercase px-5" onClick={acceptPicture}>
+              Next
             </button>
-          </>
-        ) : (
-          <button type="button" className={StylesCSS.PRIMARY_BUTTON} onClick={takePicture}>
-            Take picture
-          </button>
+          </div>
         )}
       </div>
-    </>
+    </div>
   );
 };
 

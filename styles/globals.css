@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Rational";
+  src: url("../public/fonts/RationalTWText-Medium.otf");
+}
+
+@font-face {
+  font-family: "WorkSans";
+  src: url("../public/fonts/WorkSans-VariableFont_wght.ttf");
+}
+
 html,
 body {
   padding: 0;

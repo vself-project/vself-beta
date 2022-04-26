@@ -6,6 +6,8 @@ import { withTRPC } from '@trpc/next';
 import { AppRouter } from './api/trpc/[trpc]';
 
 import { Provider } from 'react-redux';
+import { ThemeProvider } from 'next-themes';
+
 import Head from 'next/head';
 
 import { store } from '../store';
@@ -23,12 +25,14 @@ function MyApp({ Component, pageProps }: AppProps) {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <AppLayout>
-        <>
-          <Header />
-          <div className="grid place-items-center h-screen">
-            <AnyComponent {...pageProps} />
-          </div>
-        </>
+        <ThemeProvider attribute="class">
+          <>
+            {/* <Header /> */}
+            <div className="dark:bg-black text-gray-900 dark:text-white">
+              <AnyComponent {...pageProps} />
+            </div>
+          </>
+        </ThemeProvider>
       </AppLayout>
     </Provider>
   );

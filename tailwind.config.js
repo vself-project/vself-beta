@@ -6,12 +6,18 @@ module.exports = {
     './features/**/*.{js,ts,jsx,tsx}',
     './node_modules/tw-elements/dist/js/**/*.js',
   ],
-  darkMode: 'media',
+  darkMode: 'class',
   theme: {
     extend: {
+      fontFamily: {
+        worksans: ['WorkSans', 'sans-serif'],
+        rational: ['Rational', 'sans-serif'],
+      },
       animation: {
         fadein: 'fadein .5s',
         fadeout: 'fadeout .5s',
+        'spin-slow': 'spin 9s linear infinite',
+        arrow: 'arrow 2s infinite',
       },
       keyframes: {
         fadein: {
@@ -25,6 +31,12 @@ module.exports = {
           to: {
             opacity: 0,
           },
+        },
+        arrow: {
+          '0%': { opacity: 0 },
+          '40%': { opacity: 1 },
+          '80%': { opacity: 0 },
+          '100%': { opacity: 0 },
         },
       },
       colors: {
@@ -41,5 +53,5 @@ module.exports = {
   variants: {
     extend: {},
   },
-  plugins: [require('tw-elements/dist/plugin')],
+  plugins: [require('tw-elements/dist/plugin'), require('tailwindcss-animation-delay')],
 };
