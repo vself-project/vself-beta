@@ -71,7 +71,7 @@ const WebImageUploadForm = () => {
 
   const getEvidences = async () => {
     const { contract } = await getPOWAccountAndContract(account_id);
-    const evidencesArray = await contract.get_evidences({ from_index: 0, limit: 10 });
+    const evidencesArray = await contract.get_evidences({ from_index: 0, limit: 100 });
     console.log('evidencesArray: ', evidencesArray);
     setEvidences(evidencesArray);
   };
