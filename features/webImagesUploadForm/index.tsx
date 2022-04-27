@@ -15,6 +15,7 @@ import HashDoxIcon from '../../components/icons/HashDoxIcon';
 import FileImageComponent from '../../components/fileImage';
 import { Steps } from './enums';
 import ArrowsIcon from '../../components/icons/ArrowsIcon';
+import { Wrapper } from '@googlemaps/react-wrapper';
 
 interface ImageLocation {
   latitude: number;
@@ -50,22 +51,23 @@ const WebImageUploadForm = () => {
   const sendImage = async () => {
     if (imgFile) {
       setIsLoading(true);
-      const downloadUrl = await uploadImageToFirebase(imgFile);
-      const { contract } = await getPOWAccountAndContract(account_id);
-      const arrayBuffer = await imgFile.arrayBuffer();
-      const hash = sha3_256(arrayBuffer);
-      await contract.upload_evidence({
-        evidence: {
-          media_hash: hash,
-          metadata: JSON.stringify({
-            downloadUrl,
-            ...metaData,
-            ...location,
-            name: '',
-            timestamp: '',
-          }),
-        },
-      });
+      console.log('location: ', location);
+      // const downloadUrl = await uploadImageToFirebase(imgFile);
+      // const { contract } = await getPOWAccountAndContract(account_id);
+      // const arrayBuffer = await imgFile.arrayBuffer();
+      // const hash = sha3_256(arrayBuffer);
+      // await contract.upload_evidence({
+      //   evidence: {
+      //     media_hash: hash,
+      //     metadata: JSON.stringify({
+      //       downloadUrl,
+      //       ...metaData,
+      //       ...location,
+      //       name: account_id,
+      //       timestamp: '',
+      //     }),
+      //   },
+      // });
       setIsLoading(false);
       setStep(Steps.INFO_STEP);
     }
