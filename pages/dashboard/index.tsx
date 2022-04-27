@@ -10,7 +10,9 @@ const getEvidences = (from: number, limit: number) => {
 }
 
 const DashboardPage: NextPage = () => {
-  return <DashboardTable evidences={getEvidences(10,30)} />;
+  const from = 10;
+  const to = 30;
+  return <DashboardTable evidences={getEvidences(from, to)} from={from}/>;
 };
 
 export default DashboardPage;
