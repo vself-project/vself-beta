@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
-import { ref, uploadBytesResumable, getDownloadURL } from 'firebase/storage';
+import { ref, uploadBytesResumable, getDownloadURL, listAll } from 'firebase/storage';
 import { sha3_256 } from 'js-sha3';
 
 // Set the configuration for your app
@@ -31,9 +31,18 @@ export const uploadImageToFirebase = async (file: File): Promise<unknown> => {
   });
 };
 
-export const renderFirebaseImage = (hash: string): string => {
-  // const storageRef = ref(storage, `images ${hash}`);
-  // const url = await getDownloadURL(ref(storage, `images/${hash}`));
-  // console.log('url: ', url);
-  return 'storageRef';
+export const renderFirebaseImage = async (hash: string): Promise<string> => {
+  const listRef = ref(storage, 'images/');
+  let url;
+  // const result = await storageRef.listAll();
+  const result = await listAll(listRef);
+  const getImageUrl = async (ref: any) => {
+    url = await getDownloadURL(ref);
+    console.log('url: ', url);
+  };
+  result.items.forEach((itemRef) => {
+    // All the items under listRef.
+    getImageUrl(itemRef);
+  });
+  return '/0.png';
 };

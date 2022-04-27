@@ -1,0 +1,6 @@
+export enum Steps {
+  FIRST_STEP = 'FIRST_STEP',
+  CAMERA_STEP = 'CAMERA_STEP',
+  CONFIRM_STEP = 'CONFIRM_STEP',
+  INFO_STEP = 'INFO_STEP',
+}

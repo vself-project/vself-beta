@@ -3,27 +3,22 @@
 import React, { useState } from 'react';
 import exifr from 'exifr';
 import { sha3_256 } from 'js-sha3';
+import ReactPageScroller from 'react-page-scroller';
 import { useAppSelector } from '../../hooks';
-import { getPOWAccountAndContract } from '../../utils';
-import { renderFirebaseImage, uploadImageToFirebase } from '../../utils/firebase';
+import { getCoords, getPOWAccountAndContract } from '../../utils';
+import { uploadImageToFirebase } from '../../utils/firebase';
 // Components
-import UploadImageButton from '../../components/uploadImageButton';
 import MapComponent from '../../components/mapcomponent';
-import Spinner from '../../components/spinner';
-import JSONcomponent from '../../components/JSONcomponent';
-import { StylesCSS } from '../../constants/styles';
-import CameraButton from '../../components/cameraButton';
+// import { StylesCSS } from '../../constants/styles';
 import CameraComponent from '../../components/cameraComponent';
-import Modal from '../../components/modal';
+import HashDoxIcon from '../../components/icons/HashDoxIcon';
+import FileImageComponent from '../../components/fileImage';
+import { Steps } from './enums';
+import ArrowsIcon from '../../components/icons/ArrowsIcon';
 
 interface ImageLocation {
   latitude: number;
   longitude: number;
-}
-
-interface Evidence {
-  media_hash: string;
-  metadata: string;
 }
 
 const WebImageUploadForm = () => {
@@ -32,18 +27,24 @@ const WebImageUploadForm = () => {
   const [location, setImgLocation] = useState<ImageLocation | null>(null);
   const [imgFile, setNewImgFile] = useState<File | null>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [isModal, setIsModal] = useState<boolean>(false);
-  const [evidences, setEvidences] = useState<Evidence[]>([]);
-
-  const cameraButtonCallback = () => setIsModal(true);
-  const cameraCloseCallback = () => setIsModal(false);
+  const [step, setStep] = useState<string>(Steps.FIRST_STEP);
 
   const onImageSet = async (file: File): Promise<void> => {
     const output = await exifr.parse(file, true);
     const { latitude, longitude } = output;
-    setImgLocation(latitude !== undefined ? { latitude, longitude } : null);
+    const userPosition: any = await getCoords();
+    // If File Exif Data doesn't have any location coords
+    // We can get browser's geolocation
+    const imageLocation = latitude
+      ? { latitude, longitude }
+      : userPosition
+      ? { latitude: userPosition.lat, longitude: userPosition.long }
+      : null;
+    // Setting Location and other Metadata
+    setImgLocation(imageLocation);
     setNewImgFile(file);
     setMetaData(output);
+    setStep(Steps.CONFIRM_STEP);
   };
 
   const sendImage = async () => {
@@ -59,65 +60,102 @@ const WebImageUploadForm = () => {
           metadata: JSON.stringify({
             downloadUrl,
             ...metaData,
+            ...location,
+            name: '',
+            timestamp: '',
           }),
         },
       });
       setIsLoading(false);
-      setImgLocation(null);
-      setNewImgFile(null);
-      setMetaData(null);
+      setStep(Steps.INFO_STEP);
     }
-  };
-
-  const getEvidences = async () => {
-    const { contract } = await getPOWAccountAndContract(account_id);
-    const evidencesArray = await contract.get_evidences({ from_index: 0, limit: 100 });
-    console.log('evidencesArray: ', evidencesArray);
-    setEvidences(evidencesArray);
   };
 
   if (isLoading) {
     return (
       <div className="grid place-items-center h-screen">
         <div className="text-center">
-          <h2 className="mb-4">Uploading your photo</h2>
-          <Spinner />
-          <h3 className="mt-4">Please wait</h3>
+          <div className="animate-spin-slow">
+            <HashDoxIcon />
+          </div>
         </div>
       </div>
     );
   }
 
-  return (
-    <>
-      <Modal isOpened={isModal} closeCallback={cameraCloseCallback}>
-        <CameraComponent cameraCallback={onImageSet} closeCallback={cameraCloseCallback} />
-      </Modal>
-      <div>
-        <CameraButton callback={cameraButtonCallback} />
-        <UploadImageButton onImageSet={onImageSet} />
-        {metaData && <JSONcomponent json={metaData} title="EXIF Data:" />}
-        {location && (
-          <>
-            <h2 className="mb-4 pb-2 border-b-2">Location:</h2>
-            <MapComponent center={{ lat: location.latitude, lng: location.longitude }} zoom={8} />
-          </>
-        )}
-        {evidences.length !== 0 &&
-          evidences.map((evidence, index) => (
-            <div key={index}>
-              <img src={renderFirebaseImage(String(evidence.media_hash))} />
+  const startCamera = () => {
+    setStep(Steps.CAMERA_STEP);
+  };
+
+  const clearState = () => {
+    setImgLocation(null);
+    setNewImgFile(null);
+    setMetaData(null);
+    setStep(Steps.CAMERA_STEP);
+  };
+
+  switch (step) {
+    case Steps.CAMERA_STEP:
+      return <CameraComponent cameraCallback={onImageSet} />;
+    case Steps.CONFIRM_STEP:
+      return (
+        <div className="flex flex-wrap h-screen flex-col justify-center items-center">
+          {imgFile && <FileImageComponent file={imgFile} height={500} width={281} />}
+          <div>
+            <span>Signed:</span>
+            <span>{account_id}</span>
+            <span>Timestamp:</span>
+            <span>
+              {new Date().toLocaleDateString()} {new Date().toLocaleTimeString()}
+            </span>
+          </div>
+          <div>
+            <button type="button" className="text-white" onClick={startCamera}>
+              Back
+            </button>
+            <button type="button" className="text-black bg-white uppercase px-5" onClick={sendImage}>
+              Issue a hashmark
+            </button>
+          </div>
+        </div>
+      );
+    case Steps.INFO_STEP:
+      return (
+        <>
+          {location && <MapComponent center={{ lat: location.latitude, lng: location.longitude }} zoom={8} />}
+          <button type="button" onClick={clearState} className="text-black bg-white px-5">
+            Done
+          </button>
+        </>
+      );
+    default:
+      return (
+        <ReactPageScroller blockScrollUp>
+          <div className="flex content-center flex-wrap h-full">
+            <div className="px-6">
+              <div className="justify-center flex mb-10">
+                <div>
+                  <div className="animate-arrow animation-delay-200">
+                    <ArrowsIcon />
+                  </div>
+                  <div className="animate-arrow animation-delay-100">
+                    <ArrowsIcon />
+                  </div>
+                  <div className="animate-arrow ">
+                    <ArrowsIcon />
+                  </div>
+                </div>
+              </div>
+              <p className="font-rational bottom-0">
+                Hashd0x is a platform and a tool for instant and spoof-proof registration of metadata and image hashing
+                records in Near Protocol and Ethereum Swarm blockchains.
+              </p>
             </div>
-          ))}
-        <button className={StylesCSS.PRIMARY_BUTTON} type="button" disabled={!metaData} onClick={sendImage}>
-          Send
-        </button>
-        <button className={StylesCSS.PRIMARY_BUTTON} type="button" onClick={getEvidences}>
-          Get
-        </button>
-      </div>
-    </>
-  );
+          </div>
+          <CameraComponent cameraCallback={onImageSet} />
+        </ReactPageScroller>
+      );
+  }
 };
 
 export default WebImageUploadForm;

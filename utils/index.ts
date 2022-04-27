@@ -171,3 +171,18 @@ export const resizeFile = (file: File): Promise<File> =>
       450
     );
   });
+
+export const getCoords = async () => {
+  try {
+    const pos: any = await new Promise((resolve, reject) => {
+      navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
+
+    return {
+      long: pos.coords.longitude,
+      lat: pos.coords.latitude,
+    };
+  } catch (err) {
+    return null;
+  }
+};
