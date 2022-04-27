@@ -61,6 +61,8 @@ const WebImageUploadForm = () => {
             downloadUrl,
             ...metaData,
             ...location,
+            name: '',
+            timestamp: '',
           }),
         },
       });

@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=development next dev",
+    "dev:hashdox": "env-cmd -f .env.development.hashdox next dev",
     "build": "next build",
     "build:prod": "NODE_ENV=production next build",
     "start": "NODE_ENV=production next start",
@@ -11,6 +12,7 @@
     "test:watch": "jest --watch",
     "test": "jest -u",
     "deploy:dev": "NODE_ENV=development next build && firebase deploy -P staging --only hosting,functions:nextServer",
+    "deploy:hashdox": "env-cmd -f .env.development.hashdox next build && firebase deploy -P hashdox --only hosting,functions:nextServer",
     "deploy:prod": "NODE_ENV=production next build && firebase deploy -P prod --only hosting,functions:nextServer"
   },
   "dependencies": {
