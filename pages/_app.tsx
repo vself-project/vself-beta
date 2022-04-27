@@ -13,6 +13,7 @@ import Head from 'next/head';
 import { store } from '../store';
 
 import Header from '../components/header';
+import { Wrapper } from '@googlemaps/react-wrapper';
 // import AppLayout from '../components/appLayout';
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -28,12 +29,12 @@ function MyApp({ Component, pageProps }: AppProps) {
       </Head>
       {/* <AppLayout> */}
       <ThemeProvider attribute="class">
-        <>
+        <Wrapper apiKey={String(process.env.GOOGLE_MAPS_API_KEY)}>
           <Header />
           <div className="dark:bg-black text-gray-900 dark:text-white">
             <AnyComponent {...pageProps} />
           </div>
-        </>
+        </Wrapper>
       </ThemeProvider>
       {/* </AppLayout> */}
     </Provider>
