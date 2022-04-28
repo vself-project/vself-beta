@@ -9,13 +9,13 @@ type EvidenceState = Object;
 const initialState: EvidenceState = {};
 
 const eventReducer: Reducer = (state = initialState, action: AnyAction): EvidenceState => {
-  switch (action.type) {    
+  switch (action.type) {
     case EvidenceActions.AddEvidence:
-      const data = action.payload.data as Evidence;
-      const txhash = data.txhash;
-    //   const record_id = data["_"];
-    //   console.log(record_id);      
-      return { ...state, [txhash]: data };
+      //   const data = action.payload.data as Evidence;
+      //   const txhash = data.txhash;
+      // //   const record_id = data["_"];
+      // //   console.log(record_id);
+      return { ...state };
     default:
       return state;
   }

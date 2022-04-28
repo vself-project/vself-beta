@@ -22,14 +22,14 @@ interface DashboardTableProps {
 }
 
 // Constants
-const TRX_HASH_EXAMPLE = '2mtMSbfb26ojrn8ZPRwodExQDWkM4qw2wGDhPQrnSATj';
+export const TRX_HASH_EXAMPLE = '2mtMSbfb26ojrn8ZPRwodExQDWkM4qw2wGDhPQrnSATj';
 const LOCATION_DEFAULT = {
   lat: 47.662465,
   lng: -25.367988,
 };
 
 // Return human readable string with date and time
-const getDateFromTimestamp = (timestamp: any) => {
+export const getDateFromTimestamp = (timestamp: any) => {
   const date = new Date(timestamp);
   return (
     date.getDate() +
@@ -66,7 +66,7 @@ const getImageSource = (evidence: Evidence) => {
 };
 
 // Return cut hash if it's too long
-const cutHash = (hash: string) => {
+export const cutHash = (hash: string) => {
   if (hash.length > 40) {
     return hash.slice(0, 37) + '...';
   }
@@ -106,7 +106,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
             backgroundColor: 'black',
             justifyContent: 'space-between',
             width: '100%',
-            padding: '0px 12px 0px 12px',
+            padding: '0px 12px 0px 24px',
           }}
         >
           <HashDoxLogo />
@@ -115,10 +115,10 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
             records in Near Protocol and Ethereum Swarm blockchains.
           </p>
         </div>
-        <div style={{ display: 'flex', flex: 1, flexDirection: 'column', justifyContent: 'center', padding: 12 }}>
-          <p className="font-rational text-white text-[12px]">TRANSACTIONS</p>
+        <div style={{ display: 'flex', flex: 1, flexDirection: 'column', justifyContent: 'center', padding: 24 }}>
+          <p className="font-rational text-white text-[12px] mb-2">TRANSACTIONS</p>
           <div className="flex justify-center">
-            <ul className="rounded-lg w-full font-rational text-white text-[12px] overflow-y-scroll h-[160px] no-scrollbar pl-0">
+            <ul className="rounded-lg w-full font-rational text-white text-[12px] overflow-y-scroll h-[260px] no-scrollbar pl-0">
               {evidences.map((evidence, index) => {
                 return (
                   <li
@@ -144,7 +144,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
     const image_url = getImageSource(evidences[activeEvidenceIndex]);
     return (
       <div className="p-2 flex flex-1 justify-center align-center">
-        <URLImageComponent url={image_url} className="mx-4 h-80 rounded max-w-sm self-center" />
+        <URLImageComponent url={'/pow/4.jpg'} className="mx-4 h-80 rounded max-w-sm self-center" />
       </div>
     );
   };
@@ -156,7 +156,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
       const metadataObject = JSON.parse(metadata);
       let { location } = metadataObject;
       if (location == 'unknown' || location === undefined) {
-        throw Error(`Location is 'unknown' or undefined`);
+        throw Error('Location is unknown or undefined');
       }
 
       let lat, lng;
@@ -182,7 +182,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
   const getMapBlock = () => {
     return (
       <div style={{ display: 'flex:', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <div className="self-center p-3">{getMapComponent()}</div>
+        <div className="self-center h-full">{getMapComponent()}</div>
       </div>
     );
   };

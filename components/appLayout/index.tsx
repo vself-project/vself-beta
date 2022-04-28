@@ -50,7 +50,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
     initVselfWebApp();
   }, [dispatch]);
 
-  return <Loader>{is_authed ? children : <LoginForm loginCallBack={signInToNear} />}</Loader>;
+  return <Loader>{is_authed ? children : <LoginForm loginCallback={signInToNear} />}</Loader>;
 };
 
 export default AppLayout;

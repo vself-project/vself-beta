@@ -1,6 +1,6 @@
 export interface Evidence {
-  txhash: string;
-  filehash: string;
+  // txhash: string;
+  media_hash: string;
   //timestamp: string;
   //location: string;
   metadata: string;
