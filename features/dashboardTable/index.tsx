@@ -21,6 +21,10 @@ interface DashboardTableProps {
 
 // Constants
 const TRX_HASH_EXAMPLE = '2mtMSbfb26ojrn8ZPRwodExQDWkM4qw2wGDhPQrnSATj';
+const LOCATION_DEFAULT = {
+  lat: 47.662465,
+  lng: -25.367988
+}
 
 // Return human readable string with date and time
 const getDateFromTimestamp = (timestamp: any) => {
@@ -30,14 +34,19 @@ const getDateFromTimestamp = (timestamp: any) => {
 
 // Return url of image
 const getImageSource = (evidence: Evidence) => {
-  const { metadata, media_hash } = evidence;
-  const metadataObject = JSON.parse(metadata);
-  if (metadataObject.hasOwnProperty('uploadThrough') && metadataObject.uploadThrough == 'server') {
-    // Images uploaded by mobile app
-    return "http://82.148.29.178/images/" + media_hash + ".png";
+  try {
+    const { metadata, media_hash } = evidence;
+    const metadataObject = JSON.parse(metadata);
+    if (metadataObject.hasOwnProperty('uploadThrough') && metadataObject.uploadThrough == 'server') {
+      // Images uploaded by mobile app
+      return "http://82.148.29.178/images/" + media_hash + ".png";
+    }
+    // Get url of image storaged in firebase (uploaded through firebase) 
+    return "https://firebasestorage.googleapis.com/v0/b/vself-dev.appspot.com/o/images%2F" + media_hash + ".png?alt=media";
+  } catch (err) {
+    console.log(err);
+    return "";
   }
-  // Get url of image storaged in firebase (uploaded through firebase) 
-  return "https://firebasestorage.googleapis.com/v0/b/vself-dev.appspot.com/o/images%2F" + media_hash + ".png?alt=media";
 }
 
 // TO DO remove 'from' prop
@@ -93,36 +102,50 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
     const image_url = getImageSource(evidences[activeEvidenceIndex]);
     return (
       <div className="p-2 flex flex-1 justify-center align-center sm:justify-start"> 
-        <URLImageComponent url={image_url} className="mx-4 h-80 rounded max-w-sm"/>
+        <URLImageComponent url={image_url} className="mx-4 h-80 rounded max-w-sm self-center"/>
       </div>
     )
   }
 
-  // Return map with location
+  // Return map component with marker or not
+  const getMapComponent = () => {
+    try {
+      const { metadata } = evidences[activeEvidenceIndex];
+      console.log({metadata});
+      const metadataObject = JSON.parse(metadata);
+      let { location } = metadataObject;
+      if (location == 'unknown' || location === undefined) {
+        throw Error(`Location is 'unknown' or undefined`)
+      }
+
+      let lat, lng;
+      // Check how evidence had been uploaded
+      if (metadataObject.hasOwnProperty('uploadThrough') && metadataObject.uploadThrough == 'server') {
+        location = location.split(' ');
+        lat = Number(location[0].slice(0, -1));
+        lng = Number(location[1].slice(0, -1));
+      } else {
+        // TO DO check location from evidence uploaded through web app (JSON.parse error in mock data)
+        lat = Number(location.latitude);
+        lng = Number(location.longitude);
+      }
+      return <MapComponent height={300} center={{ lat, lng }} zoom={12} marker={true}/>
+    } catch (err) {
+      return (
+        <MapComponent height={300} center={{ lat: LOCATION_DEFAULT.lat, lng: LOCATION_DEFAULT.lng }} zoom={1}/>
+      )
+    }
+  }
+
+  // Return block with map
   const getMapBlock = () => {
-    const { metadata } = evidences[activeEvidenceIndex];
-    const metadataObject = JSON.parse(metadata);
-    if (metadataObject.hasOwnProperty('uploadThrough') && metadataObject.uploadThrough == 'server') {
-      const { location } = metadataObject;
-      if (location == 'unknown' || location == undefined) {
-        const lat = 47.662465;
-        const lng = -25.367988;
-        const zoom = 8;
-        return (
-          <div style={{ display: 'flex:', flex: 1, backgroundColor: 'yellow' }}>
-            <MapComponent center={{ lat, lng }} zoom={zoom} />
-          </div>
-        )
-      }          
-    }
-    if (metadataObject.hasOwnProperty('location')) {
-      return (<></>);
-      // return (
-      //   <div style={{ display: 'flex:', flex: 1, backgroundColor: 'yellow' }}>
-      //     <MapComponent center={{ lat: location.latitude, lng: location.longitude }} zoom={8} />
-      //   </div>
-      // )
-    }
+    return (
+      <div style={{ display: 'flex:', flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+        <div className="self-center px-2">
+          {getMapComponent()}
+        </div>
+      </div>
+    )
   }
 
   return (

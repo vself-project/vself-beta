@@ -3,9 +3,11 @@ import React, { useEffect, useRef } from 'react';
 interface MapComponentProps {
   center: google.maps.LatLngLiteral;
   zoom: number;
+  height: number;
+  marker?: boolean;
 }
 
-const MapComponent: React.FC<MapComponentProps> = ({ center, zoom }) => {
+const MapComponent: React.FC<MapComponentProps> = ({ center, zoom, height, marker }) => {
   const ref = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
@@ -15,15 +17,17 @@ const MapComponent: React.FC<MapComponentProps> = ({ center, zoom }) => {
         zoom,
         disableDefaultUI: true,
       });
-      new window.google.maps.Marker({
-        position: center,
-        map,
-        title: '',
-      });
+      if (marker) {
+        new window.google.maps.Marker({
+          position: center,
+          map,
+          title: '',
+        });
+      }
     }
   });
 
-  return <div ref={ref} id="map" style={{ height: 300 }} className="mb-4 pb-2" />;
+  return <div ref={ref} id="map" style={{ height }} className="mb-4 pb-2" />;
 };
 
 export default MapComponent;

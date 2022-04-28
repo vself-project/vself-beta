@@ -1,14 +1,16 @@
 import { Evidence } from '../models/Evidence';
 
 export const mockEvidences: Evidence[] = [
-  {media_hash: '1ae5c72cd2ddc93149d1cfc2bc1b432f930f4a0d7f827cb988a9f51aad3bd46a', metadata: '{"date": "Wed Apr 13 2022 20:17:28 GMT+0300 (Москва, стандартное время)"}'},
-  {media_hash: '64f7014beb71c8826831044f2c8c192ca73b34f99c0d8adf1ce144d287613249', metadata: '{"downloadUrl":"https://firebasestorage.googleapi","Filter":"Adaptive","Interlace":"Noninterlaced"}'},
+  {media_hash: '97ddff1e367be9d80e6ba7c109028203', metadata: '{"name":"Alex","time":"4/21/2022 3:57:57 PM","location":"41.69804N 44.80519E","uploadThrough":"server"}'},
+  {media_hash: '689bb00ad043497f885fd91209d7e9c1', metadata: '{"name":"Alex","time":"4/21/2022 3:59:26 PM","location":"41.69101N 44.80069E","uploadThrough":"server"}'},
+  {media_hash: '67b30ec070298ebefb77936308f6a371', metadata: '{"name":"Alex","time":"4/21/2022 3:54:00 PM","location":"unknown","uploadThrough":"server"}'},
+  {media_hash: '1ae5c72cd2ddc93149d1cfc2bc1b432f930f4a0d7f827cb988a9f51aad3bd46a', metadata: '{"date": "Wed Apr 13 2022 20:17:28 GMT+0300 (Москва, стандартное время)", "location":"unknown"}'},
+  {media_hash: '64f7014beb71c8826831044f2c8c192ca73b34f99c0d8adf1ce144d287613249', metadata: '{"downloadUrl":"https://firebasestorage.googleapi","Filter":"Adaptive","Interlace":"Noninterlaced","location":"{"latitude":"43.93653888888888","longitude":"12.4466"}"}'},
   {media_hash: 'd367eb6bae74ee2c83e1141fa998963d5c6874c682376e349978b714dc81eb8e', metadata: '{"downloadUrl":"https://firebasestorage.googleapis","1111":66,"1112":51,"1113":65,"1114":0,"1115":0}'},
   {media_hash: 'b2d5d2e97fbd1ca6f5f4f5951c711c3957ae79d24a4f6e6386749dde08bea804', metadata: '{"downloadUrl":"https://firebasestorage.googleapis","polution":37,"ThumbnailWidth":0,"ThumbnailHeight":0}'},
   {media_hash: 'd367eb6bae74ee2c83e1141fa998963d5c6874c682376e349978b714dc81eb8e', metadata: '{"downloadUrl":"https://firebasestorage.googleapis","1111":66,"1112":51,"1113":65,"1114":0,"1115":0}'},
-  {media_hash: '03d4257e5c93f3621908c5b7f1245daf', metadata: '{"name":"Alex","time":"4/21/2022 3:54:00 PM","location":"unknown","uploadThrough":"server"}'},
-  {media_hash: '0e90aceaac33398232ba10faf56e5b7c', metadata: '{"name":"Alex","time":"4/21/2022 3:57:57 PM","location":"unknown","uploadThrough":"server"}'},
-  {media_hash: '689bb00ad043497f885fd91209d7e9c1', metadata: '{"name":"Alex","time":"4/21/2022 3:59:26 PM","location":"unknown","uploadThrough":"server"}'},
+  {media_hash: '0e90aceaac33398232ba10faf56e5b7c', metadata: '{"name":"Alex","time":"4/21/2022 3:57:57 PM","location":"41.69804N 44.80519E","uploadThrough":"server"}'},
+  {media_hash: '689bb00ad043497f885fd91209d7e9c1', metadata: '{"name":"Alex","time":"4/21/2022 3:59:26 PM","location":"41.69101N 44.80069E","uploadThrough":"server"}'},
   {media_hash: 'bdd5f8f6de26c896da2e5793e35e08c4', metadata: '{"name":"Alex","time":"4/21/2022 4:00:22 PM","location":"unknown","uploadThrough":"server"}'},
   {media_hash: '60bb086f30daffbe5f32cb6b46e56562', metadata: '{"name":"Alex","time":"4/21/2022 8:25:37 PM","location":"unknown","uploadThrough":"server"}'},
   {media_hash: 'd106e7ede8392263d926a9b88df2ba45', metadata: '{"name":"Alex","time":"4/21/2022 8:26:35 PM","location":"unknown","uploadThrough":"server"}'},
