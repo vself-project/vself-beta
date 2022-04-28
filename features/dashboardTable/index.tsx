@@ -4,6 +4,7 @@ import React, { useState } from 'react';
 
 // Components
 import { Evidence } from '../../models/Evidence';
+import { powAccount } from '../../constants/accounts';
 import Spinner from '../../components/spinner';
 import HashDoxLogo from '../../components/icons/HashDoxLogo';
 import URLImageComponent from '../../components/urlImage';
@@ -47,6 +48,14 @@ const getImageSource = (evidence: Evidence) => {
     console.log(err);
     return "";
   }
+}
+
+// Return cut hash if it's too long
+const cutHash = (hash: string) => {
+  if (hash.length > 40) {
+    return hash.slice(0, 37) + '...';
+  }
+  return hash;
 }
 
 // TO DO remove 'from' prop
@@ -111,7 +120,6 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
   const getMapComponent = () => {
     try {
       const { metadata } = evidences[activeEvidenceIndex];
-      console.log({metadata});
       const metadataObject = JSON.parse(metadata);
       let { location } = metadataObject;
       if (location == 'unknown' || location === undefined) {
@@ -148,6 +156,140 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
     )
   }
 
+  // Return block with map
+  const getEvidenceDataBlock = () => {
+    try {
+      const evidence = evidences[activeEvidenceIndex];
+      const { metadata, media_hash } = evidence;
+      const metadataObject = JSON.parse(metadata);
+      let signedBy = powAccount;
+      if (!metadataObject.hasOwnProperty('uploadThrough') || metadataObject.uploadThrough != 'server') {
+        signedBy = metadataObject.name;
+        if (signedBy === undefined) {
+          signedBy = 'Unknown';
+        }
+      }
+
+      let { location } = metadataObject;
+      if (location == undefined) {
+        location = 'Unknown';
+      } else if (!metadataObject.hasOwnProperty('uploadThrough') || metadataObject.uploadThrough != 'server') {
+        const { lat, lng } = location;
+        if (lat != undefined && lng != undefined) {
+          location = String(location.lat) + 'N  ' + location.lng + 'E';
+        }
+      }
+  
+      return (
+        <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: 8 }}>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10}}>
+              <div>
+                <p className="font-rational text-white text-[12px]">
+                  SIGNED
+                </p>
+                <p className="font-rational text-white text-[10px]">
+                  {signedBy}
+                </p>
+              </div>
+              <div>
+                <p className="font-rational text-white text-[12px]">
+                  TIMESTAMP
+                </p>
+                <p className="font-rational text-white text-[10px]">
+                  {getDateFromTimestamp(Math.floor(Date.now() / 1000))}
+                </p>
+              </div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between' }}>
+              <p className="font-rational text-white text-[12px]">
+                FILEHASH
+              </p>
+              <p className="font-rational text-white text-[8px] self-end">
+                Powered by Swarm
+              </p>
+            </div>
+            <p className="p-1 pb-0 font-rational text-white text-[12px]  border w-full">
+              {cutHash(media_hash)}
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
+              <p className="font-rational text-white text-[12px]">
+                HASHMARK
+              </p>
+              <p className="font-rational text-white text-[8px] self-end">
+                Powered by NEAR
+              </p>
+            </div>
+            <p className="p-1 pb-0 font-rational text-white text-[12px] border w-full">
+              {cutHash(TRX_HASH_EXAMPLE)}
+            </p>
+            <div style={{display: "flex", flexDirection: 'row', justifyContent: 'space-between', width: '100%', marginTop: 14}}>
+              <div>
+                <p className="font-rational text-white text-[12px]">
+                  LOCATION DATA
+                </p>
+                <p className="font-rational text-white text-[10px]">
+                  {location}
+                </p>
+              </div>
+              <p className="ml-4 font-rational text-white text-[8px] w-44">
+                Location data can be spoofed or faked at several levels of the operating system, GPS or VPN
+              </p>
+            </div>
+          </div>
+        </div>
+      )
+    } catch (err) {
+      const { media_hash } = evidences[activeEvidenceIndex];
+      return (
+        <div style={{ display: 'flex', flex: 1, justifyContent: 'center'}}>
+          <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: 8 }}>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10}}>
+              <div>
+                <p className="font-rational text-white text-[12px]">
+                  SIGNED
+                </p>
+                <p className="font-rational text-white text-[10px]">
+                  Unknown
+                </p>
+              </div>
+              <div>
+                <p className="font-rational text-white text-[12px]">
+                  TIMESTAMP
+                </p>
+                <p className="font-rational text-white text-[10px]">
+                  {getDateFromTimestamp(Math.floor(Date.now() / 1000))}
+                </p>
+              </div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between'}}>
+              <p className="font-rational text-white text-[12px]">
+                FILEHASH
+              </p>
+              <p className="font-rational text-white text-[8px] self-end">
+                Powered by Swarm
+              </p>
+            </div>
+            <p className="font-rational text-white text-[12px]">
+              {cutHash(media_hash)}
+            </p>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
+              <p className="font-rational text-white text-[12px]">
+                HASHMARK
+              </p>
+              <p className="font-rational text-white text-[8px] self-end">
+                Powered by NEAR
+              </p>
+            </div>
+            <p className="font-rational text-white text-[12px]">
+              {cutHash(TRX_HASH_EXAMPLE)}
+            </p>
+          </div>
+        </div>
+      )
+    }
+  }
+
   return (
     <div style={{ display: 'flex', flexDirection: 'column', width: '100%', height: '100vh' }}>
       <div className="flex flex-1 flex-col sm:flex-row">
@@ -156,9 +298,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
       </div>
       <div className="flex flex-1 flex-col sm:flex-row">
         {getMapBlock()}
-        <div style={{ display: 'flex', flex: 1, backgroundColor: 'green' }}>
-          {getTransactionsBlock()}
-        </div>
+        {getEvidenceDataBlock()}
       </div>
     </div>
   );

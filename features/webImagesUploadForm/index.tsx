@@ -124,7 +124,7 @@ const WebImageUploadForm = () => {
     case Steps.INFO_STEP:
       return (
         <>
-          {location && <MapComponent center={{ lat: location.latitude, lng: location.longitude }} zoom={8} />}
+          {location && <MapComponent height={300} center={{ lat: location.latitude, lng: location.longitude }} zoom={8}/>}
           <button type="button" onClick={clearState} className="text-black bg-white px-5">
             Done
           </button>
