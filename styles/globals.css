@@ -2,6 +2,16 @@
 @tailwind components;
 @tailwind utilities;
 
+@font-face {
+  font-family: "Rational";
+  src: url("../public/fonts/RationalTWText-Medium.otf");
+}
+
+@font-face {
+  font-family: "WorkSans";
+  src: url("../public/fonts/WorkSans-VariableFont_wght.ttf");
+}
+
 html,
 body {
   padding: 0;
@@ -17,4 +27,15 @@ a {
 
 * {
   box-sizing: border-box;
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;  /* Firefox */
 }
