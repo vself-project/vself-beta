@@ -14,7 +14,8 @@ const CameraComponent: React.FC<CameraComponentProps> = ({ cameraCallback }) => 
   const takePicture = () => {
     const ctx: CanvasRenderingContext2D | null = canvas.current ? canvas.current.getContext('2d') : null;
     if (ctx && ref.current && canvas.current) {
-      ctx.drawImage(ref.current, 0, 0, canvas.current?.width, canvas.current?.height);
+      console.log('ref.current: ', ref.current);
+      ctx.drawImage(ref.current, 0, 0, ref.current.clientWidth, canvas.current?.height);
       setIsCaptured(true);
       canvas.current.toBlob((blob) => {
         if (blob) {
@@ -72,31 +73,33 @@ const CameraComponent: React.FC<CameraComponentProps> = ({ cameraCallback }) => 
   }, [isCaptured]);
 
   return (
-    <div className="flex flex-wrap h-screen flex-col justify-center">
-      {!isCaptured && (
-        <div>
-          <video
-            className="h-full mx-auto"
-            id="video"
-            ref={ref}
-            style={{ objectFit: 'initial', height: 500, width: 281 }}
-            autoPlay
-            muted
-            playsInline
-          >
-            Video stream not available.
-          </video>
-        </div>
-      )}
-      <div style={{ display: !isCaptured ? 'none' : 'block', alignSelf: 'center' }}>
-        <canvas id="canvas" ref={canvas} height={500} width={281} />
-      </div>
-      <div className="text-center mt-2 flex-col">
-        <button type="button" onClick={takePicture} disabled={isCaptured}>
-          <PictureButtonIcon />
-        </button>
-        {isCaptured && (
+    <div className="flex content-center flex-wrap h-screen">
+      <div style={{ maxWidth: 600, margin: '0 auto', display: 'flex', flexDirection: 'column' }}>
+        {!isCaptured && (
           <div>
+            <video
+              className="h-full mx-auto w-full"
+              id="video"
+              ref={ref}
+              style={{ objectFit: 'initial', height: 500, width: 300 }}
+              autoPlay
+              muted
+              playsInline
+            >
+              Video stream not available.
+            </video>
+          </div>
+        )}
+        <div className="flex flex-1 w-full" style={{ display: !isCaptured ? 'none' : 'flex', alignSelf: 'center' }}>
+          <canvas id="canvas" ref={canvas} height={500} style={{ width: '100%;' }} />
+        </div>
+        <div className="text-center mt-8 flex-col">
+          <button type="button" onClick={takePicture} disabled={isCaptured}>
+            <PictureButtonIcon />
+          </button>
+        </div>
+        {isCaptured && (
+          <div className="flex justify-between mt-4">
             <button type="button" className="text-white uppercase px-5" onClick={cancelPicture}>
               Retake
             </button>
