@@ -7,6 +7,7 @@ import { Evidence } from '../../models/Evidence';
 import { powAccount } from '../../constants/accounts';
 import Spinner from '../../components/spinner';
 import HashDoxLogo from '../../components/icons/HashDoxLogo';
+import HashDoxIcon from '../../components/icons/HashDoxIcon';
 import URLImageComponent from '../../components/urlImage';
 import MapComponent from '../../components/mapcomponent';
 
@@ -62,17 +63,13 @@ const cutHash = (hash: string) => {
 const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
   const [activeEvidenceIndex, setActiveEvidenceIndex] = useState(0);
 
-  // TO DO check that case
+  // Empty evidence array case
   if (!evidences.length) {
     return (
-      <div className="grid place-items-center h-screen">
-        <div className="text-center">
-          <h2 className="mb-4">Uploading your photo</h2>
-          <Spinner />
-          <h3 className="mt-4">Please wait</h3>
-        </div>
+      <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', width: '100%', height: '100vh' }}>
+        <HashDoxIcon/>
       </div>
-    );
+    )
   }
 
   // Return block with transactions data
@@ -149,7 +146,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
   const getMapBlock = () => {
     return (
       <div style={{ display: 'flex:', flex: 1, justifyContent: 'center', alignItems: 'center'}}>
-        <div className="self-center px-2">
+        <div className="self-center p-3">
           {getMapComponent()}
         </div>
       </div>
@@ -181,7 +178,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
       }
   
       return (
-        <div style={{ display: 'flex', flex: 1, justifyContent: 'center' }}>
+        <div style={{ display: 'flex', flex: 1, justifyContent: 'center', paddingBottom: 40 }}>
           <div style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: 8 }}>
             <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginBottom: 10}}>
               <div>
