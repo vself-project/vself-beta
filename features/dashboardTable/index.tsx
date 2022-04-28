@@ -107,7 +107,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
   const getImageBlock = () => {
     const image_url = getImageSource(evidences[activeEvidenceIndex]);
     return (
-      <div className="p-2 flex flex-1 justify-center align-center sm:justify-start"> 
+      <div className="p-2 flex flex-1 justify-center align-center"> 
         <URLImageComponent url={image_url} className="mx-4 h-80 rounded max-w-sm self-center"/>
       </div>
     )
