@@ -15,7 +15,6 @@ import HashDoxIcon from '../../components/icons/HashDoxIcon';
 import FileImageComponent from '../../components/fileImage';
 import { Steps } from './enums';
 import ArrowsIcon from '../../components/icons/ArrowsIcon';
-import { Wrapper } from '@googlemaps/react-wrapper';
 import { cutHash, getDateFromTimestamp, TRX_HASH_EXAMPLE } from '../dashboardTable';
 import HashDoxLogo from '../../components/icons/HashDoxLogo';
 
@@ -61,13 +60,13 @@ const WebImageUploadForm = () => {
       const { contract } = await getPOWAccountAndContract(account_id);
       await contract.upload_evidence({
         evidence: {
-          media_hash: hash,
+          media_hash: newHash,
           metadata: JSON.stringify({
             downloadUrl,
             ...metaData,
             location,
             name: account_id,
-            timestamp: '',
+            timestamp: Date.now() * 1000,
           }),
         },
       });
