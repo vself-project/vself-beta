@@ -35,6 +35,7 @@ const Header: React.FC = () => {
   return (
     <nav
       className="
+          hidden
           w-full
           flex flex-wrap
           items-center
