@@ -1,0 +1,14 @@
+version: '3.4'
+
+services:
+  vselfdao:
+    image: vselfdao
+    build:
+      context: .
+      dockerfile: ./Dockerfile
+    environment:
+      NODE_ENV: development
+    ports:
+      - 8765:8765
+      - 9229:9229
+    command: ["node", "--inspect=0.0.0.0:9229", "service.js"]

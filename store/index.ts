@@ -1,11 +1,13 @@
 import { configureStore, combineReducers } from '@reduxjs/toolkit';
 import userAccountReducer from './reducers/userAccountReducer';
 import eventReducer from './reducers/eventReducer';
+import evidenceReducer from './reducers/evidenceReducer';
 import appStateReducer from './reducers/appStateReducer';
 
 const rootReducer = combineReducers({
   userAccountReducer,
   eventReducer,
+  evidenceReducer,
   appStateReducer,
 });
 
