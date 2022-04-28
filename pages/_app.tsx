@@ -6,7 +6,7 @@ import { withTRPC } from '@trpc/next';
 import { AppRouter } from './api/trpc/[trpc]';
 
 import { Provider } from 'react-redux';
-import { ThemeProvider, useTheme } from 'next-themes';
+import { ThemeProvider } from 'next-themes';
 
 import Head from 'next/head';
 
@@ -17,8 +17,6 @@ import { Wrapper } from '@googlemaps/react-wrapper';
 // import AppLayout from '../components/appLayout';
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const { theme, setTheme } = useTheme();
-  setTheme('dark');
   const AnyComponent = Component as any;
   return (
     <Provider store={store}>

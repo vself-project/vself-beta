@@ -3,7 +3,7 @@ import React, { useEffect, useRef } from 'react';
 interface MapComponentProps {
   center: google.maps.LatLngLiteral;
   zoom: number;
-  height: number;
+  height?: number | string;
   marker?: boolean;
 }
 

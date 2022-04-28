@@ -6,7 +6,7 @@ interface FileImageComponentProps {
   url: string;
   className?: string;
 }
-      
+
 const checkIfImageExists = (url: string, callback: any) => {
   const img = new Image();
   img.src = url;
@@ -16,24 +16,24 @@ const checkIfImageExists = (url: string, callback: any) => {
     img.onload = () => {
       callback(true);
     };
-    
+
     img.onerror = () => {
       callback(false);
     };
   }
-}
+};
 
 const URLImageComponent: React.FC<FileImageComponentProps> = ({ url, className }) => {
-  const [imgExist, setImgExists] = useState(false); 
+  const [imgExist, setImgExists] = useState(false);
 
   useEffect(() => {
     checkIfImageExists(url, setImgExists);
-  }, [url]); 
+  }, [url]);
 
   if (imgExist) {
-    return <img className={className} src={url} alt="The image isn't available."/>
+    return <img className={className} src={url} alt="The image isn't available." />;
   }
-  return <HashDoxIcon/>;
+  return <HashDoxIcon />;
 };
 
 export default URLImageComponent;
