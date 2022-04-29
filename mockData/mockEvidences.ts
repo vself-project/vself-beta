@@ -1,5 +1,19 @@
 import { Evidence } from '../models/Evidence';
 
+// Preloaded transaction hashes
+export const txHashes: any = {
+  "99db50f86507b2756183d829efc86eb70357d37c186e583cfb6979cfdcfab89e": { tx: "998iKsTJJWi4buN5YbiYVxYs2MJeqfL3GQRwqmCh4WcR", time: "April 29, 2022 at 8:27:14am" },
+  "4e00110557e83f12f8dfa28a62d3e9ca0e364859f0dbe984e605a165de4ffc7a": { tx: "8GAnELPCo2VZHLQ61LrF9FsTEgAFsvQ3gRfHKNreWEon", time: "April 29, 2022 at 8:27:19am"},
+  "5ae03c532ff376172511940f2dc08b2898eca8342168f3d8cc384f07951bd859": { tx: "DWf5BnqLPoSiBfGJDSxmcS5Vhkq4ff1xDRbqB3NsFjvT", time: "April 29, 2022 at 8:27:25am"},
+  "7e907833c6233ff27c5f928fd1c60cf5112381675258925c1676b5a3a2231835": { tx: "FVBFN4dax9H8fJykiTs6Buau4csL2dc7CRSycnqX35ba", time: "April 29, 2022 at 8:27:30am"},
+  "9a7516f8e2edf3d13e04e66d3eb8de4cd236e66f49a513e8a5b9b247906af72b": { tx: "ABhVtxHeXDHhKX28xnTqNFhcDqskQXMVUtwYmreGyyVg", time: "April 29, 2022 at 8:27:35am"},
+  "395addc5cdbf628e273e3e059c16c08dcb65d432848756d35ab898742177ecd4": { tx: "CoXFvzxNQUoeEir2WywzdxgxfjvM7tYDfiF6vVeLprmk", time: "April 29, 2022 at 8:27:41am"},
+  "1778955f366bb24ca9f1ca74646768ad44c419cc8cb31dfd19ea38f1ab158369": { tx: "2VY59bktqdpX91J4GiXpx5cDDfiwevvtZJ6jtWnPLBqt", time: "April 29, 2022 at 8:27:53am"},
+  "9825679226b72456cd082d75bbd6a845d8ceadfa506fcc978b30f54723db6b78": { tx: "6SvSjHm5yRLDay3ugVV6KUsFQT2q5LTA4VBy4P1vaCVJ", time: "April 29, 2022 at 8:27:59am" },
+  "69407975431f5177f7e9bb3252a399669192bdf007da1cb524a023bcc30d9dc5": { tx: "CFvKsfSuy7T9FB1x8iUyJemRQPVHtPDRnGC2XZHG2Fyu", time: "April 29, 2022 at 8:28:05am"},
+  "e56824cfb04e44dd3115db9dc47811eda59b1cd692a2a8a494c2b09145b68b85": { tx: "3vhyPHNo1t3ZrY7KeLAFZt9RPrWeHqDGAUnZCM362nhF", time: "April 29, 2022 at 8:28:11am"},
+};
+
 export const mockEvidences: Evidence[] = [
   {media_hash: '97ddff1e367be9d80e6ba7c109028203', metadata: '{"name":"Alex","time":"4/21/2022 3:57:57 PM","location":"41.69804N 44.80519E","uploadThrough":"server"}'},
   {media_hash: '689bb00ad043497f885fd91209d7e9c1', metadata: '{"name":"Alex","time":"4/21/2022 3:59:26 PM","location":"41.69101N 44.80069E","uploadThrough":"server"}'},

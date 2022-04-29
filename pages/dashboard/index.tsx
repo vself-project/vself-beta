@@ -25,7 +25,7 @@ const DashboardPage: NextPage = () => {
         const response = await contract.get_evidences({
           from_index: from,
           limit,
-        });
+        });        
         setEvidences(response);
       } catch (err) {
         console.log(err);

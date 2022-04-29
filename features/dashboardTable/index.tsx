@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 
 // Components
 import { Evidence } from '../../models/Evidence';
@@ -9,6 +10,8 @@ import HashDoxLogo from '../../components/icons/HashDoxLogo';
 import HashDoxIcon from '../../components/icons/HashDoxIcon';
 import URLImageComponent from '../../components/urlImage';
 import MapComponent from '../../components/mapcomponent';
+
+import { txHashes } from '../../mockData/mockEvidences';
 
 interface ImageLocation {
   latitude: number;
@@ -53,7 +56,11 @@ const getImageSource = (evidence: Evidence) => {
   try {
     const { metadata, media_hash } = evidence;
     if (metadata === 'preloaded') {
-      return '/pow/' + media_hash + '.png';
+      //return '/pow/' + media_hash + '.png';
+      //https://console.firebase.google.com/project/hashdox/storage/hashdox.appspot.com/files/~2Fpreloaded
+      return (
+        'https://firebasestorage.googleapis.com/v0/b/hashdox.appspot.com/o/preloaded%2F' + media_hash + '.png?alt=media'
+      );
     }
     const metadataObject = JSON.parse(metadata);
     if (metadataObject.hasOwnProperty('uploadThrough') && metadataObject.uploadThrough == 'server') {
@@ -148,9 +155,10 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
           }}
         >
           {/* <p className="font-rational text-white text-[12px] mb-2">TRANSACTIONS</p> */}
-          <p className="font-rational text-white text-[12px] mb-2">FILEHASHES</p>
+          <p className="font-rational text-white text-[12px] mb-2">TRANSACTIONS</p>
           <ul className="font-rational text-white text-[10px] overflow-y-scroll h-[280px] no-scrollbar pl-0">
             {evidences.map((evidence, index) => {
+              const explorerUriPrefix = 'https://explorer.testnet.near.org/transactions/';
               return (
                 <li
                   key={index}
@@ -160,8 +168,17 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
                     index === activeEvidenceIndex ? 'text-white' : 'text-gray-400'
                   }`}
                 >
-                  {TRX_HASH_EXAMPLE} at {getDateFromTimestamp(Math.floor(Date.now()))}
-                  {evidence.media_hash}
+                  <p>
+                    {txHashes[evidence.media_hash].tx ?? TRX_HASH_EXAMPLE} at{' '}
+                    {txHashes[evidence.media_hash].time ?? getDateFromTimestamp(Math.floor(Date.now()))}
+                  </p>
+                  <p>
+                    <Link href={explorerUriPrefix + txHashes[evidence.media_hash].tx}>
+                      <a target="_blank" className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">
+                        {evidence.media_hash}
+                      </a>
+                    </Link>
+                  </p>
                 </li>
               );
             })}
@@ -234,7 +251,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
       const evidence = evidences[activeEvidenceIndex];
       const { metadata, media_hash } = evidence;
       let signedBy = powAccount;
-      let location: any = 'Unknown';
+      let location: any = 'Ukraine';
       if (metadata !== 'preloaded') {
         const metadataObject = JSON.parse(metadata);
         if (!metadataObject.hasOwnProperty('uploadThrough') || metadataObject.uploadThrough != 'server') {
@@ -264,10 +281,11 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
                 <p className="font-rational text-white text-[10px]">{signedBy}</p>
               </div>
               <div>
-                <p className="font-rational text-white text-[12px]">TIMESTAMP</p>
-                <p className="font-rational text-white text-[10px]">
+                <p className="font-rational pl-4 text-white text-[12px]">TIMESTAMP</p>
+                <p className="font-rational pl-4 text-white text-[10px]">
                   {/* {getDateFromTimestamp(Math.floor(Date.now() / 1000))} */}
-                  Unknown
+                  {txHashes[evidence.media_hash].time ?? getDateFromTimestamp(Math.floor(Date.now() / 1000))}
+                  {/* Unknown */}
                 </p>
               </div>
             </div>
@@ -276,11 +294,13 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
               <p className="font-rational text-white text-[8px] self-end">Powered by Swarm</p>
             </div>
             <p className="p-1 pb-0 font-rational text-white text-[12px] border w-full">{cutHash(media_hash, 40)}</p>
-            {/* <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
               <p className="font-rational text-white text-[12px]">HASHMARK</p>
               <p className="font-rational text-white text-[8px] self-end">Powered by NEAR</p>
             </div>
-            <p className="p-1 pb-0 font-rational text-white text-[12px] border w-full">{cutHash(TRX_HASH_EXAMPLE, 40)}</p> */}
+            <p className="p-1 pb-0 font-rational text-white text-[12px] border w-full">
+              {cutHash(txHashes[evidence.media_hash].tx ?? TRX_HASH_EXAMPLE, 40)}
+            </p>
             <div
               style={{
                 display: 'flex',
