@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 
 // Components
 import { Evidence } from '../../models/Evidence';
@@ -27,8 +27,8 @@ const LOCATION_DEFAULT = {
 };
 const LOCATION_PRELOADED = {
   lat: 49.887742,
-  lng: 30.977597
-}
+  lng: 30.977597,
+};
 
 // Return human readable string with date and time
 export const getDateFromTimestamp = (timestamp: any) => {
@@ -52,7 +52,7 @@ export const getDateFromTimestamp = (timestamp: any) => {
 const getImageSource = (evidence: Evidence) => {
   try {
     const { metadata, media_hash } = evidence;
-    if (metadata === "preloaded") {
+    if (metadata === 'preloaded') {
       return '/pow/' + media_hash + '.png';
     }
     const metadataObject = JSON.parse(metadata);
@@ -82,6 +82,24 @@ export const cutHash = (hash: string, limit: number) => {
 // TO DO remove 'from' prop
 const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
   const [activeEvidenceIndex, setActiveEvidenceIndex] = useState(0);
+  const counter = useRef(0);
+
+  useEffect(() => {
+    let newIndex = 0;
+    const activeLi = document.getElementById('activeEvidenceIndex');
+    if (activeEvidenceIndex < evidences.length - 1) {
+      counter.current += 1;
+      newIndex = activeEvidenceIndex + 1;
+    }
+    activeLi &&
+      activeLi.scrollIntoView({
+        behavior: 'smooth',
+      });
+
+    const timer = setTimeout(() => setActiveEvidenceIndex(newIndex), 4000);
+
+    return () => clearTimeout(timer);
+  }, [activeEvidenceIndex, evidences.length]);
 
   // Empty evidence array case
   if (!evidences.length) {
@@ -130,6 +148,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
                 return (
                   <li
                     key={index}
+                    id={index === activeEvidenceIndex ? 'activeEvidenceIndex' : ''}
                     onClick={() => setActiveEvidenceIndex(index)}
                     className={`py-2 w-full rounded-t-lg cursor-pointer ${
                       index === activeEvidenceIndex ? 'font-bold text-white' : 'text-gray-400'
@@ -170,7 +189,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
         if (location == 'unknown' || location === undefined) {
           throw Error('Location is unknown or undefined');
         }
-  
+
         // Check how evidence had been uploaded
         if (metadataObject.hasOwnProperty('uploadThrough') && metadataObject.uploadThrough == 'server') {
           location = location.split(' ');
@@ -207,7 +226,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
       const evidence = evidences[activeEvidenceIndex];
       const { metadata, media_hash } = evidence;
       let signedBy = powAccount;
-      let location = 'Unknown';
+      let location: any = 'Unknown';
       if (metadata !== 'preloaded') {
         const metadataObject = JSON.parse(metadata);
         if (!metadataObject.hasOwnProperty('uploadThrough') || metadataObject.uploadThrough != 'server') {
@@ -216,7 +235,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
             signedBy = 'Unknown';
           }
         }
-  
+
         location = metadataObject.location;
         if (location == undefined) {
           location = 'Unknown';
