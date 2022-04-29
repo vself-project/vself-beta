@@ -18,7 +18,6 @@ interface ImageLocation {
 
 interface DashboardTableProps {
   evidences: Evidence[];
-  from: number;
 }
 
 // Constants
@@ -48,12 +47,17 @@ export const getDateFromTimestamp = (timestamp: any) => {
 
 // Return url of image
 const getImageSource = (evidence: Evidence) => {
+  return '/pow/' + (Math.floor(Math.random() * 3) + 1) + '.jpg';
+
   try {
     const { metadata, media_hash } = evidence;
     const metadataObject = JSON.parse(metadata);
     if (metadataObject.hasOwnProperty('uploadThrough') && metadataObject.uploadThrough == 'server') {
       // Images uploaded by mobile app
-      return 'http://82.148.29.178/images/' + media_hash + '.png';
+      console.log('media_hash & url: ', 'http://82.148.29.178/images/' + media_hash + '.png');
+      // return 'http://82.148.29.178/images/ae25b0aceac412ee3fabefd1d5e3c31d.png';
+      // return 'https://82.148.29.178/images/' + media_hash + '.png';
+      return '/pow/' + Math.floor(Math.random() * (1 - 4 + 1) + 1) + '.png';
     }
     // Get url of image storaged in firebase (uploaded through firebase)
     return (
@@ -74,7 +78,7 @@ export const cutHash = (hash: string) => {
 };
 
 // TO DO remove 'from' prop
-const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
+const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
   const [activeEvidenceIndex, setActiveEvidenceIndex] = useState(0);
 
   // Empty evidence array case
@@ -142,9 +146,10 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
   // Return block with corresponding image
   const getImageBlock = () => {
     const image_url = getImageSource(evidences[activeEvidenceIndex]);
+    console.log('image_url: ', image_url);
     return (
       <div className="p-2 flex flex-1 justify-center align-center">
-        <URLImageComponent url={'/pow/4.jpg'} className="mx-4 h-80 rounded max-w-sm self-center" />
+        <URLImageComponent url={image_url} className="mx-4 h-80 rounded max-w-sm self-center" />
       </div>
     );
   };
@@ -170,10 +175,10 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
         lat = Number(location.latitude);
         lng = Number(location.longitude);
       }
-      return <MapComponent height={'100%'} center={{ lat, lng }} zoom={12} marker={true} />;
+      return <MapComponent height={'100%'} center={{ lat, lng }} zoom={11} marker={true} />;
     } catch (err) {
       return (
-        <MapComponent height={'100%'} center={{ lat: LOCATION_DEFAULT.lat, lng: LOCATION_DEFAULT.lng }} zoom={1} />
+        <MapComponent height={'100%'} center={{ lat: LOCATION_DEFAULT.lat, lng: LOCATION_DEFAULT.lng }} zoom={2} />
       );
     }
   };
@@ -247,7 +252,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
             >
               <div>
                 <p className="font-rational text-white text-[12px]">LOCATION DATA</p>
-                <p className="font-rational text-white text-[10px]">{location}</p>
+                <p className="font-rational text-white text-[10px]">{JSON.stringify(location)}</p>
               </div>
               <p className="ml-4 font-rational text-white text-[8px] w-44">
                 Location data can be spoofed or faked at several levels of the operating system, GPS or VPN
