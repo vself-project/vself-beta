@@ -63,7 +63,7 @@ const getImageSource = (evidence: Evidence) => {
     }
     // Get url of image storaged in firebase (uploaded through firebase)
     return (
-      'https://firebasestorage.googleapis.com/v0/b/vself-dev.appspot.com/o/images%2F' + media_hash + '.png?alt=media'
+      'https://firebasestorage.googleapis.com/v0/b/hashdox.appspot.com/o/images%2F' + media_hash + '.png?alt=media'
     );
   } catch (err) {
     console.log(err);
@@ -144,13 +144,12 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
             display: 'flex',
             flex: 1,
             flexDirection: 'column',
-            justifyContent: 'center',
             padding: '0 0 0 24px',
           }}
         >
           {/* <p className="font-rational text-white text-[12px] mb-2">TRANSACTIONS</p> */}
           <p className="font-rational text-white text-[12px] mb-2">FILEHASHES</p>
-          <ul className="font-rational text-white text-[10px] overflow-y-scroll h-[370px] no-scrollbar pl-0">
+          <ul className="font-rational text-white text-[10px] overflow-y-scroll h-[380px] no-scrollbar pl-0">
             {evidences.map((evidence, index) => {
               return (
                 <li
