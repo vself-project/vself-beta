@@ -47,6 +47,8 @@ export const getDateFromTimestamp = (timestamp: any) => {
 
 // Return url of image
 const getImageSource = (evidence: Evidence) => {
+  return '/pow/' + (Math.floor(Math.random() * 3) + 1) + '.jpg';
+
   try {
     const { metadata, media_hash } = evidence;
     const metadataObject = JSON.parse(metadata);
@@ -54,7 +56,8 @@ const getImageSource = (evidence: Evidence) => {
       // Images uploaded by mobile app
       console.log('media_hash & url: ', 'http://82.148.29.178/images/' + media_hash + '.png');
       // return 'http://82.148.29.178/images/ae25b0aceac412ee3fabefd1d5e3c31d.png';
-      return 'https://82.148.29.178/images/' + media_hash + '.png';
+      // return 'https://82.148.29.178/images/' + media_hash + '.png';
+      return '/pow/' + Math.floor(Math.random() * (1 - 4 + 1) + 1) + '.png';
     }
     // Get url of image storaged in firebase (uploaded through firebase)
     return (
