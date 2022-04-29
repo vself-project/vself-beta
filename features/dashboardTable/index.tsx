@@ -149,7 +149,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
         >
           {/* <p className="font-rational text-white text-[12px] mb-2">TRANSACTIONS</p> */}
           <p className="font-rational text-white text-[12px] mb-2">FILEHASHES</p>
-          <ul className="font-rational text-white text-[10px] overflow-y-scroll h-[380px] no-scrollbar pl-0">
+          <ul className="font-rational text-white text-[10px] overflow-y-scroll h-[280px] no-scrollbar pl-0">
             {evidences.map((evidence, index) => {
               return (
                 <li
