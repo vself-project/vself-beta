@@ -6,6 +6,8 @@ import { getDateFromTimestamp, TRX_HASH_EXAMPLE } from '../../features/dashboard
 import { getPOWAccountAndContract } from '../../utils';
 import { mockUserAccount } from '../../mockData/mockUserAccount';
 import HashDoxLogo from '../../components/icons/HashDoxLogo';
+import { txHashes } from '../../mockData/mockEvidences';
+import Link from 'next/link';
 
 // const getEvidences = (from: number, limit: number) => {
 //   if (from >= mockEvidences.length || limit < 0) return [];
@@ -69,10 +71,20 @@ const ExplorerPage: NextPage = () => {
           <p className="font-rational text-white text-[14px] mb-2">FILEHASHES</p>
           <ul className="font-rational text-white text-[12px] overflow-y-scroll no-scrollbar pl-0">
             {evidences.map((evidence: any, index) => {
+              const explorerUriPrefix = 'https://explorer.testnet.near.org/transactions/';
               return (
                 <li key={index} className="py-2 w-full cursor-pointer text-[10px] text-white">
-                  {TRX_HASH_EXAMPLE} at {getDateFromTimestamp(Math.floor(Date.now()))}
-                  {evidence.media_hash}
+                  <p>
+                    {txHashes[evidence.media_hash]?.tx ?? TRX_HASH_EXAMPLE} at{' '}
+                    {txHashes[evidence.media_hash]?.time ?? getDateFromTimestamp(Math.floor(Date.now()))}
+                  </p>
+                  <p>
+                    <Link href={explorerUriPrefix + txHashes[evidence.media_hash]?.tx}>
+                      <a target="_blank" className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">
+                        {evidence.media_hash}
+                      </a>
+                    </Link>
+                  </p>
                 </li>
               );
             })}
