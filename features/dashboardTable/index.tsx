@@ -96,7 +96,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
         behavior: 'smooth',
       });
 
-    const timer = setTimeout(() => setActiveEvidenceIndex(newIndex), 4000);
+    const timer = setTimeout(() => setActiveEvidenceIndex(newIndex), 15000);
 
     return () => clearTimeout(timer);
   }, [activeEvidenceIndex, evidences.length]);
@@ -139,28 +139,34 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
             records in Near Protocol and Ethereum Swarm blockchains.
           </p>
         </div>
-        <div style={{ display: 'flex', flex: 1, flexDirection: 'column', justifyContent: 'center', padding: 24 }}>
+        <div
+          style={{
+            display: 'flex',
+            flex: 1,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            padding: '0 0 0 24px',
+          }}
+        >
           {/* <p className="font-rational text-white text-[12px] mb-2">TRANSACTIONS</p> */}
           <p className="font-rational text-white text-[12px] mb-2">FILEHASHES</p>
-          <div className="flex justify-center">
-            <ul className="rounded-lg w-full font-rational text-white text-[12px] overflow-y-scroll h-[260px] no-scrollbar pl-0">
-              {evidences.map((evidence, index) => {
-                return (
-                  <li
-                    key={index}
-                    id={index === activeEvidenceIndex ? 'activeEvidenceIndex' : ''}
-                    onClick={() => setActiveEvidenceIndex(index)}
-                    className={`py-2 w-full rounded-t-lg cursor-pointer ${
-                      index === activeEvidenceIndex ? 'font-bold text-white' : 'text-gray-400'
-                    }`}
-                  >
-                    {/* {TRX_HASH_EXAMPLE} at {getDateFromTimestamp(Math.floor(Date.now() / 1000))} */}
-                    {evidence.media_hash}
-                  </li>
-                );
-              })}
-            </ul>
-          </div>
+          <ul className="font-rational text-white text-[10px] overflow-y-scroll h-[370px] no-scrollbar pl-0">
+            {evidences.map((evidence, index) => {
+              return (
+                <li
+                  key={index}
+                  id={index === activeEvidenceIndex ? 'activeEvidenceIndex' : ''}
+                  onClick={() => setActiveEvidenceIndex(index)}
+                  className={`py-2 w-full cursor-pointer text-[10px] ${
+                    index === activeEvidenceIndex ? 'text-white' : 'text-gray-400'
+                  }`}
+                >
+                  {TRX_HASH_EXAMPLE} at {getDateFromTimestamp(Math.floor(Date.now()))}
+                  {evidence.media_hash}
+                </li>
+              );
+            })}
+          </ul>
         </div>
       </div>
     );
@@ -170,8 +176,8 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
   const getImageBlock = () => {
     const image_url = getImageSource(evidences[activeEvidenceIndex]);
     return (
-      <div className="p-2 flex flex-1 justify-center align-center">
-        <URLImageComponent url={image_url} className="mx-4 h-80 rounded max-w-sm self-center" />
+      <div className="flex flex-1 justify-center align-center">
+        <URLImageComponent url={image_url} className="mx-4 rounded self-center max-h-[400px]" />
       </div>
     );
   };
@@ -214,7 +220,10 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
   // Return block with map
   const getMapBlock = () => {
     return (
-      <div style={{ display: 'flex:', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <div
+        // className="flex flex-1 justify-center items-center"
+        style={{ display: 'flex:', flex: 1, justifyContent: 'center', alignItems: 'center' }}
+      >
         <div className="self-center h-full">{getMapComponent()}</div>
       </div>
     );
