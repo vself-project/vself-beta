@@ -1,6 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useRef, useState } from 'react';
+import Link from 'next/link';
 
 // Components
 import { Evidence } from '../../models/Evidence';
@@ -53,7 +54,11 @@ const getImageSource = (evidence: Evidence) => {
   try {
     const { metadata, media_hash } = evidence;
     if (metadata === 'preloaded') {
-      return '/pow/' + media_hash + '.png';
+      //return '/pow/' + media_hash + '.png';
+      //https://console.firebase.google.com/project/hashdox/storage/hashdox.appspot.com/files/~2Fpreloaded
+      return (
+        'https://firebasestorage.googleapis.com/v0/b/hashdox.appspot.com/o/preloaded%2F' + media_hash + '.png?alt=media'
+      )
     }
     const metadataObject = JSON.parse(metadata);
     if (metadataObject.hasOwnProperty('uploadThrough') && metadataObject.uploadThrough == 'server') {
@@ -119,6 +124,20 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
     );
   }
 
+  // Preloaded transaction hashes
+  const txHashes = {
+    "99db50f86507b2756183d829efc86eb70357d37c186e583cfb6979cfdcfab89e": { tx: "998iKsTJJWi4buN5YbiYVxYs2MJeqfL3GQRwqmCh4WcR", time: "April 29, 2022 at 8:27:14am" },
+    "4e00110557e83f12f8dfa28a62d3e9ca0e364859f0dbe984e605a165de4ffc7a": { tx: "8GAnELPCo2VZHLQ61LrF9FsTEgAFsvQ3gRfHKNreWEon", time: "April 29, 2022 at 8:27:19am"},
+    "5ae03c532ff376172511940f2dc08b2898eca8342168f3d8cc384f07951bd859": { tx: "DWf5BnqLPoSiBfGJDSxmcS5Vhkq4ff1xDRbqB3NsFjvT", time: "April 29, 2022 at 8:27:25am"},
+    "7e907833c6233ff27c5f928fd1c60cf5112381675258925c1676b5a3a2231835": { tx: "FVBFN4dax9H8fJykiTs6Buau4csL2dc7CRSycnqX35ba", time: "April 29, 2022 at 8:27:30am"},
+    "9a7516f8e2edf3d13e04e66d3eb8de4cd236e66f49a513e8a5b9b247906af72b": { tx: "ABhVtxHeXDHhKX28xnTqNFhcDqskQXMVUtwYmreGyyVg", time: "April 29, 2022 at 8:27:35am"},
+    "395addc5cdbf628e273e3e059c16c08dcb65d432848756d35ab898742177ecd4": { tx: "CoXFvzxNQUoeEir2WywzdxgxfjvM7tYDfiF6vVeLprmk", time: "April 29, 2022 at 8:27:41am"},
+    "1778955f366bb24ca9f1ca74646768ad44c419cc8cb31dfd19ea38f1ab158369": { tx: "2VY59bktqdpX91J4GiXpx5cDDfiwevvtZJ6jtWnPLBqt", time: "April 29, 2022 at 8:27:53am"},
+    "9825679226b72456cd082d75bbd6a845d8ceadfa506fcc978b30f54723db6b78": { tx: "6SvSjHm5yRLDay3ugVV6KUsFQT2q5LTA4VBy4P1vaCVJ", time: "April 29, 2022 at 8:27:59am" },
+    "69407975431f5177f7e9bb3252a399669192bdf007da1cb524a023bcc30d9dc5": { tx: "CFvKsfSuy7T9FB1x8iUyJemRQPVHtPDRnGC2XZHG2Fyu", time: "April 29, 2022 at 8:28:05am"},
+    "e56824cfb04e44dd3115db9dc47811eda59b1cd692a2a8a494c2b09145b68b85": { tx: "3vhyPHNo1t3ZrY7KeLAFZt9RPrWeHqDGAUnZCM362nhF", time: "April 29, 2022 at 8:28:11am"},
+  }  
+
   // Return block with transactions data
   const getTransactionsBlock = () => {
     return (
@@ -148,10 +167,11 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
             padding: '0 0 0 24px',
           }}
         >
-          {/* <p className="font-rational text-white text-[12px] mb-2">TRANSACTIONS</p> */}
-          <p className="font-rational text-white text-[12px] mb-2">FILEHASHES</p>
+          <p className="font-rational text-white text-[12px] mb-2">TRANSACTIONS</p>
+          {/* <p className="font-rational text-white text-[12px] mb-2">FILEHASHES</p> */}
           <ul className="font-rational text-white text-[10px] overflow-y-scroll h-[370px] no-scrollbar pl-0">
             {evidences.map((evidence, index) => {
+              const explorerUriPrefix = "https://explorer.testnet.near.org/transactions/";              
               return (
                 <li
                   key={index}
@@ -161,8 +181,15 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
                     index === activeEvidenceIndex ? 'text-white' : 'text-gray-400'
                   }`}
                 >
-                  {TRX_HASH_EXAMPLE} at {getDateFromTimestamp(Math.floor(Date.now()))}
-                  {evidence.media_hash}
+                  <p>
+                  {txHashes[evidence.media_hash].tx ?? TRX_HASH_EXAMPLE} at {txHashes[evidence.media_hash].time ?? getDateFromTimestamp(Math.floor(Date.now()))}
+                  </p>
+                  <p>
+                  <Link href={explorerUriPrefix + txHashes[evidence.media_hash].tx}>
+                    <a target="_blank" className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">{evidence.media_hash}</a>
+                  </Link>
+                  </p>
+                  
                 </li>
               );
             })}
@@ -235,7 +262,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
       const evidence = evidences[activeEvidenceIndex];
       const { metadata, media_hash } = evidence;
       let signedBy = powAccount;
-      let location: any = 'Unknown';
+      let location: any = 'Ukraine';
       if (metadata !== 'preloaded') {
         const metadataObject = JSON.parse(metadata);
         if (!metadataObject.hasOwnProperty('uploadThrough') || metadataObject.uploadThrough != 'server') {
@@ -265,10 +292,11 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
                 <p className="font-rational text-white text-[10px]">{signedBy}</p>
               </div>
               <div>
-                <p className="font-rational text-white text-[12px]">TIMESTAMP</p>
-                <p className="font-rational text-white text-[10px]">
+                <p className="font-rational pl-4 text-white text-[12px]">TIMESTAMP</p>
+                <p className="font-rational pl-4 text-white text-[10px]">
                   {/* {getDateFromTimestamp(Math.floor(Date.now() / 1000))} */}
-                  Unknown
+                  {txHashes[evidence.media_hash].time ?? getDateFromTimestamp(Math.floor(Date.now() / 1000))}
+                  {/* Unknown */}
                 </p>
               </div>
             </div>
@@ -277,11 +305,11 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
               <p className="font-rational text-white text-[8px] self-end">Powered by Swarm</p>
             </div>
             <p className="p-1 pb-0 font-rational text-white text-[12px] border w-full">{cutHash(media_hash, 40)}</p>
-            {/* <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
+            <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
               <p className="font-rational text-white text-[12px]">HASHMARK</p>
               <p className="font-rational text-white text-[8px] self-end">Powered by NEAR</p>
             </div>
-            <p className="p-1 pb-0 font-rational text-white text-[12px] border w-full">{cutHash(TRX_HASH_EXAMPLE, 40)}</p> */}
+            <p className="p-1 pb-0 font-rational text-white text-[12px] border w-full">{cutHash(txHashes[evidence.media_hash].tx ?? TRX_HASH_EXAMPLE, 40)}</p>
             <div
               style={{
                 display: 'flex',
