@@ -33,7 +33,15 @@ const URLImageComponent: React.FC<FileImageComponentProps> = ({ url, className }
   if (imgExist) {
     return <img className={className} src={url} alt="The image isn't available." />;
   }
-  return <HashDoxIcon />;
+  return (
+    <div className="grid place-items-center h-full">
+      <div className="text-center">
+        <div className="animate-spin-slow">
+          <HashDoxIcon />
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default URLImageComponent;

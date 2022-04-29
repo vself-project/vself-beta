@@ -7,14 +7,18 @@ interface MapComponentProps {
   marker?: boolean;
 }
 
+const LOCATION_DEFAULT = {
+  lat: 47.662465,
+  lng: -25.367988,
+};
+
 const MapComponent: React.FC<MapComponentProps> = ({ center, zoom, height, marker }) => {
   const ref = useRef<HTMLDivElement | null>(null);
-
   useEffect(() => {
     if (ref.current !== null) {
       const map = new window.google.maps.Map(ref.current, {
-        center,
-        zoom,
+        center: isNaN(center.lat) ? { lat: LOCATION_DEFAULT.lat, lng: LOCATION_DEFAULT.lng } : center,
+        zoom: isNaN(center.lat) ? 2 : zoom,
         disableDefaultUI: true,
       });
       map.setOptions({

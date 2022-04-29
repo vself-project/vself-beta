@@ -186,13 +186,13 @@ const WebImageUploadForm = () => {
                   <p className="font-rational text-white text-[12px]">FILEHASH</p>
                   <p className="font-rational text-white text-[8px] self-end">Powered by Swarm</p>
                 </div>
-                <p className="p-1 pb-0 font-rational text-white text-[12px]  border w-full">{cutHash(newHash)}</p>
+                <p className="p-1 pb-0 font-rational text-white text-[12px]  border w-full">{cutHash(newHash, 40)}</p>
                 <div style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', marginTop: 10 }}>
                   <p className="font-rational text-white text-[12px]">HASHMARK</p>
                   <p className="font-rational text-white text-[8px] self-end">Powered by NEAR</p>
                 </div>
                 <p className="p-1 pb-0 font-rational text-white text-[12px] border w-full">
-                  {cutHash(TRX_HASH_EXAMPLE)}
+                  {cutHash(TRX_HASH_EXAMPLE, 40)}
                 </p>
                 <div
                   style={{

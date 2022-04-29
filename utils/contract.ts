@@ -8,7 +8,7 @@ import fs from 'fs';
 // Constants
 const contractName = Endpoints.TESTNET_POW_CONTRACT_NAME;
 const contractMethods = {
-  viewMethods: ['get_evidences', 'version'],
+  viewMethods: ['get_evidences', 'version', 'get_evidences_amount'],
   changeMethods: ['upload_evidence'],
 };
 

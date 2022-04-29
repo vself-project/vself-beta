@@ -11,18 +11,18 @@ const Home: NextPage = () => {
   return (
     <div className="grid place-items-center h-screen">
       <div className="" style={{ maxWidth: 600 }}>
-        <p className="font-rational">
+        <p className="font-rational text-white">
           Hashd0x is a platform and a tool for instant and spoof-proof registration of metadata and image hashing
           records in Near Protocol and Ethereum Swarm blockchains.
         </p>
-        <p className="font-rational my-8">
+        <p className="font-rational my-8 text-white">
           You can participate by downloading an app or visiting web version{' '}
           <Link href="/upload" passHref>
             <span className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">upload</span>
           </Link>
         </p>
         <div className="flex justify-between">
-          <img src="/apple.png" alt="AppStore" width={250} />
+          <img src="/applenew.png" alt="AppStore" width={250} />
           <img src="/google.png" alt="Google Play" width={250} />
         </div>
       </div>

@@ -47,6 +47,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({ cameraCallback }) => 
           const stream = await navigator.mediaDevices.getUserMedia({
             video: {
               aspectRatio: 9 / 16,
+              facingMode: 'environment',
             },
             audio: false,
           });
