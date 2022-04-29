@@ -1,11 +1,11 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
 
 // Components
 import { Evidence } from '../../models/Evidence';
 import { powAccount } from '../../constants/accounts';
-import Spinner from '../../components/spinner';
 import HashDoxLogo from '../../components/icons/HashDoxLogo';
 import HashDoxIcon from '../../components/icons/HashDoxIcon';
 import URLImageComponent from '../../components/urlImage';
@@ -99,6 +99,22 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
     );
   }
 
+  // useEffect(() => {
+  //   let timeoutID: any;
+  //   const increaseEvidenceIndex = () => {
+  //     let newIndex = activeEvidenceIndex;
+  //     newIndex++;
+  //     if (activeEvidenceIndex >= evidences.length) {
+  //       newIndex = 0;
+  //     }
+  //     setActiveEvidenceIndex(newIndex);
+  //   }
+  //   console.log('HELLO');
+  //   timeoutID = setTimeout(() => {increaseEvidenceIndex()}, 10000);
+
+  //   return () => clearTimeout(timeoutID);
+  // }, []);
+
   // Return block with transactions data
   const getTransactionsBlock = () => {
     return (
@@ -129,7 +145,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
                     key={index}
                     onClick={() => setActiveEvidenceIndex(index)}
                     className={`py-2 w-full rounded-t-lg cursor-pointer ${
-                      index === activeEvidenceIndex && 'font-bold'
+                      index === activeEvidenceIndex ? 'font-bold text-white' : 'text-gray-400'
                     }`}
                   >
                     {TRX_HASH_EXAMPLE} at {getDateFromTimestamp(Math.floor(Date.now() / 1000))}
