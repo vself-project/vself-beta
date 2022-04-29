@@ -4,7 +4,7 @@ class MyDocument extends Document {
   render(): React.ReactElement {
     return (
       <Html>
-        <Head />
+        <Head>{/* <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests"></meta> */}</Head>
         <body className="bg-black dark:bg-black text-gray-900 dark:text-white">
           <Main />
           <NextScript />

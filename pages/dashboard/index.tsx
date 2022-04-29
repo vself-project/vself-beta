@@ -1,18 +1,25 @@
 import type { NextPage } from 'next';
-import { mockEvidences } from '../../mockData/mockEvidences';
+// import { mockEvidences } from '../../mockData/mockEvidences';
 import DashboardTable from '../../features/dashboardTable';
-
-const getEvidences = (from: number, limit: number) => {
-  if (from >= mockEvidences.length || limit < 0) return [];
-  let to = from + limit;
-  if (to > mockEvidences.length) to = mockEvidences.length;
-  return mockEvidences.slice(from, to);
-};
+import { useEffect, useState } from 'react';
+import { getPOWAccountAndContract } from '../../utils';
+import { mockUserAccount } from '../../mockData/mockUserAccount';
 
 const DashboardPage: NextPage = () => {
-  const from = 0;
-  const to = 20;
-  return <DashboardTable evidences={getEvidences(from, to)} from={from} />;
+  const [evidences, setEvidences] = useState([]);
+  useEffect(() => {
+    const getEvidences = async (from: number, limit: number) => {
+      const { contract } = await getPOWAccountAndContract(mockUserAccount.account_id);
+      const response = await contract.get_evidences({
+        from_index: from,
+        limit,
+      });
+      console.log('response: ', response);
+      setEvidences(response);
+    };
+    getEvidences(395, 410);
+  }, []);
+  return <DashboardTable evidences={evidences} />;
 };
 
 export default DashboardPage;
