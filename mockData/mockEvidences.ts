@@ -74,7 +74,19 @@ export const txHashes: any = {
     tx: 'B8dThBKqrCDQGmSdF1HsYcpZU7DuFhgb9E4ZKm7T9j3',
     time: 'April 29, 2022 at 8:16:12pm',
   },
-  //"": { tx: "", time: ""},
+  // Masha
+  ab0ebefcbb2e4de5ed999f1f34c5183d608539527dd00be8a7643a70157d7b5d: {
+    tx: '9DHKcuXbEf9zsmhiEL6Cf5Qj5yLnETa99KKFoVNEVePi',
+    time: 'April 29, 2022 at 9:35:23pm',
+  },
+  d4f5d8233eb544ad78e93cd985c4278a4328c3d7c752774076221528ff09e2a6: {
+    tx: '3ePRsdYuhSLWyt5dDgwPV3YAQETGoa21GzUnwYp6E4az',
+    time: 'April 29, 2022 at 9:36:59pm',
+  },
+  e02485b1ed3d2e4f179c8abc5fa95a7b6ed750b17f9c94f7428279e5f6bf0894: {
+    tx: 'GnN5S3qw5QF8wVqHWGNiK3nXS3P9tqM4mUEkokk8FRjd',
+    time: 'April 29, 2022 at 9:38:49pm',
+  },
   // Video previews
   '7a14fdff826f8dc3b83152235aa754f990f8c3e5957991356e83e420720ede9e': {
     tx: '2ma2dqmnXTAcp8y8c1avucN581Mnsfc6qLyn1mYZYQWV',
