@@ -75,6 +75,12 @@ export const txHashes: any = {
     time: 'April 29, 2022 at 8:16:12pm',
   },
   //"": { tx: "", time: ""},
+  // Video previews
+  '7a14fdff826f8dc3b83152235aa754f990f8c3e5957991356e83e420720ede9e': {
+    tx: '2ma2dqmnXTAcp8y8c1avucN581Mnsfc6qLyn1mYZYQWV',
+    time: 'April 29, 2022 at 8:46:33pm',
+  },
+  //"": { tx: "", time: ""},
 };
 
 export const mockEvidences: Evidence[] = [
