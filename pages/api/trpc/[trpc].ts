@@ -10,7 +10,7 @@ import { Endpoints } from '../../../constants/endpoints';
 const contractName = Endpoints.TESTNET_POW_CONTRACT_NAME;
 const accountName = 'pow_v1.sergantche.testnet';
 const contractMethods = {
-  viewMethods: ['get_evidences', 'version'],
+  viewMethods: ['get_evidences', 'version', 'get_evidences_amount'],
   changeMethods: ['upload_evidence'],
 };
 

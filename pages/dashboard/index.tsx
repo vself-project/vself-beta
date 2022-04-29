@@ -14,8 +14,8 @@ import { mockUserAccount } from '../../mockData/mockUserAccount';
 
 const DashboardPage: NextPage = () => {
   const [evidences, setEvidences] = useState([]);
-  const _from = 300;
-  const _limit = 100;
+  const _from = 0;
+  const _limit = 1000;
 
   useEffect(() => {
     let timeOutID: any;

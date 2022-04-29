@@ -3,5 +3,6 @@ export enum Endpoints {
   TESTNET_RPC_ENDPOINT_URI = 'https://rpc.testnet.near.org',
   TESTNET_CONTRACT_URI = 'beta_v10.sergantche.testnet',
   MAINNET_CONTRACT_URI = 'v1.prod.vself.sergantche.testnet',
-  TESTNET_POW_CONTRACT_NAME = 'dev-1649869010185-27333021356814',
+  TESTNET_POW_CONTRACT_NAME_DEV = 'dev-1649869010185-27333021356814',
+  TESTNET_POW_CONTRACT_NAME = 'pow_v1c.sergantche.testnet',
 }
