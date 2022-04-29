@@ -5,12 +5,12 @@ import DashboardTable from '../../features/dashboardTable';
 import { getPOWAccountAndContract } from '../../utils';
 import { mockUserAccount } from '../../mockData/mockUserAccount';
 
-const getEvidences = (from: number, limit: number) => {
-  if (from >= mockEvidences.length || limit < 0) return [];
-  let to = from + limit;
-  if (to > mockEvidences.length) to = mockEvidences.length;
-  return mockEvidences.slice(from, to);
-};
+// const getEvidences = (from: number, limit: number) => {
+//   if (from >= mockEvidences.length || limit < 0) return [];
+//   let to = from + limit;
+//   if (to > mockEvidences.length) to = mockEvidences.length;
+//   return mockEvidences.slice(from, to);
+// };
 
 const DashboardPage: NextPage = () => {
   const [evidences, setEvidences] = useState([]);
@@ -42,7 +42,7 @@ const DashboardPage: NextPage = () => {
     };
   }, []);
 
-  return <DashboardTable evidences={evidences} from={_from} />;
+  return <DashboardTable evidences={evidences} />;
 };
 
 export default DashboardPage;
