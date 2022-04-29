@@ -95,22 +95,6 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences, from }) => {
     );
   }
 
-  // useEffect(() => {
-  //   let timeoutID: any;
-  //   const increaseEvidenceIndex = () => {
-  //     let newIndex = activeEvidenceIndex;
-  //     newIndex++;
-  //     if (activeEvidenceIndex >= evidences.length) {
-  //       newIndex = 0;
-  //     }
-  //     setActiveEvidenceIndex(newIndex);
-  //   }
-  //   console.log('HELLO');
-  //   timeoutID = setTimeout(() => {increaseEvidenceIndex()}, 10000);
-
-  //   return () => clearTimeout(timeoutID);
-  // }, []);
-
   // Return block with transactions data
   const getTransactionsBlock = () => {
     return (
