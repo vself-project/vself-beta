@@ -1,7 +1,6 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useState } from 'react';
 
 // Components
 import { Evidence } from '../../models/Evidence';
@@ -26,6 +25,10 @@ const LOCATION_DEFAULT = {
   lat: 47.662465,
   lng: -25.367988,
 };
+const LOCATION_PRELOADED = {
+  lat: 49.887742,
+  lng: 30.977597
+}
 
 // Return human readable string with date and time
 export const getDateFromTimestamp = (timestamp: any) => {
@@ -47,17 +50,16 @@ export const getDateFromTimestamp = (timestamp: any) => {
 
 // Return url of image
 const getImageSource = (evidence: Evidence) => {
-  return '/pow/' + (Math.floor(Math.random() * 3) + 1) + '.jpg';
-
   try {
     const { metadata, media_hash } = evidence;
+    if (metadata === "preloaded") {
+      return '/pow/' + media_hash + '.png';
+    }
     const metadataObject = JSON.parse(metadata);
     if (metadataObject.hasOwnProperty('uploadThrough') && metadataObject.uploadThrough == 'server') {
       // Images uploaded by mobile app
-      console.log('media_hash & url: ', 'http://82.148.29.178/images/' + media_hash + '.png');
-      // return 'http://82.148.29.178/images/ae25b0aceac412ee3fabefd1d5e3c31d.png';
-      // return 'https://82.148.29.178/images/' + media_hash + '.png';
-      return '/pow/' + Math.floor(Math.random() * (1 - 4 + 1) + 1) + '.png';
+      //console.log('media_hash & url: ', 'http://82.148.29.178/images/' + media_hash + '.png');
+      return 'https://82.148.29.178/images/' + media_hash + '.png';
     }
     // Get url of image storaged in firebase (uploaded through firebase)
     return (
@@ -146,7 +148,6 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
   // Return block with corresponding image
   const getImageBlock = () => {
     const image_url = getImageSource(evidences[activeEvidenceIndex]);
-    console.log('image_url: ', image_url);
     return (
       <div className="p-2 flex flex-1 justify-center align-center">
         <URLImageComponent url={image_url} className="mx-4 h-80 rounded max-w-sm self-center" />
@@ -157,25 +158,31 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
   // Return map component with marker or not
   const getMapComponent = () => {
     try {
+      let { lat, lng } = LOCATION_PRELOADED;
+      let zoom = 6;
+      let marker = false;
       const { metadata } = evidences[activeEvidenceIndex];
-      const metadataObject = JSON.parse(metadata);
-      let { location } = metadataObject;
-      if (location == 'unknown' || location === undefined) {
-        throw Error('Location is unknown or undefined');
+      if (metadata !== 'preloaded') {
+        const metadataObject = JSON.parse(metadata);
+        let { location } = metadataObject;
+        if (location == 'unknown' || location === undefined) {
+          throw Error('Location is unknown or undefined');
+        }
+  
+        // Check how evidence had been uploaded
+        if (metadataObject.hasOwnProperty('uploadThrough') && metadataObject.uploadThrough == 'server') {
+          location = location.split(' ');
+          lat = Number(location[0].slice(0, -1));
+          lng = Number(location[1].slice(0, -1));
+        } else {
+          // TO DO check location from evidence uploaded through web app (JSON.parse error in mock data)
+          lat = Number(location.latitude);
+          lng = Number(location.longitude);
+        }
+        zoom = 11;
+        marker = true;
       }
-
-      let lat, lng;
-      // Check how evidence had been uploaded
-      if (metadataObject.hasOwnProperty('uploadThrough') && metadataObject.uploadThrough == 'server') {
-        location = location.split(' ');
-        lat = Number(location[0].slice(0, -1));
-        lng = Number(location[1].slice(0, -1));
-      } else {
-        // TO DO check location from evidence uploaded through web app (JSON.parse error in mock data)
-        lat = Number(location.latitude);
-        lng = Number(location.longitude);
-      }
-      return <MapComponent height={'100%'} center={{ lat, lng }} zoom={11} marker={true} />;
+      return <MapComponent height={'100%'} center={{ lat, lng }} zoom={zoom} marker={marker} />;
     } catch (err) {
       return (
         <MapComponent height={'100%'} center={{ lat: LOCATION_DEFAULT.lat, lng: LOCATION_DEFAULT.lng }} zoom={2} />
@@ -197,22 +204,25 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
     try {
       const evidence = evidences[activeEvidenceIndex];
       const { metadata, media_hash } = evidence;
-      const metadataObject = JSON.parse(metadata);
       let signedBy = powAccount;
-      if (!metadataObject.hasOwnProperty('uploadThrough') || metadataObject.uploadThrough != 'server') {
-        signedBy = metadataObject.name;
-        if (signedBy === undefined) {
-          signedBy = 'Unknown';
+      let location = 'Unknown';
+      if (metadata !== 'preloaded') {
+        const metadataObject = JSON.parse(metadata);
+        if (!metadataObject.hasOwnProperty('uploadThrough') || metadataObject.uploadThrough != 'server') {
+          signedBy = metadataObject.name;
+          if (signedBy === undefined) {
+            signedBy = 'Unknown';
+          }
         }
-      }
-
-      let { location } = metadataObject;
-      if (location == undefined) {
-        location = 'Unknown';
-      } else if (!metadataObject.hasOwnProperty('uploadThrough') || metadataObject.uploadThrough != 'server') {
-        const { lat, lng } = location;
-        if (lat != undefined && lng != undefined) {
-          location = String(location.lat) + 'N  ' + location.lng + 'E';
+  
+        location = metadataObject.location;
+        if (location == undefined) {
+          location = 'Unknown';
+        } else if (!metadataObject.hasOwnProperty('uploadThrough') || metadataObject.uploadThrough != 'server') {
+          const { lat, lng } = location;
+          if (lat != undefined && lng != undefined) {
+            location = String(location.lat) + 'N  ' + location.lng + 'E';
+          }
         }
       }
 

@@ -26,7 +26,6 @@ const DashboardPage: NextPage = () => {
           from_index: from,
           limit,
         });
-        console.log('response: ', response);
         setEvidences(response);
       } catch (err) {
         console.log(err);
