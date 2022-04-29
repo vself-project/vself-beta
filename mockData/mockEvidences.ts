@@ -12,6 +12,10 @@ export const txHashes = {
   "9825679226b72456cd082d75bbd6a845d8ceadfa506fcc978b30f54723db6b78": { tx: "6SvSjHm5yRLDay3ugVV6KUsFQT2q5LTA4VBy4P1vaCVJ", time: "April 29, 2022 at 8:27:59am" },
   "69407975431f5177f7e9bb3252a399669192bdf007da1cb524a023bcc30d9dc5": { tx: "CFvKsfSuy7T9FB1x8iUyJemRQPVHtPDRnGC2XZHG2Fyu", time: "April 29, 2022 at 8:28:05am"},
   "e56824cfb04e44dd3115db9dc47811eda59b1cd692a2a8a494c2b09145b68b85": { tx: "3vhyPHNo1t3ZrY7KeLAFZt9RPrWeHqDGAUnZCM362nhF", time: "April 29, 2022 at 8:28:11am"},
+  "52221bef0ca8d2420ed1e7f84b36b0a9ef2f0cb88a456b0c755e64863ff9d742": { tx: "DfjwFiyYmXi6r3oYsXGAFjahhzrqQLx5iqJsqPe1Saa2", time: "April 29, 2022 at 7:26:15pm"},
+  "575b37610e2f291a4169fe8e53fabf53cec6015f9cbcd8958432fd3086f666d7": { tx: "2H8v7KwarZK4arBrSpG6jK29j9NUECNc7yki2mC2FGWH", time: "April 29, 2022 at 7:29:09pm"},
+  "0e6c69ac3f32571ccb306b464baa19737e3aa806d1a13c3a0d59a92ace089aef": { tx: "ApatVuUryL8K8VXEkxdBVkYRSNoCR2xvLCcbVh1BZQAD", time: "April 29, 2022 at 7:32:37pm"},
+  //"": { tx: "", time: ""},    
 };
 
 export const mockEvidences: Evidence[] = [
