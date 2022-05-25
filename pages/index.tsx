@@ -19,11 +19,15 @@ const Home: NextPage = () => {
           You can participate by downloading an app or visiting web version{' '}
           <Link href="/upload" passHref>
             <span className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">upload</span>
+          </Link>{' '}
+          and see the results on the{' '}
+          <Link href="/dashboard" passHref>
+            <span className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">dashboard</span>
           </Link>
         </p>
         <div className="flex justify-between">
-          <img src="/applenew.png" alt="AppStore" width={250} />
-          <img src="/google.png" alt="Google Play" width={250} />
+          <img src="/applenew.png" alt="AppStore" width={250} style={{ borderRadius: 6 }} />
+          <img src="/google.png" alt="Google Play" width={250} style={{ borderRadius: 6 }} />
         </div>
       </div>
     </div>

@@ -113,7 +113,7 @@ export const getPOWAccountAndContract = async (account_id: string): Promise<any>
 
   const contract = new Contract(
     account, // the account object that is connecting
-    Endpoints.TESTNET_POW_CONTRACT_NAME,
+    Endpoints.TESTNET_POW_CONTRACT_NAME_DEV,
     {
       // name of contract you're connecting to
       viewMethods: ['get_evidences', 'version', 'get_evidences_amount'], // view methods do not change state but usually return a value
