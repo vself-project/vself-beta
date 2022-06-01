@@ -3,20 +3,35 @@ import type { NextPage } from 'next';
 import { useTranslation } from 'next-i18next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import AppLayout from '../../components/appLayout';
 import HashDoxLogo from '../../components/icons/HashDoxLogo';
+import { useAppDispatch } from '../../hooks';
 import { mockUserAccount } from '../../mockData/mockUserAccount';
+import { setAppLoadingState } from '../../store/reducers/appStateReducer/actions';
 import { getPOWAccountAndContract } from '../../utils';
+import { addDocToFirestore } from '../../utils/firebase';
 
 const PrizePage: NextPage = () => {
+  const dispatch = useAppDispatch();
   const router = useRouter();
+  const { signMeta } = router.query;
+  console.log(signMeta);
+
   const { t } = useTranslation(['hashdox', 'common']);
+  // Form State
   const [formStep, setFormStep] = useState<number>(0);
   const [formState, setFormState] = useState<number>(2);
   const [username, setUsername] = useState<string>('');
   const [wallet, setWallet] = useState<string>('');
   const [email, setEmail] = useState<string>('');
+
+  useEffect(() => {
+    if (signMeta === 'done') {
+      setFormStep(6);
+    }
+  }, [signMeta]);
+
   const setRadioButton = (event: React.ChangeEvent<HTMLInputElement>): void => {
     event.persist();
     const { value } = event.target;
@@ -34,18 +49,25 @@ const PrizePage: NextPage = () => {
     const { value } = event.target;
     setUsername(value);
   };
-  const collectEmail = (): void => {
-    // TODO:
+  const collectEmail = async (): Promise<void> => {
+    dispatch(setAppLoadingState(true));
+    setFormStep(6);
+    await addDocToFirestore('donate_emails', { email, username });
+    dispatch(setAppLoadingState(false));
   };
 
   const sendReward = async () => {
     try {
+      dispatch(setAppLoadingState(true));
       const { contract } = await getPOWAccountAndContract(mockUserAccount.account_id);
-      await contract.send_reward(
-        { username: wallet },
-        '300000000000000', // attached GAS (optional)
-        '8690000000000000000000'
-      );
+      await addDocToFirestore('participants', { wallet, username });
+      await contract.send_reward({
+        callbackUrl: 'https://vself-dev.web.app/prize', // callbackUrl after the transaction approved (optional)
+        meta: 'done',
+        args: { username: wallet },
+        gas: '300000000000000',
+        amount: '8690000000000000000000',
+      });
     } catch (err) {
       console.log(err);
     }
@@ -55,9 +77,6 @@ const PrizePage: NextPage = () => {
   };
   const setRewardType = () => {
     setFormStep(formState);
-  };
-  const setFinalStep = () => {
-    setFormStep(6);
   };
   const goBack = () => {
     setFormStep(3);
@@ -149,12 +168,13 @@ const PrizePage: NextPage = () => {
               name="email"
               placeholder="Enter your email"
               value={email}
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
             />
             <div className="justify-between w-full flex-row flex">
               <button type="button" className="text-black bg-white uppercase px-5" onClick={goBack}>
                 Back
               </button>
-              <button onClick={setFinalStep} type="button" className="text-black bg-white uppercase px-5">
+              <button onClick={collectEmail} type="button" className="text-black bg-white uppercase px-5">
                 Next
               </button>
             </div>
@@ -250,7 +270,12 @@ const PrizePage: NextPage = () => {
               <button type="button" className="text-black bg-white uppercase px-5" onClick={() => setFormStep(0)}>
                 Back
               </button>
-              <button onClick={() => setFormStep(3)} type="button" className="text-black bg-white uppercase px-5">
+              <button
+                disabled={username.length === 0}
+                onClick={() => setFormStep(3)}
+                type="button"
+                className="text-black bg-white uppercase px-5"
+              >
                 Next
               </button>
             </div>

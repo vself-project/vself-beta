@@ -1,5 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
+import { addDoc, doc, collection, getFirestore } from 'firebase/firestore';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 import { ref, uploadBytesResumable, getDownloadURL, listAll } from 'firebase/storage';
 import { sha3_256 } from 'js-sha3';
@@ -19,6 +20,7 @@ const firebaseConfig = {
 
 export const firebaseApp = initializeApp(firebaseConfig);
 // Get a reference to the storage service, which is used to create references in your storage bucket
+const db = getFirestore(firebaseApp);
 export const storage = getStorage(firebaseApp);
 export const analytics = isSupported().then((result) => {
   return result ? getAnalytics(firebaseApp) : null;
@@ -50,3 +52,6 @@ export const renderFirebaseImage = async (hash: string): Promise<string> => {
   });
   return '/0.png';
 };
+
+export const addDocToFirestore = async (collectionName: string, data: object) =>
+  await addDoc(collection(db, collectionName), data);
