@@ -15,6 +15,7 @@ import { store } from '../store';
 import Header from '../components/header';
 import { Wrapper } from '@googlemaps/react-wrapper';
 // import AppLayout from '../components/appLayout';
+import { appWithTranslation } from 'next-i18next';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const AnyComponent = Component as any;
@@ -65,4 +66,4 @@ export default withTRPC<AppRouter>({
    * @link https://trpc.io/docs/ssr
    */
   ssr: true,
-})(MyApp);
+})(appWithTranslation(MyApp));

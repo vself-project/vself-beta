@@ -1,6 +1,9 @@
+// eslint-disable-next-line @typescript-eslint/no-var-requires
+const { i18n } = require('./next-i18next.config');
 /** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: true,
+  i18n,
   env: {
     USER_ACCOUNT_ID: process.env.USER_ACCOUNT_ID,
     PUBLIC_KEY: process.env.PUBLIC_KEY,

@@ -3,7 +3,7 @@ const nacl = require('tweetnacl');
 const { createHash } = require('crypto');
 const { providers } = require('near-api-js');
 const { encode } = require('js-base64');
-import { connect, ConnectConfig, keyStores, Contract, WalletConnection } from 'near-api-js';
+import { connect, ConnectConfig, keyStores, Contract, WalletConnection, utils } from 'near-api-js';
 import Resizer from 'react-image-file-resizer';
 
 import { Endpoints } from '../constants/endpoints';
@@ -12,6 +12,9 @@ import { Endpoints } from '../constants/endpoints';
 export const hash = (msg: string) => {
   return createHash('sha256').update(msg).digest('hex');
 };
+
+export const amountInYocto = (amount: string) => utils.format.parseNearAmount(amount);
+export const amountInNEAR = (amount: string) => utils.format.formatNearAmount(amount);
 
 const provider = new providers.JsonRpcProvider(Endpoints.TESTNET_RPC_ENDPOINT_URI);
 
@@ -66,7 +69,7 @@ export const getNearWallet = async () => {
   };
 
   const signIn = () => {
-    wallet.requestSignIn({ contractId: Endpoints.TESTNET_POW_CONTRACT_NAME });
+    wallet.requestSignIn({ contractId: Endpoints.TESTNET_POW_PRIZES_CONTRACT_NAME });
   };
 
   return { wallet, accountId, isSignedIn, signOut, signIn };
@@ -87,7 +90,7 @@ export const getNearAccountAndContract = async (account_id: string): Promise<any
 
   const contract = new Contract(
     account, // the account object that is connecting
-    Endpoints.TESTNET_POW_CONTRACT_NAME,
+    Endpoints.TESTNET_POW_PRIZES_CONTRACT_NAME,
     {
       // name of contract you're connecting to
       viewMethods: ['is_active', 'get_actions', 'get_event_data', 'get_event_stats'], // view methods do not change state but usually return a value
@@ -108,16 +111,18 @@ export const getPOWAccountAndContract = async (account_id: string): Promise<any>
     headers: {},
   };
   const near = await connect(config);
+  const wallet = new WalletConnection(near, '');
 
   const account = await near.account(account_id);
 
   const contract = new Contract(
-    account, // the account object that is connecting
-    Endpoints.TESTNET_POW_CONTRACT_NAME_DEV,
+    wallet.account(), // the account object that is connecting
+    Endpoints.TESTNET_POW_PRIZES_CONTRACT_NAME,
     {
       // name of contract you're connecting to
       viewMethods: ['get_evidences', 'version', 'get_evidences_amount'], // view methods do not change state but usually return a value
-      changeMethods: ['upload_evidence'], // change methods modify state
+      changeMethods: ['upload_evidence', 'send_reward'], // change methods modify state
+      sender: wallet.account(),
     }
   );
 

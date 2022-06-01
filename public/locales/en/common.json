@@ -1,0 +1,21 @@
+{
+    "alphabetical_order": "Alphabetical Order",
+
+    "dashboard": "dashboard",
+
+    "FILEHASH": "FILEHASH",
+
+    "HASHMARK": "HASHMARK",
+
+    "LOCATION_DATA": "LOCATION DATA",
+    "location_data_disclaimer": "Location data can be spoofed or faked at several levels of the operating system, GPS or VPN",
+    
+    "powered_by_near": "Powered by NEAR",
+
+    "SIGNED": "SIGNED",
+
+    "TIMESTAMP": "TIMESTAMP",
+
+    "upload": "upload"
+
+}

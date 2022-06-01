@@ -1,16 +1,9 @@
 import { useState, useEffect } from 'react';
 import type { NextPage } from 'next';
-// import { mockEvidences } from '../../mockData/mockEvidences';
 import DashboardTable from '../../features/dashboardTable';
 import { getPOWAccountAndContract } from '../../utils';
 import { mockUserAccount } from '../../mockData/mockUserAccount';
-
-// const getEvidences = (from: number, limit: number) => {
-//   if (from >= mockEvidences.length || limit < 0) return [];
-//   let to = from + limit;
-//   if (to > mockEvidences.length) to = mockEvidences.length;
-//   return mockEvidences.slice(from, to);
-// };
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const DashboardPage: NextPage = () => {
   const [evidences, setEvidences] = useState([]);
@@ -45,3 +38,11 @@ const DashboardPage: NextPage = () => {
 };
 
 export default DashboardPage;
+
+export async function getStaticProps({ locale }: any) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'hashdox'])),
+    },
+  };
+}

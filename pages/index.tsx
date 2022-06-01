@@ -1,28 +1,27 @@
 /* eslint-disable @next/next/no-img-element */
 import type { NextPage } from 'next';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+import { useTranslation } from 'next-i18next';
 import Link from 'next/link';
-// import EventsTable from '../features/eventsTable';
-// import NewEventForm from '../features/newEventForm';
-// import { useAppSelector } from '../hooks';
 
 const Home: NextPage = () => {
-  // const { is_active } = useAppSelector((state) => state.eventReducer);
-  // return !is_active ? <NewEventForm /> : <EventsTable />;
+  const { t } = useTranslation(['hashdox', 'common']);
   return (
     <div className="grid place-items-center h-screen">
       <div className="" style={{ maxWidth: 600 }}>
-        <p className="font-rational text-white">
-          Hashd0x is a platform and a tool for instant and spoof-proof registration of metadata and image hashing
-          records in Near Protocol and Ethereum Swarm blockchains.
-        </p>
+        <p className="font-rational text-white">{t('paragraph_0')}</p>
         <p className="font-rational my-8 text-white">
-          You can participate by downloading an app or visiting web version{' '}
+          {t('paragraph_1')}{' '}
           <Link href="/upload" passHref>
-            <span className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">upload</span>
+            <span className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">
+              {t('upload', { ns: 'common' })}
+            </span>
           </Link>{' '}
-          and see the results on the{' '}
+          {t('paragraph_2')}{' '}
           <Link href="/dashboard" passHref>
-            <span className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">dashboard</span>
+            <span className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">
+              {t('dashboard', { ns: 'common' })}
+            </span>
           </Link>
         </p>
         <div className="flex justify-between">
@@ -35,3 +34,11 @@ const Home: NextPage = () => {
 };
 
 export default Home;
+
+export async function getStaticProps({ locale }: any) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale, ['common', 'hashdox'])),
+    },
+  };
+}
