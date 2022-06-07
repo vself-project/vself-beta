@@ -7,6 +7,7 @@ import { connect, ConnectConfig, keyStores, Contract, WalletConnection, utils } 
 import Resizer from 'react-image-file-resizer';
 
 import { Endpoints } from '../constants/endpoints';
+import { mockUserAccount } from '../mockData/mockUserAccount';
 
 // SHA-256 hash
 export const hash = (msg: string) => {
@@ -18,8 +19,8 @@ export const amountInNEAR = (amount: string) => utils.format.formatNearAmount(am
 
 const provider = new providers.JsonRpcProvider(Endpoints.TESTNET_RPC_ENDPOINT_URI);
 
-const contractEndPoint =
-  process.env.NODE_ENV !== 'production' ? Endpoints.TESTNET_CONTRACT_URI : Endpoints.MAINNET_CONTRACT_URI;
+// const contractEndPoint =
+//   process.env.NODE_ENV !== 'production' ? Endpoints.TESTNET_CONTRACT_URI : Endpoints.MAINNET_CONTRACT_URI;
 
 export const getContractState = async (methodName: string): Promise<boolean> => {
   try {
@@ -50,31 +51,6 @@ export const getRandomHashString = (): string => {
   }).join('');
 };
 
-export const getNearWallet = async () => {
-  const config: ConnectConfig = {
-    networkId: 'testnet',
-    keyStore: new keyStores.BrowserLocalStorageKeyStore(),
-    nodeUrl: 'https://rpc.testnet.near.org',
-    walletUrl: 'https://wallet.testnet.near.org',
-    helperUrl: 'https://helper.testnet.near.org',
-    headers: {},
-  };
-  const near = await connect(config);
-  const wallet = new WalletConnection(near, '');
-  const accountId = wallet.getAccountId();
-  const isSignedIn = wallet.isSignedIn();
-
-  const signOut = () => {
-    wallet.signOut();
-  };
-
-  const signIn = () => {
-    wallet.requestSignIn({ contractId: Endpoints.TESTNET_POW_PRIZES_CONTRACT_NAME });
-  };
-
-  return { wallet, accountId, isSignedIn, signOut, signIn };
-};
-
 export const getNearAccountAndContract = async (account_id: string): Promise<any> => {
   const config: ConnectConfig = {
     networkId: 'testnet',
@@ -90,7 +66,7 @@ export const getNearAccountAndContract = async (account_id: string): Promise<any
 
   const contract = new Contract(
     account, // the account object that is connecting
-    Endpoints.TESTNET_POW_PRIZES_CONTRACT_NAME,
+    Endpoints.TESTNET_CONTRACT_URI,
     {
       // name of contract you're connecting to
       viewMethods: ['is_active', 'get_actions', 'get_event_data', 'get_event_stats'], // view methods do not change state but usually return a value
@@ -101,7 +77,7 @@ export const getNearAccountAndContract = async (account_id: string): Promise<any
   return { account, contract };
 };
 
-export const getPOWAccountAndContract = async (account_id: string): Promise<any> => {
+export const getPOWAccountAndContract = async (account_id = mockUserAccount.account_id): Promise<any> => {
   const config: ConnectConfig = {
     networkId: 'testnet',
     keyStore: new keyStores.BrowserLocalStorageKeyStore(),
@@ -111,25 +87,36 @@ export const getPOWAccountAndContract = async (account_id: string): Promise<any>
     headers: {},
   };
   const near = await connect(config);
+
   const wallet = new WalletConnection(near, '');
+
+  const isSignedIn = wallet.isSignedIn();
+
+  const signOut = () => {
+    wallet.signOut();
+  };
+
+  const signIn = () => {
+    wallet.requestSignIn({ contractId: Endpoints.TESTNET_POW_CONTRACT_NAME });
+  };
 
   const account = await near.account(account_id);
 
   const contract = new Contract(
     wallet.account(), // the account object that is connecting
-    Endpoints.TESTNET_POW_PRIZES_CONTRACT_NAME,
+    Endpoints.TESTNET_POW_CONTRACT_NAME,
     {
       // name of contract you're connecting to
       viewMethods: ['get_evidences', 'version', 'get_evidences_amount'], // view methods do not change state but usually return a value
-      changeMethods: ['upload_evidence', 'send_reward'], // change methods modify state
+      changeMethods: ['upload_evidence'], // change methods modify state
       sender: wallet.account(),
     }
   );
 
-  return { account, contract };
+  return { account, contract, signOut, signIn, isSignedIn };
 };
 
-export const getNftTokens = async (account_id: string): Promise<any[]> => {
+export const getNftTokens = async (account_id: string): Promise<object[]> => {
   try {
     const request = { account_id };
     const encodedText = encode(JSON.stringify(request));

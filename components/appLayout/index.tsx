@@ -1,12 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import {
-  //  getNearAccountAndContract,
-  getNearWallet,
-  //  getPOWAccountAndContract
-} from '../../utils';
-// import { setEventStatus } from '../../store/reducers/eventReducer/actions';
+import { getPOWAccountAndContract } from '../../utils';
 import { getUserAccountData } from '../../store/reducers/userAccountReducer/actions';
 import { setAppLoadingState, signInApp } from '../../store/reducers/appStateReducer/actions';
 
@@ -22,21 +17,16 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const dispatch = useAppDispatch();
 
   const signInToNear = async () => {
-    const { signIn } = await getNearWallet();
+    const { signIn } = await getPOWAccountAndContract();
     signIn();
   };
 
   useEffect(() => {
     const initVselfWebApp = async () => {
       try {
-        const { accountId, isSignedIn } = await getNearWallet();
+        const { accountId, isSignedIn } = await getPOWAccountAndContract();
         if (isSignedIn) {
-          // const { contract } = await getNearAccountAndContract(accountId);
-          // const { contract } = await getPOWAccountAndContract(accountId);
-
-          // const eventStatus = await contract.is_active();
           dispatch(signInApp());
-          // dispatch(setEventStatus(eventStatus));
           dispatch(getUserAccountData({ account_id: accountId }));
         }
       } catch (err) {

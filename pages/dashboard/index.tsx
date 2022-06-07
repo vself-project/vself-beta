@@ -42,7 +42,7 @@ export default DashboardPage;
 export async function getStaticProps({ locale }: any) {
   return {
     props: {
-      ...(await serverSideTranslations(locale, ['common', 'hashdox'])),
+      ...(await serverSideTranslations(locale || 'en', ['common', 'hashdox'])),
     },
   };
 }

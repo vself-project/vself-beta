@@ -13,7 +13,7 @@
     "lint": "next lint",
     "test:watch": "jest --watch",
     "test": "jest -u",
-    "deploy:dev": "NODE_ENV=development next build && firebase deploy -P staging --only hosting,functions:nextServer",
+    "deploy:dev": "env-cmd -f .env.development next build && firebase deploy -P staging --only hosting,functions:nextServer",
     "deploy:hashdox": "env-cmd -f .env.development.hashdox next build && firebase deploy -P hashdox --only hosting,functions:nextServer",
     "deploy:prod": "NODE_ENV=production next build && firebase deploy -P prod --only hosting,functions:nextServer"
   },

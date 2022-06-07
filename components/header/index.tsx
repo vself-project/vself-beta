@@ -10,7 +10,7 @@ import {
   // setAppStateDevMode,
   signOutApp,
 } from '../../store/reducers/appStateReducer/actions';
-import { getNearWallet } from '../../utils';
+import { getPOWAccountAndContract } from '../../utils';
 // import ThemeChanger from '../themeChanger';
 import HashDoxLogo from '../icons/HashDoxLogo';
 
@@ -25,7 +25,7 @@ const Header: React.FC = () => {
   // };
 
   const signOut = async () => {
-    const { signOut } = await getNearWallet();
+    const { signOut } = await getPOWAccountAndContract();
     signOut();
     dispatch(setAppLoadingState(true));
     dispatch(signOutApp());

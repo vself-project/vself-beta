@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/alt-text */
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
+// import Link from 'next/link';
 
 // Components
 import { Evidence } from '../../models/Evidence';
@@ -11,7 +11,7 @@ import HashDoxIcon from '../../components/icons/HashDoxIcon';
 import URLImageComponent from '../../components/urlImage';
 import MapComponent from '../../components/mapcomponent';
 
-import { txHashes } from '../../mockData/mockEvidences';
+// import { txHashes } from '../../mockData/mockEvidences';
 
 interface DashboardTableProps {
   evidences: Evidence[];
@@ -340,7 +340,21 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
         {getImageBlock()}
       </div>
       <div className="flex flex-1 flex-col sm:flex-row">
-        {getMapBlock()}
+        {/* {getMapBlock()} */}
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            width: '100%',
+            height: '100%',
+          }}
+        >
+          <div className="animate-spin-slow">
+            <HashDoxIcon />
+          </div>
+        </div>
         {getEvidenceDataBlock()}
       </div>
     </div>
