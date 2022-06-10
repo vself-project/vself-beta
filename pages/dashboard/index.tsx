@@ -1,8 +1,6 @@
 import { useState, useEffect } from 'react';
 import type { NextPage } from 'next';
 import DashboardTable from '../../features/dashboardTable';
-import { getPOWAccountAndContract } from '../../utils';
-import { mockUserAccount } from '../../mockData/mockUserAccount';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 
 const DashboardPage: NextPage = () => {
@@ -14,12 +12,10 @@ const DashboardPage: NextPage = () => {
     let timeOutID: any;
     const getEvidences = async (from: number, limit: number) => {
       try {
-        const { contract } = await getPOWAccountAndContract(mockUserAccount.account_id);
-        const response = await contract.get_evidences({
-          from_index: from,
-          limit,
-        });
-        setEvidences(response);
+        const response = await fetch('api/get-evidences?from_index=' + from + '&limit=' + limit);
+        const { result } = await response.json();
+        const reversedOrder = result.slice(0).reverse();
+        setEvidences(reversedOrder);
       } catch (err) {
         console.log(err);
       }

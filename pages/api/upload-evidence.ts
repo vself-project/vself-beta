@@ -1,5 +1,5 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getConnectedContract } from '../../utils/contract';
+import { getPowConnectedContract } from '../../utils/pow_contract';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -12,7 +12,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     parsedData = JSON.stringify(parsedData);
 
     // Create contract instance to use its method
-    const connection: any = await getConnectedContract();
+    const connection: any = await getPowConnectedContract();
     const { contract, account } = connection;
     const { transaction } = await account.functionCall({
       contractId: contract.contractId,
@@ -27,7 +27,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
     res.status(200).json({ result: transaction.hash });
   } catch (err) {
-    console.log(err);
     res.status(500).json({ result: false, error: 'failed to save evidence' });
   }
 }

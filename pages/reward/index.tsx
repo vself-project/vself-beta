@@ -9,8 +9,7 @@ import HashDoxLogo from '../../components/icons/HashDoxLogo';
 import Loader from '../../components/loader';
 import { useAppDispatch } from '../../hooks';
 import { setAppLoadingState } from '../../store/reducers/appStateReducer/actions';
-import { getConnectedContract } from '../../utils/contract';
-import { addDocToFirestore } from '../../utils/firebase';
+import { addDocToFirestore, isRewardAddedToFirestore } from '../../utils/firebase';
 
 const PrizePage: NextPage = () => {
   const dispatch = useAppDispatch();
@@ -67,26 +66,32 @@ const PrizePage: NextPage = () => {
   const sendReward = async () => {
     try {
       dispatch(setAppLoadingState(true));
-
-      const response = await fetch('api/check-account?nearid=' + wallet);
-      const result = await response.json();
-
+      // Verifying Near Id is Exists
+      const checkResponse = await fetch('api/check-account?nearid=' + wallet);
+      const result = await checkResponse.json();
       if (!result) {
         throw 'not exist';
       }
-
-      const connection: any = await getConnectedContract();
-      const { contract } = connection;
-      const tokenId = await contract.send_reward({
-        args: { username: wallet },
-        gas: '300000000000000',
-        amount: '10000000000000000000000',
-      });
+      // Check If Reward Already Issued
+      const isRewardIssued = await isRewardAddedToFirestore(wallet);
+      if (isRewardIssued) {
+        throw 'already issued';
+      }
+      // Sending Reward
+      const tokenId = await fetch('api/send-reward?nearid=' + wallet);
+      // Adding Participant to Firestore
       await addDocToFirestore('participants', { wallet, username, tokenId });
-
+      // Showing Success Message
       setFormStep(6);
     } catch (err) {
-      setFormStep(7);
+      switch (err) {
+        case 'already issued':
+          setFormStep(8);
+          break;
+        default:
+          setFormStep(7);
+          return;
+      }
     } finally {
       dispatch(setAppLoadingState(false));
     }
@@ -132,8 +137,29 @@ const PrizePage: NextPage = () => {
     setFormStep(0);
   };
 
+  const radioBtnDisabled = () => {
+    if (formState > 3) {
+      return false;
+    }
+    return true;
+  };
+
   const renderSteps = () => {
     switch (formStep) {
+      case 8:
+        return (
+          <>
+            <h2 className="my-5">This Near Id Already Has NFT Reward</h2>
+            <div className="justify-between w-full flex-row flex">
+              <button type="button" className="text-black bg-white uppercase px-5" onClick={goToMain}>
+                Return to Main Page
+              </button>
+              <button type="button" className="text-black bg-white uppercase px-5" onClick={goToStart}>
+                Try again
+              </button>
+            </div>
+          </>
+        );
       case 7:
         return (
           <>
@@ -316,7 +342,12 @@ const PrizePage: NextPage = () => {
               <button type="button" className="text-black bg-white uppercase px-5" onClick={stepBack}>
                 Back
               </button>
-              <button onClick={setRewardType} type="button" className="text-black bg-white uppercase px-5">
+              <button
+                disabled={radioBtnDisabled()}
+                onClick={setRewardType}
+                type="button"
+                className="text-black bg-white uppercase px-5"
+              >
                 Next
               </button>
             </div>

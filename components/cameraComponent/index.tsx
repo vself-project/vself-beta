@@ -14,7 +14,6 @@ const CameraComponent: React.FC<CameraComponentProps> = ({ cameraCallback }) => 
   const takePicture = () => {
     const ctx: CanvasRenderingContext2D | null = canvas.current ? canvas.current.getContext('2d') : null;
     if (ctx && ref.current && canvas.current) {
-      console.log('ref.current: ', ref.current);
       ctx.drawImage(ref.current, 0, 0, ref.current.clientWidth, canvas.current?.height);
       setIsCaptured(true);
       canvas.current.toBlob((blob) => {

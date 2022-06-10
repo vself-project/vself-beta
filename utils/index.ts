@@ -77,7 +77,7 @@ export const getNearAccountAndContract = async (account_id: string): Promise<any
   return { account, contract };
 };
 
-export const getPOWAccountAndContract = async (account_id = mockUserAccount.account_id): Promise<any> => {
+export const getPOWAccountAndContract = async (): Promise<any> => {
   const config: ConnectConfig = {
     networkId: 'testnet',
     keyStore: new keyStores.BrowserLocalStorageKeyStore(),
@@ -90,21 +90,23 @@ export const getPOWAccountAndContract = async (account_id = mockUserAccount.acco
 
   const wallet = new WalletConnection(near, '');
 
-  const isSignedIn = wallet.isSignedIn();
+  if (!wallet.isSignedIn()) return wallet.requestSignIn();
 
   const signOut = () => {
     wallet.signOut();
   };
 
   const signIn = () => {
-    wallet.requestSignIn({ contractId: Endpoints.TESTNET_POW_CONTRACT_NAME });
+    wallet.requestSignIn({ contractId: Endpoints.TESTNET_POW_CONTRACT_NAME_DEV });
   };
 
-  const account = await near.account(account_id);
+  const walletAccountId = wallet.getAccountId();
+
+  const account = await near.account(walletAccountId);
 
   const contract = new Contract(
     wallet.account(), // the account object that is connecting
-    Endpoints.TESTNET_POW_CONTRACT_NAME,
+    Endpoints.TESTNET_POW_CONTRACT_NAME_DEV,
     {
       // name of contract you're connecting to
       viewMethods: ['get_evidences', 'version', 'get_evidences_amount'], // view methods do not change state but usually return a value
@@ -113,7 +115,7 @@ export const getPOWAccountAndContract = async (account_id = mockUserAccount.acco
     }
   );
 
-  return { account, contract, signOut, signIn, isSignedIn };
+  return { account, contract, signOut, signIn, walletAccountId };
 };
 
 export const getNftTokens = async (account_id: string): Promise<object[]> => {

@@ -1,10 +1,8 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState, useEffect } from 'react';
 import type { NextPage } from 'next';
-// import { mockEvidences } from '../../mockData/mockEvidences';
 import { getDateFromTimestamp, TRX_HASH_EXAMPLE } from '../../features/dashboardTable';
 import { getPOWAccountAndContract } from '../../utils';
-import { mockUserAccount } from '../../mockData/mockUserAccount';
 import HashDoxLogo from '../../components/icons/HashDoxLogo';
 import { txHashes } from '../../mockData/mockEvidences';
 import Link from 'next/link';
@@ -18,7 +16,7 @@ const ExplorerPage: NextPage = () => {
     let timeOutID: any;
     const getEvidences = async (from: number, limit: number) => {
       try {
-        const { contract } = await getPOWAccountAndContract(mockUserAccount.account_id);
+        const { contract } = await getPOWAccountAndContract();
         const response = await contract.get_evidences({
           from_index: from,
           limit,

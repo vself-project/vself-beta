@@ -57,7 +57,8 @@ const WebImageUploadForm = () => {
     if (imgFile) {
       setIsLoading(true);
       const downloadUrl = await uploadImageToFirebase(imgFile);
-      const { contract } = await getPOWAccountAndContract(account_id);
+      const { contract } = await getPOWAccountAndContract();
+      // TODO: add callbackUrl https://docs.near.org/docs/api/naj-quick-reference#call-contract
       await contract.upload_evidence({
         evidence: {
           media_hash: newHash,
