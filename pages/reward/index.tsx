@@ -78,7 +78,8 @@ const PrizePage: NextPage = () => {
         throw 'already issued';
       }
       // Sending Reward
-      const tokenId = await fetch('api/send-reward?nearid=' + wallet);
+      const rewardResponse = await fetch('api/send-reward?nearid=' + wallet);
+      const { tokenId } = await rewardResponse.json();
       // Adding Participant to Firestore
       await addDocToFirestore('participants', { wallet, username, tokenId });
       // Showing Success Message
@@ -114,7 +115,7 @@ const PrizePage: NextPage = () => {
   };
 
   const goToDashboard = () => {
-    router.replace('/dashboard');
+    router.replace('/crowd');
   };
 
   const stepBack = () => {
@@ -150,6 +151,9 @@ const PrizePage: NextPage = () => {
         return (
           <>
             <h2 className="my-5">This Near Id Already Has NFT Reward</h2>
+            <h3>
+              Feel free to contact us at <b>info@vself.app</b> if you have any questions.
+            </h3>
             <div className="justify-between w-full flex-row flex">
               <button type="button" className="text-black bg-white uppercase px-5" onClick={goToMain}>
                 Return to Main Page
@@ -163,13 +167,10 @@ const PrizePage: NextPage = () => {
       case 7:
         return (
           <>
-            <h2 className="my-5">Something went wrong</h2>
+            <h2 className="my-5">Something went wrong. Please, contact us at info@vself.app or </h2>
             <div className="justify-between w-full flex-row flex">
-              <button type="button" className="text-black bg-white uppercase px-5" onClick={goToMain}>
-                Return to Main Page
-              </button>
               <button type="button" className="text-black bg-white uppercase px-5" onClick={goToStart}>
-                Try again
+                RETURN TO THE MAIN SCREEN
               </button>
             </div>
           </>
@@ -178,7 +179,10 @@ const PrizePage: NextPage = () => {
         return (
           <>
             <h2 className="my-5 w-[600px]">Thank you for your help</h2>
-            <div className="justify-between w-full flex-row flex">
+            <h3>
+              Feel free to contact us at <b>info@vself.app</b> if you have any questions.
+            </h3>
+            <div className="justify-between w-full flex-row flex mt-5">
               <button type="button" className="text-black bg-white uppercase px-5" onClick={goToMain}>
                 Return to Main Page
               </button>
@@ -194,7 +198,7 @@ const PrizePage: NextPage = () => {
             <h2 className="my-5">Give us your NEAR account to receive a complimentary NFT.</h2>
 
             <h2 className="my-5">
-              If you want to create one, follow the link.{' '}
+              If you want to create one, follow the link{' '}
               <Link href="https://wallet.near.org" passHref>
                 <a target="_blank" rel="noopener noreferrer">
                   <span className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">
@@ -241,19 +245,17 @@ const PrizePage: NextPage = () => {
         return (
           <>
             <h2 className="my-5">
-              For each onboarding user, we donate $0.5 NEAR to the Unchained{' '}
+              For each onboarding user, we donate $0.5 NEAR to the{' '}
               <Link href="https://unchain.fund/" passHref>
                 <a target="_blank" rel="noopener noreferrer">
-                  <span className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">
-                    https://unchain.fund/
-                  </span>
+                  <span className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">Unchain</span>
                 </a>
               </Link>{' '}
               fund.{' '}
             </h2>
 
             <h2 className="my-5">
-              If you want to receive confirmation and follow the campaign progress, live us your email:
+              If you want to receive confirmation and follow the campaign progress, leave us your email:
             </h2>
             <input
               onChange={setUserEmail}
@@ -403,15 +405,28 @@ const PrizePage: NextPage = () => {
           <>
             <h2 className="my-5">Step 1: Download and try Hashd0x application.</h2>
 
-            <h2 className="my-5">Step 2: Use it to make a photo of anything you have witnessed. </h2>
+            <h2 className="my-5">Step 2: Use it to take a photo of anything you have witnessed. </h2>
 
-            <h2 className="my-5">Step 3: Choose your reward & join the community.</h2>
+            <h2 className="my-5">Step 3: Choose your reward &amp; join the community.</h2>
 
             <div className="flex justify-between mb-5 flex-col md:flex-row">
-              <img src="/applenew.png" alt="AppStore" style={{ borderRadius: 6, maxWidth: 250, width: '100%' }} />
-              <img src="/google.png" alt="Google Play" style={{ borderRadius: 6, maxWidth: 250, width: '100%' }} />
+              <Link href="https://apps.apple.com/ru/app/hashd0x/id1619383186" passHref>
+                <a target="_blank" rel="noopener noreferrer">
+                  <h3>Apple</h3>
+                  <img src="/applenew.png" alt="AppStore" style={{ borderRadius: 6, maxWidth: 250, width: '100%' }} />
+                </a>
+              </Link>
+              <Link href="https://play.google.com/store/apps/details?id=com.vSelf.PoW&amp;hl=ru&amp;gl=US" passHref>
+                <a target="_blank" rel="noopener noreferrer">
+                  <h3>Google</h3>
+                  <img src="/google.png" alt="Google Play" style={{ borderRadius: 6, maxWidth: 250, width: '100%' }} />
+                </a>
+              </Link>
             </div>
-            <div className="justify-end w-full flex">
+            <div className="justify-between w-full flex-row flex">
+              <button type="button" className="text-black bg-white uppercase px-5" onClick={goToStart}>
+                Back
+              </button>
               <button onClick={goToName} type="button" className="text-black bg-white uppercase px-5">
                 Next
               </button>
@@ -424,21 +439,19 @@ const PrizePage: NextPage = () => {
             <h2 className="my-5">Join Hashd0X and support Ukraine</h2>
 
             <p>
-              HashdOx is a platform for instant and fraud-proof registration of images and their metadata on the NEAR
+              Hashd0x is a platform for instant and fraud-proof registration of images and their metadata on the NEAR
               blockchain. The app is addressing the problem of fake news and the falsification of facts about war
               consequences across Ukraine. It started as a collaboration of the vSelf team and Egor Kraft&apos;s art
               project Proof-of-War.
             </p>
 
             <p className="my-5">
-              Now, we invite **you** to join our project and help us create a secure environment to share evidence of
+              Now, we invite <b>you</b> to join our project and help us create a secure environment to share evidence of
               what you are witnessing. We will ask you to download and try our application. To celebrate your
-              contribution, choose one of two options: we send you an NFT-gift or we donate $0.5 NEAR to the Unchained{' '}
+              contribution, choose one of two options: we send you an NFT-gift, or we donate $0.5 NEAR to the{' '}
               <Link href="https://unchain.fund/" passHref>
                 <a target="_blank" rel="noopener noreferrer">
-                  <span className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">
-                    https://unchain.fund/
-                  </span>
+                  <span className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">Unchain</span>
                 </a>
               </Link>{' '}
               fund.

@@ -55,9 +55,7 @@ const getImageSource = (evidence: Evidence) => {
       //return '/pow/' + media_hash + '.png';
       //https://console.firebase.google.com/project/hashdox/storage/hashdox.appspot.com/files/~2Fpreloaded
       return (
-        'https://firebasestorage.googleapis.com/v0/b/vself-dev.appspot.com/o/preloaded%2F' +
-        media_hash +
-        '.png?alt=media'
+        'https://firebasestorage.googleapis.com/v0/b/hashdox.appspot.com/o/preloaded%2F' + media_hash + '.png?alt=media'
       );
     }
     const metadataObject = JSON.parse(metadata);
@@ -67,7 +65,7 @@ const getImageSource = (evidence: Evidence) => {
     }
     // Get url of image storaged in firebase (uploaded through firebase)
     return (
-      'https://firebasestorage.googleapis.com/v0/b/vself-dev.appspot.com/o/images%2F' + media_hash + '.png?alt=media'
+      'https://firebasestorage.googleapis.com/v0/b/hashdox.appspot.com/o/images%2F' + media_hash + '.png?alt=media'
     );
   } catch (err) {
     console.log(err);
@@ -131,14 +129,14 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
       <div className="flex flex-1 flex-col" style={{ minWidth: '50%' }}>
         <div className="flex flex-row bg-black justify-between w-full pt-3 px-4">
           <HashDoxLogo />
-          <p className="font-rational text-[12px] w-64 text-white mt-3">
+          <p className="font-rational text-[10px] w-64 text-white mt-3">
             Hashd0x is a platform and a tool for instant and spoof-proof registration of metadata and image hashing
             records in Near Protocol and Ethereum Swarm blockchains.
           </p>
         </div>
         <div className="flex flex-1 flex-col">
           <p className="font-rational text-white text-[14px] p-4">TRANSACTIONS</p>
-          <ul className="font-rational text-white text-[12px] overflow-y-scroll h-[280px] no-scrollbar p-4">
+          <ul className="font-rational text-white text-[10px] overflow-y-scroll h-[280px] no-scrollbar p-4">
             {evidences.map((evidence, index) => {
               const explorerUriPrefix = 'https://explorer.testnet.near.org/transactions/';
               return (
@@ -146,7 +144,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
                   key={index}
                   id={index === activeEvidenceIndex ? 'activeEvidenceIndex' : ''}
                   onClick={() => setActiveEvidenceIndex(index)}
-                  className={`py-2 w-full cursor-pointer text-[12px] ${
+                  className={`py-2 w-full cursor-pointer text-[10px] ${
                     index === activeEvidenceIndex ? 'text-white' : 'text-gray-400'
                   }`}
                 >
@@ -155,12 +153,12 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
                     {txHashes[evidence.media_hash]?.time ?? getDateFromTimestamp(Math.floor(Date.now()))}
                   </p>
                   <p>
-                    {evidence.media_hash}
+                    {/* {evidence.media_hash}
                     <Link href={explorerUriPrefix + (txHashes[evidence.media_hash]?.tx || '')}>
                       <a target="_blank" className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">
                         {evidence.media_hash}
                       </a>
-                    </Link>
+                    </Link> */}
                   </p>
                 </li>
               );
@@ -219,7 +217,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
   // Return block with map
   const getMapBlock = () => {
     return (
-      <div style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <div style={{ flex: 1, justifyContent: 'center', alignItems: 'center', minWidth: '50%' }}>
         <div className="self-center h-full">{getMapComponent()}</div>
       </div>
     );
@@ -284,7 +282,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
             <div className="flex flex-row justify-between w-full mt-3">
               <div>
                 <p className="font-rational text-white text-[14px]">LOCATION DATA</p>
-                <p className="font-rational text-white text-[12px]">{JSON.stringify(location)}</p>
+                <p className="font-rational text-white text-[12px]  break-all">{JSON.stringify(location)}</p>
               </div>
               <p className="ml-4 font-rational text-white text-[10px] w-44">
                 Location data can be spoofed or faked at several levels of the operating system, GPS or VPN
@@ -321,7 +319,7 @@ const DashboardTable: React.FC<DashboardTableProps> = ({ evidences }) => {
             <div className="flex flex-row justify-between w-full mt-3 break-words">
               <div>
                 <p className="font-rational text-white text-[14px]">LOCATION DATA</p>
-                <p className="font-rational text-white text-[12px]">{JSON.stringify(location)}</p>
+                <p className="font-rational text-white text-[12px] break-all">{JSON.stringify(location)}</p>
               </div>
               <p className="ml-4 font-rational text-white text-[10px] w-44">
                 Location data can be spoofed or faked at several levels of the operating system, GPS or VPN

@@ -6,13 +6,13 @@ import { Endpoints } from '../constants/endpoints';
 import { mockUserAccount } from '../mockData/mockUserAccount';
 
 // Constants
-const contractName = Endpoints.TESTNET_POW_CONTRACT_NAME_V1;
+const contractName = Endpoints.TESTNET_POW_CONTRACT_NAME;
 const contractMethods = {
   viewMethods: ['get_evidences', 'version', 'get_evidences_amount'],
   changeMethods: ['upload_evidence'],
 };
 
-export const getPowConnectedContract = async () => {
+export const getCrowdConnectedContract = async () => {
   const { InMemoryKeyStore } = keyStores;
 
   // Wallet credentials

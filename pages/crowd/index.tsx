@@ -1,0 +1,44 @@
+import { useState, useEffect } from 'react';
+import type { NextPage } from 'next';
+import DashboardTable from '../../features/dashboardTable';
+import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
+
+const DashboardPage: NextPage = () => {
+  const [evidences, setEvidences] = useState([]);
+  const _from = 0;
+  const _limit = 1000;
+
+  useEffect(() => {
+    let timeOutID: any;
+    const getEvidences = async (from: number, limit: number) => {
+      try {
+        const response = await fetch('api/get-crowd-evidences?from_index=' + from + '&limit=' + limit);
+        const { result } = await response.json();
+        const reversedOrder = result.slice(0).reverse();
+        setEvidences(reversedOrder);
+      } catch (err) {
+        console.log(err);
+      }
+      timeOutID = setTimeout(() => {
+        getEvidences(from, limit);
+      }, 60000);
+    };
+    getEvidences(_from, _limit);
+
+    return () => {
+      clearTimeout(timeOutID);
+    };
+  }, []);
+
+  return <DashboardTable evidences={evidences} />;
+};
+
+export default DashboardPage;
+
+export async function getStaticProps({ locale }: any) {
+  return {
+    props: {
+      ...(await serverSideTranslations(locale || 'en', ['common', 'hashdox'])),
+    },
+  };
+}
