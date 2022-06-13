@@ -1,35 +1,32 @@
 /* eslint-disable @next/next/no-img-element */
 import type { NextPage } from 'next';
-import Link from 'next/link';
-// import { useTranslation } from 'next-i18next';
-// import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import { useRouter } from 'next/router';
 import React, { useState, useEffect } from 'react';
 import HashDoxLogo from '../../components/icons/HashDoxLogo';
 import Loader from '../../components/loader';
+import AlreadyIssuedStep from '../../features/reward/already-step';
+import DonationForm from '../../features/reward/donation-form';
+import ErrorStep from '../../features/reward/error-step';
+import FinalStep from '../../features/reward/final-step';
+import Introduction from '../../features/reward/introduction';
+import NameForm from '../../features/reward/name-form';
+import NFTForm from '../../features/reward/nft-form';
+import RewardForm from '../../features/reward/reward-form';
+import StorePresence from '../../features/reward/store-presence';
 import { useAppDispatch } from '../../hooks';
 import { setAppLoadingState } from '../../store/reducers/appStateReducer/actions';
 import { addDocToFirestore, isRewardAddedToFirestore } from '../../utils/firebase';
 
 const PrizePage: NextPage = () => {
   const dispatch = useAppDispatch();
-  const router = useRouter();
   // Form State
   const [formStep, setFormStep] = useState<number>(0);
-  const [formState, setFormState] = useState<number>(2);
   const [username, setUsername] = useState<string>('');
-  const [wallet, setWallet] = useState<string>('');
   const [email, setEmail] = useState<string>('');
+  const [wallet, setWallet] = useState<string>('');
 
   useEffect(() => {
     dispatch(setAppLoadingState(false));
   }, [dispatch]);
-
-  const setRadioButton = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    event.persist();
-    const { value } = event.target;
-    setFormState(Number(value));
-  };
 
   const setNearWallet = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const { value } = event.target;
@@ -102,20 +99,12 @@ const PrizePage: NextPage = () => {
     setFormStep(1);
   };
 
-  const setRewardType = () => {
-    setFormStep(formState);
+  const setRewardType = (step: number) => {
+    setFormStep(step);
   };
 
   const goBack = () => {
     setFormStep(3);
-  };
-
-  const goToMain = () => {
-    router.replace('/');
-  };
-
-  const goToDashboard = () => {
-    router.replace('/crowd');
   };
 
   const stepBack = () => {
@@ -138,329 +127,55 @@ const PrizePage: NextPage = () => {
     setFormStep(0);
   };
 
-  const radioBtnDisabled = () => {
-    if (formState > 3) {
-      return false;
-    }
-    return true;
-  };
-
   const renderSteps = () => {
     switch (formStep) {
       case 8:
-        return (
-          <>
-            <h2 className="my-5">This Near Id Already Has NFT Reward</h2>
-            <h3>
-              Feel free to contact us at <b>info@vself.app</b> if you have any questions.
-            </h3>
-            <div className="justify-between w-full flex-row flex">
-              <button type="button" className="text-black bg-white uppercase px-5" onClick={goToMain}>
-                Return to Main Page
-              </button>
-              <button type="button" className="text-black bg-white uppercase px-5" onClick={goToStart}>
-                Try again
-              </button>
-            </div>
-          </>
-        );
+        return <AlreadyIssuedStep />;
+
       case 7:
-        return (
-          <>
-            <h2 className="my-5">Something went wrong. Please, contact us at info@vself.app or </h2>
-            <div className="justify-between w-full flex-row flex">
-              <button type="button" className="text-black bg-white uppercase px-5" onClick={goToStart}>
-                RETURN TO THE MAIN SCREEN
-              </button>
-            </div>
-          </>
-        );
+        return <ErrorStep />;
+
       case 6:
-        return (
-          <>
-            <h2 className="my-5 w-[600px]">Thank you for your help</h2>
-            <h3>
-              Feel free to contact us at <b>info@vself.app</b> if you have any questions.
-            </h3>
-            <div className="justify-between w-full flex-row flex mt-5">
-              <button type="button" className="text-black bg-white uppercase px-5" onClick={goToMain}>
-                Return to Main Page
-              </button>
-              <button type="button" className="text-black bg-white uppercase px-5" onClick={goToDashboard}>
-                View on the Dashboard
-              </button>
-            </div>
-          </>
-        );
+        return <FinalStep />;
+
       case 5:
         return (
-          <>
-            <h2 className="my-5">Give us your NEAR account to receive a complimentary NFT.</h2>
-
-            <h2 className="my-5">
-              If you want to create one, follow the link{' '}
-              <Link href="https://wallet.near.org" passHref>
-                <a target="_blank" rel="noopener noreferrer">
-                  <span className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">
-                    https://wallet.near.org/
-                  </span>
-                </a>
-              </Link>
-            </h2>
-            <input
-              type="text"
-              className="
-            form-control
-            block
-            w-full
-            px-3
-            py-1
-            text-base
-            font-normal
-            text-gray-700
-            bg-white bg-clip-padding
-            border border-solid border-gray-300
-            rounded
-            transition
-            ease-in-out
-            mb-5
-            focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-              onChange={setNearWallet}
-              id="near"
-              name="near"
-              placeholder="Enter your NEAR wallet"
-              value={wallet}
-            />
-            <div className="justify-between w-full flex-row flex">
-              <button type="button" className="text-black bg-white uppercase px-5" onClick={goBack}>
-                Back
-              </button>
-              <button type="button" className="text-black bg-white uppercase px-5" onClick={sendReward}>
-                Next
-              </button>
-            </div>
-          </>
+          <NFTForm
+            backBtnCallback={goBack}
+            nextBtnCallback={sendReward}
+            inputHandle={setNearWallet}
+            inputValue={wallet}
+          />
         );
+
       case 4:
         return (
-          <>
-            <h2 className="my-5">
-              For each onboarding user, we donate $0.5 NEAR to the{' '}
-              <Link href="https://unchain.fund/" passHref>
-                <a target="_blank" rel="noopener noreferrer">
-                  <span className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">Unchain</span>
-                </a>
-              </Link>{' '}
-              fund.{' '}
-            </h2>
-
-            <h2 className="my-5">
-              If you want to receive confirmation and follow the campaign progress, leave us your email:
-            </h2>
-            <input
-              onChange={setUserEmail}
-              type="text"
-              className="
-            form-control
-            block
-            w-full
-            px-3
-            py-1
-            text-base
-            font-normal
-            text-gray-700
-            bg-white bg-clip-padding
-            border border-solid border-gray-300
-            rounded
-            transition
-            ease-in-out
-            mb-5
-            focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-              id="email"
-              name="email"
-              placeholder="Enter your email"
-              value={email}
-              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,4}$"
-            />
-            <div className="justify-between w-full flex-row flex">
-              <button type="button" className="text-black bg-white uppercase px-5" onClick={goBack}>
-                Back
-              </button>
-              <button onClick={collectEmail} type="button" className="text-black bg-white uppercase px-5">
-                Next
-              </button>
-            </div>
-          </>
+          <DonationForm
+            backBtnCallback={goBack}
+            nextBtnCallback={collectEmail}
+            inputHandle={setUserEmail}
+            inputValue={email}
+          />
         );
+
       case 3:
-        return (
-          <>
-            <h2 className="my-5">Choose your reward:</h2>
-            <div className="flex mb-5">
-              <div>
-                <div className="form-check  my-5">
-                  <input
-                    onChange={setRadioButton}
-                    className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                    type="radio"
-                    name="reward"
-                    id="donate"
-                    value={4}
-                  />
-                  <label className="form-check-label inline-block" htmlFor="flexRadioDefault1">
-                    We donate to Ukraine
-                  </label>
-                </div>
-                <div className="form-check  my-5">
-                  <input
-                    onChange={setRadioButton}
-                    className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                    type="radio"
-                    name="reward"
-                    id="nft"
-                    value={5}
-                  />
-                  <label className="form-check-label inline-block" htmlFor="flexRadioDefault2">
-                    Get NFT
-                  </label>
-                </div>
-                <div className="form-check my-5">
-                  <input
-                    onChange={setRadioButton}
-                    className="form-check-input appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
-                    type="radio"
-                    name="reward"
-                    id="nothing"
-                    value={6}
-                  />
-                  <label className="form-check-label inline-block" htmlFor="flexRadioDefault2">
-                    Nothing, glad to help!
-                  </label>
-                </div>
-              </div>
-            </div>
+        return <RewardForm nextBtnCallback={setRewardType} backBtnCallback={stepBack} />;
 
-            <div className="justify-between w-full flex-row flex">
-              <button type="button" className="text-black bg-white uppercase px-5" onClick={stepBack}>
-                Back
-              </button>
-              <button
-                disabled={radioBtnDisabled()}
-                onClick={setRewardType}
-                type="button"
-                className="text-black bg-white uppercase px-5"
-              >
-                Next
-              </button>
-            </div>
-          </>
-        );
       case 2:
         return (
-          <>
-            <h2 className="my-5">
-              One last thing: give us the account name that you used in the app and we set up a reward for you.{' '}
-            </h2>
-            <input
-              onChange={setUserName}
-              type="text"
-              className="
-            form-control
-            block
-            w-full
-            px-3
-            py-1
-            text-base
-            font-normal
-            text-gray-700
-            bg-white bg-clip-padding
-            border border-solid border-gray-300
-            rounded
-            transition
-            ease-in-out
-            mb-5
-            focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-              id="appname"
-              name="appname"
-              placeholder="Enter your name"
-              value={username}
-            />
-            <div className="justify-between w-full flex-row flex">
-              <button type="button" className="text-black bg-white uppercase px-5" onClick={goToBeginig}>
-                Back
-              </button>
-              <button
-                disabled={username.length === 0}
-                onClick={goToReward}
-                type="button"
-                className="text-black bg-white uppercase px-5"
-              >
-                Next
-              </button>
-            </div>
-          </>
+          <NameForm
+            inputHandle={setUserName}
+            inputValue={username}
+            backBtnCallback={goToBeginig}
+            nextBtnCallback={goToReward}
+          />
         );
+
       case 1:
-        return (
-          <>
-            <h2 className="my-5">Step 1: Download and try Hashd0x application.</h2>
+        return <StorePresence backBtnCallback={goToStart} nextBtnCallback={goToName} />;
 
-            <h2 className="my-5">Step 2: Use it to take a photo of anything you have witnessed. </h2>
-
-            <h2 className="my-5">Step 3: Choose your reward &amp; join the community.</h2>
-
-            <div className="flex justify-between mb-5 flex-col md:flex-row">
-              <Link href="https://apps.apple.com/ru/app/hashd0x/id1619383186" passHref>
-                <a target="_blank" rel="noopener noreferrer">
-                  <h3>Apple</h3>
-                  <img src="/applenew.png" alt="AppStore" style={{ borderRadius: 6, maxWidth: 250, width: '100%' }} />
-                </a>
-              </Link>
-              <Link href="https://play.google.com/store/apps/details?id=com.vSelf.PoW&amp;hl=ru&amp;gl=US" passHref>
-                <a target="_blank" rel="noopener noreferrer">
-                  <h3>Google</h3>
-                  <img src="/google.png" alt="Google Play" style={{ borderRadius: 6, maxWidth: 250, width: '100%' }} />
-                </a>
-              </Link>
-            </div>
-            <div className="justify-between w-full flex-row flex">
-              <button type="button" className="text-black bg-white uppercase px-5" onClick={goToStart}>
-                Back
-              </button>
-              <button onClick={goToName} type="button" className="text-black bg-white uppercase px-5">
-                Next
-              </button>
-            </div>
-          </>
-        );
       default:
-        return (
-          <>
-            <h2 className="my-5">Join Hashd0X and support Ukraine</h2>
-
-            <p>
-              Hashd0x is a platform for instant and fraud-proof registration of images and their metadata on the NEAR
-              blockchain. The app is addressing the problem of fake news and the falsification of facts about war
-              consequences across Ukraine. It started as a collaboration of the vSelf team and Egor Kraft&apos;s art
-              project Proof-of-War.
-            </p>
-
-            <p className="my-5">
-              Now, we invite <b>you</b> to join our project and help us create a secure environment to share evidence of
-              what you are witnessing. We will ask you to download and try our application. To celebrate your
-              contribution, choose one of two options: we send you an NFT-gift, or we donate $0.5 NEAR to the{' '}
-              <Link href="https://unchain.fund/" passHref>
-                <a target="_blank" rel="noopener noreferrer">
-                  <span className="hover:text-gray-600 underline underline-offset-2 cursor-pointer">Unchain</span>
-                </a>
-              </Link>{' '}
-              fund.
-            </p>
-            <button type="button" className="text-black bg-white uppercase px-5" onClick={startStep}>
-              Start
-            </button>
-          </>
-        );
+        return <Introduction btnCallback={startStep} />;
     }
   };
   return (

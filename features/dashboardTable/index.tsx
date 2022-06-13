@@ -10,7 +10,6 @@ import HashDoxLogo from '../../components/icons/HashDoxLogo';
 import HashDoxIcon from '../../components/icons/HashDoxIcon';
 import URLImageComponent from '../../components/urlImage';
 import MapComponent from '../../components/mapcomponent';
-import Link from 'next/link';
 
 import { txHashes } from '../../mockData/mockEvidences';
 
