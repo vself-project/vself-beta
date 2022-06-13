@@ -91,7 +91,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({ cameraCallback }) => 
           </div>
         )}
         <div className="flex flex-1 w-full" style={{ display: !isCaptured ? 'none' : 'flex', alignSelf: 'center' }}>
-          <canvas id="canvas" ref={canvas} height={500} style={{ width: '100%;' }} />
+          <canvas id="canvas" ref={canvas} height={500} style={{ width: '100%' }} />
         </div>
         <div className="text-center mt-8 flex-col">
           <button type="button" onClick={takePicture} disabled={isCaptured}>

@@ -15,7 +15,7 @@ import HashDoxIcon from '../../components/icons/HashDoxIcon';
 import FileImageComponent from '../../components/fileImage';
 import { Steps } from './enums';
 import ArrowsIcon from '../../components/icons/ArrowsIcon';
-import { cutHash, getDateFromTimestamp, TRX_HASH_EXAMPLE } from '../dashboardTable';
+import { cutHash, getDateFromTimestamp, TRX_HASH_EXAMPLE } from '../dashboard';
 import HashDoxLogo from '../../components/icons/HashDoxLogo';
 
 interface ImageLocation {

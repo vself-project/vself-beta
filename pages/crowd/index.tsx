@@ -2,11 +2,11 @@
 import { useState, useEffect, useRef } from 'react';
 import type { NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import TransactionsBlock from '../../features/dashboardTable/transactionsBlock';
+import TransactionsBlock from '../../features/dashboard/transactionsBlock';
 import URLImageComponent from '../../components/urlImage';
-import EvidenceBlock from '../../features/dashboardTable/evidenceBlock';
+import EvidenceBlock from '../../features/dashboard/evidenceBlock';
 import { Evidence } from '../../models/Evidence';
-import MapBlock from '../../features/dashboardTable/mapBlock';
+import MapBlock from '../../features/dashboard/mapBlock';
 
 const DashboardPage: NextPage = () => {
   // Refreshing Evidences Every 60 Seconds

@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import { useState, useEffect } from 'react';
 import type { NextPage } from 'next';
-import { getDateFromTimestamp, TRX_HASH_EXAMPLE } from '../../features/dashboardTable';
+import { getDateFromTimestamp, TRX_HASH_EXAMPLE } from '../../features/dashboard';
 import { getPOWAccountAndContract } from '../../utils';
 import HashDoxLogo from '../../components/icons/HashDoxLogo';
 import { txHashes } from '../../mockData/mockEvidences';

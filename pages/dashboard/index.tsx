@@ -2,12 +2,12 @@
 import { useState, useEffect, useRef } from 'react';
 import type { NextPage } from 'next';
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
-import TransactionsBlock from '../../features/dashboardTable/transactionsBlock';
+import TransactionsBlock from '../../features/dashboard/transactionsBlock';
 import URLImageComponent from '../../components/urlImage';
-import EvidenceBlock from '../../features/dashboardTable/evidenceBlock';
-import HashDoxIcon from '../../components/icons/HashDoxIcon';
+import EvidenceBlock from '../../features/dashboard/evidenceBlock';
 import { Evidence } from '../../models/Evidence';
-import MapBlock from '../../features/dashboardTable/mapBlock';
+import MapBlock from '../../features/dashboard/mapBlock';
+import HashDoxIcon from '../../components/icons/HashDoxIcon';
 
 const DashboardPage: NextPage = () => {
   // Refreshing Evidences Every 60 Seconds
@@ -106,7 +106,25 @@ const DashboardPage: NextPage = () => {
           />
         </div>
         <div className="flex flex-1 justify-center align-center" style={{ minWidth: '50%' }}>
-          <URLImageComponent url={imgUrl} className="mx-4 rounded self-center max-h-[400px]" />
+          {imgUrl === '' ? (
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                justifyContent: 'center',
+                alignItems: 'center',
+                width: '100%',
+                height: '100%',
+                minWidth: '50%',
+              }}
+            >
+              <div className="animate-spin-slow">
+                <HashDoxIcon />
+              </div>
+            </div>
+          ) : (
+            <URLImageComponent url={imgUrl} className="mx-4 rounded self-center max-h-[400px]" />
+          )}
         </div>
       </div>
       <div className="flex flex-1 flex-col sm:flex-row">
