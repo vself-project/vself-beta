@@ -1,12 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getPOWAccountAndContract } from '../../utils';
+import { getNearAccountAndContract, getPOWAccountAndContract } from '../../utils';
 import { getUserAccountData } from '../../store/reducers/userAccountReducer/actions';
 import { setAppLoadingState, signInApp } from '../../store/reducers/appStateReducer/actions';
 
 import Loader from '../loader';
 import LoginForm from './loginForm';
+import { setEventStatus } from '../../store/reducers/eventReducer/actions';
 
 interface AppLayoutProps {
   children: React.ReactElement;
@@ -14,20 +15,23 @@ interface AppLayoutProps {
 
 const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const { is_authed } = useAppSelector((state) => state.appStateReducer);
-  const { account_id } = useAppSelector((state) => state.userAccountReducer);
   const dispatch = useAppDispatch();
 
   const signInToNear = async () => {
-    const { signIn } = await getPOWAccountAndContract();
+    const { signIn } = await getNearAccountAndContract();
     signIn();
   };
 
   useEffect(() => {
     const initVselfWebApp = async () => {
       try {
-        await getPOWAccountAndContract();
-        dispatch(signInApp());
-        dispatch(getUserAccountData({ account_id }));
+        const { isSignedIn, walletAccountId, contract } = await getNearAccountAndContract();
+        if (isSignedIn) {
+          dispatch(signInApp());
+          dispatch(getUserAccountData({ account_id: walletAccountId }));
+          const is_active = await contract.is_active();
+          dispatch(setEventStatus(is_active));
+        }
       } catch (err) {
         console.log('Cannot connect to contract: ', err);
       } finally {
@@ -37,7 +41,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
       }
     };
     initVselfWebApp();
-  }, [dispatch, account_id]);
+  }, [dispatch]);
 
   return <Loader>{is_authed ? children : <LoginForm loginCallback={signInToNear} />}</Loader>;
 };

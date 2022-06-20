@@ -9,13 +9,13 @@ import { getNearAccountAndContract, hash, resizeFile } from '../../utils';
 import { Quest, EventData } from '../../models/Event';
 import QuestComponent, { QuestChangeCallback } from './quests';
 // Components
-import Spinner from '../../components/spinner';
 import EventCard from '../events-table/eventCard';
 import Modal from '../../components/modal';
 import Accordion from '../../components/accordion';
 import { mockEvent } from '../../mockData/mockEvents';
 import { uploadImageToFirebase } from '../../utils/firebase';
 import { StylesCSS } from '../../constants/styles';
+import { SpinnerLoader } from '../../components/loader';
 
 const initialQuest: Quest = {
   qr_prefix_enc: '',
@@ -141,7 +141,8 @@ const NewEventForm: React.FC = () => {
           };
         });
         // Starting New Event In NEAR
-        const { contract } = await getNearAccountAndContract(account_id);
+
+        const { contract } = await getNearAccountAndContract();
         await contract.start_event({
           event: {
             event_description,
@@ -163,20 +164,20 @@ const NewEventForm: React.FC = () => {
     }
   }, [account_id, dispatch, event_description, event_name, files, finish_time, is_starting, quests, start_time]);
 
+  if (is_starting) {
+    return <SpinnerLoader />;
+  }
+
   return (
     <>
-      <Modal
-        isOpened={!!submitedEvent}
-        closeCallback={closeModal}
-        title={is_starting ? 'Creating New Event' : 'Confirm New Event'}
-      >
-        {is_starting ? <Spinner /> : <EventCard eventData={submitedEvent} detailed files={files} />}
+      <Modal isOpened={!!submitedEvent} closeCallback={closeModal} title={'Confirm New Event'}>
+        <EventCard eventData={submitedEvent} detailed files={files} />
       </Modal>
 
       <form onSubmit={onNewEventSubmit} className="flex-row flex container">
-        <div className="mb-6 p-5 rounded-lg shadow-lg bg-white w-1/3 relative">
+        <div className="mb-6 p-5 rounded-lg shadow-lg bg-white min-w-1/3 w-1/3 relative">
           <h5 className="text-gray-900 text-xl font-medium mb-2">New Event</h5>
-          <img className="rounded mb-4" src="/meta.jpg" alt="" style={{ maxWidth: 300 }} />
+          <img className="rounded mb-4" src="/meta.jpg" alt="" />
           <input
             autoComplete="off"
             type="text"
@@ -193,8 +194,8 @@ const NewEventForm: React.FC = () => {
             className={`${StylesCSS.TEXTAREA}`}
             placeholder="Event description"
           />
-          <span className="mb-2 ">Start Date:</span>
-          <span className="flex-row flex justify-between mb-2 cursor-pointer">
+          <span className="mb-2 text-black">Start Date:</span>
+          <span className="flex-row flex justify-between my-2 cursor-pointer">
             <DatePicker
               onChange={onStartTimeChange}
               selected={new Date(start_time / 1000000)}
@@ -203,8 +204,8 @@ const NewEventForm: React.FC = () => {
             />
             {/* <CalendarIcon /> */}
           </span>
-          <span className="mb-4 ">End Date:</span>
-          <span className="flex-row flex justify-between mb-2 cursor-pointer align-middle">
+          <span className="mb-4 text-black">End Date:</span>
+          <span className="flex-row flex justify-between my-2 cursor-pointer align-middle">
             <DatePicker
               onChange={onFinishTimeChange}
               selected={new Date(finish_time / 1000000)}
@@ -220,7 +221,7 @@ const NewEventForm: React.FC = () => {
           </div>
         </div>
 
-        <div className="flex-row ml-4 mb-6 p-6  w-1/2 ">
+        <div className="flex-row ml-4 mb-6 p-6 min-w-2/3 w-2/3">
           <h5 className="text-gray-900 text-xl font-medium mb-2">Quests</h5>
           <div className="flex flex-col overflow-y-scroll h-screen relative" style={{ maxHeight: 520 }}>
             {quests.map((quest, index) => (
@@ -243,7 +244,11 @@ const NewEventForm: React.FC = () => {
             ))}
           </div>
           <div className="mt-5 border-t-2 pt-5">
-            <button type="button" onClick={addNewQuest} className={StylesCSS.PRIMARY_BUTTON}>
+            <button
+              type="button"
+              onClick={addNewQuest}
+              className="'inline-block px-6 py-2.5 bg-blue-600 text-white font-medium text-xs leading-tight uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out'"
+            >
               Add New Quest
             </button>
           </div>

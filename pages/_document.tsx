@@ -5,7 +5,7 @@ class MyDocument extends Document {
     return (
       <Html>
         <Head>{/* <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests"></meta> */}</Head>
-        <body className="bg-black dark:bg-black text-gray-900 dark:text-white">
+        <body className="text-gray-900 dark:text-white bg-white">
           <Main />
           <NextScript />
         </body>

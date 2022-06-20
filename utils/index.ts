@@ -51,7 +51,7 @@ export const getRandomHashString = (): string => {
   }).join('');
 };
 
-export const getNearAccountAndContract = async (account_id: string): Promise<any> => {
+export const getNearAccountAndContract = async (): Promise<any> => {
   const config: ConnectConfig = {
     networkId: 'testnet',
     keyStore: new keyStores.BrowserLocalStorageKeyStore(),
@@ -60,21 +60,35 @@ export const getNearAccountAndContract = async (account_id: string): Promise<any
     helperUrl: 'https://helper.testnet.near.org',
     headers: {},
   };
-  const near = await connect(config);
 
-  const account = await near.account(account_id);
+  const near = await connect(config);
+  const wallet = new WalletConnection(near, '');
+  const isSignedIn = wallet.isSignedIn();
+
+  const signOut = () => {
+    wallet.signOut();
+  };
+
+  const signIn = () => {
+    wallet.requestSignIn({ contractId: Endpoints.MAINNET_CONTRACT_URI });
+  };
+
+  const walletAccountId = wallet.getAccountId();
+
+  const account = await near.account(walletAccountId);
 
   const contract = new Contract(
-    account, // the account object that is connecting
-    Endpoints.TESTNET_CONTRACT_URI,
+    wallet.account(), // the account object that is connecting
+    Endpoints.MAINNET_CONTRACT_URI,
     {
       // name of contract you're connecting to
       viewMethods: ['is_active', 'get_actions', 'get_event_data', 'get_event_stats'], // view methods do not change state but usually return a value
       changeMethods: ['start_event', 'stop_event'], // change methods modify state
+      sender: wallet.account(),
     }
   );
 
-  return { account, contract };
+  return { account, contract, signOut, signIn, walletAccountId, isSignedIn };
 };
 
 export const getPOWAccountAndContract = async (): Promise<any> => {

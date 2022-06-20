@@ -23,7 +23,7 @@ const EventCard: React.FC<EventCardProps> = ({ eventData, detailed, files }) => 
             eventData?.quests.map((quest, index) => (
               <div
                 key={index}
-                className="flex flex-col rounded-lg shadow-lg bg-white mb-2 p-10 hover:bg-gray-200 cursor-pointer"
+                className="flex flex-col rounded-lg shadow-lg text-black bg-white mb-2 p-10 hover:bg-gray-200 cursor-pointer"
               >
                 <h3 className="font-bold">Quest #{index + 1}</h3>
                 {files !== undefined && files?.length > 0 && (
