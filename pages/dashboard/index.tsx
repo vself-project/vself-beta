@@ -21,7 +21,14 @@ const DashboardPage: NextPage = () => {
       try {
         const response = await fetch('api/get-evidences?from_index=' + from + '&limit=' + limit);
         const { result } = await response.json();
-        const reversedOrder = result.slice(0).reverse();
+        const reversedOrder = result
+          .slice(0)
+          .filter(
+            (a: any) =>
+              a.media_hash !== 'keepyoumotivatedwhileyoulearn' &&
+              a.media_hash !== 'b9d3b258647c0e57901c6f68ecff1a270f4afb8b19cb660f65d0b81c6b372d89'
+          )
+          .reverse();
         setEvidences(reversedOrder);
       } catch (err) {
         console.log(err);
