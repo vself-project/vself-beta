@@ -7,7 +7,6 @@ import URLImageComponent from '../../components/urlImage';
 import EvidenceBlock from '../../features/dashboard/evidenceBlock';
 import { Evidence } from '../../models/Evidence';
 import MapBlock from '../../features/dashboard/mapBlock';
-import HashDoxIcon from '../../components/icons/HashDoxIcon';
 
 const DashboardPage: NextPage = () => {
   // Refreshing Evidences Every 60 Seconds
@@ -19,16 +18,9 @@ const DashboardPage: NextPage = () => {
     let timeOutID: any;
     const getEvidences = async (from: number, limit: number) => {
       try {
-        const response = await fetch('api/get-evidences?from_index=' + from + '&limit=' + limit);
+        const response = await fetch('api/get-crowd-evidences?from_index=' + from + '&limit=' + limit);
         const { result } = await response.json();
-        const reversedOrder = result
-          .slice(0)
-          .filter(
-            (a: any) =>
-              a.media_hash !== 'keepyoumotivatedwhileyoulearn' &&
-              a.media_hash !== 'b9d3b258647c0e57901c6f68ecff1a270f4afb8b19cb660f65d0b81c6b372d89'
-          )
-          .reverse();
+        const reversedOrder = result.slice(0).reverse();
         setEvidences(reversedOrder);
       } catch (err) {
         console.log(err);
@@ -42,7 +34,6 @@ const DashboardPage: NextPage = () => {
     return () => {
       clearTimeout(timeOutID);
     };
-    // setEvidences(mockEvidences);
   }, []);
 
   // Switching Active Evidence Every 15 Seconds
@@ -113,25 +104,7 @@ const DashboardPage: NextPage = () => {
           />
         </div>
         <div className="flex flex-1 justify-center align-center" style={{ minWidth: '50%' }}>
-          {imgUrl === '' ? (
-            <div
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-                width: '100%',
-                height: '100%',
-                minWidth: '50%',
-              }}
-            >
-              <div className="animate-spin-slow">
-                <HashDoxIcon />
-              </div>
-            </div>
-          ) : (
-            <URLImageComponent url={imgUrl} className="mx-4 rounded self-center max-h-[400px]" />
-          )}
+          <URLImageComponent url={imgUrl} className="mx-4 rounded self-center max-h-[400px]" />
         </div>
       </div>
       <div className="flex flex-1 flex-col sm:flex-row">

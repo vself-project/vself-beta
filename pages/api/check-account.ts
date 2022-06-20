@@ -5,7 +5,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { query } = req;
   const { nearid } = query;
   try {
-    const response = await fetch('https://explorer.testnet.near.org/accounts/' + nearid);
+    const response = await fetch('https://explorer.mainnet.near.org/accounts/' + nearid);
     const resText = await response.text();
     result = !resText.includes('check if the account name');
   } catch (err) {

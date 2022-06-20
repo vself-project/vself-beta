@@ -14,6 +14,7 @@ interface AppLayoutProps {
 
 const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   const { is_authed } = useAppSelector((state) => state.appStateReducer);
+  const { account_id } = useAppSelector((state) => state.userAccountReducer);
   const dispatch = useAppDispatch();
 
   const signInToNear = async () => {
@@ -24,11 +25,9 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
   useEffect(() => {
     const initVselfWebApp = async () => {
       try {
-        const { accountId, isSignedIn } = await getPOWAccountAndContract();
-        if (isSignedIn) {
-          dispatch(signInApp());
-          dispatch(getUserAccountData({ account_id: accountId }));
-        }
+        await getPOWAccountAndContract();
+        dispatch(signInApp());
+        dispatch(getUserAccountData({ account_id }));
       } catch (err) {
         console.log('Cannot connect to contract: ', err);
       } finally {
@@ -38,7 +37,7 @@ const AppLayout: React.FC<AppLayoutProps> = ({ children }) => {
       }
     };
     initVselfWebApp();
-  }, [dispatch]);
+  }, [dispatch, account_id]);
 
   return <Loader>{is_authed ? children : <LoginForm loginCallback={signInToNear} />}</Loader>;
 };

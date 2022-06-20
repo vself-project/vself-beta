@@ -1,4 +1,4 @@
-import React, { AnimationEvent } from 'react';
+import React from 'react';
 import { StylesCSS } from '../../constants/styles';
 
 interface ModalProps {
@@ -8,16 +8,12 @@ interface ModalProps {
 }
 
 const Modal: React.FC<ModalProps> = ({ children, title, closeCallback, isOpened }) => {
-  const animationEventHandle = (event: AnimationEvent<HTMLDivElement>) => {
-    console.log('event: ', event);
-  };
   return (
     <div
       className={`${StylesCSS.MODAL_BACKGROUND} bg-background-dark hidden ${
         isOpened && 'dropdown-menu show'
       } animate-fadein`}
       tabIndex={-1}
-      onAnimationEnd={animationEventHandle}
       role="dialog"
       aria-modal={true}
     >

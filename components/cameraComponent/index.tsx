@@ -14,7 +14,6 @@ const CameraComponent: React.FC<CameraComponentProps> = ({ cameraCallback }) => 
   const takePicture = () => {
     const ctx: CanvasRenderingContext2D | null = canvas.current ? canvas.current.getContext('2d') : null;
     if (ctx && ref.current && canvas.current) {
-      console.log('ref.current: ', ref.current);
       ctx.drawImage(ref.current, 0, 0, ref.current.clientWidth, canvas.current?.height);
       setIsCaptured(true);
       canvas.current.toBlob((blob) => {
@@ -92,7 +91,7 @@ const CameraComponent: React.FC<CameraComponentProps> = ({ cameraCallback }) => 
           </div>
         )}
         <div className="flex flex-1 w-full" style={{ display: !isCaptured ? 'none' : 'flex', alignSelf: 'center' }}>
-          <canvas id="canvas" ref={canvas} height={500} style={{ width: '100%;' }} />
+          <canvas id="canvas" ref={canvas} height={500} style={{ width: '100%' }} />
         </div>
         <div className="text-center mt-8 flex-col">
           <button type="button" onClick={takePicture} disabled={isCaptured}>

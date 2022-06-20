@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getStorage } from 'firebase/storage';
-import { addDoc, doc, collection, getFirestore } from 'firebase/firestore';
+import { addDoc, doc, collection, getFirestore, query, where, getDocs } from 'firebase/firestore';
 import { getAnalytics, isSupported } from 'firebase/analytics';
 import { ref, uploadBytesResumable, getDownloadURL, listAll } from 'firebase/storage';
 import { sha3_256 } from 'js-sha3';
@@ -55,3 +55,14 @@ export const renderFirebaseImage = async (hash: string): Promise<string> => {
 
 export const addDocToFirestore = async (collectionName: string, data: object) =>
   await addDoc(collection(db, collectionName), data);
+
+export const isRewardAddedToFirestore = async (wallet: string) => {
+  const particpantsCollection = collection(db, 'participants');
+  const q = query(particpantsCollection, where('wallet', '==', wallet));
+  const querySnapshot = await getDocs(q);
+  if (!querySnapshot.empty) {
+    return true;
+  } else {
+    return false;
+  }
+};

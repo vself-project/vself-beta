@@ -10,7 +10,7 @@ import { Quest, EventData } from '../../models/Event';
 import QuestComponent, { QuestChangeCallback } from './quests';
 // Components
 import Spinner from '../../components/spinner';
-import EventCard from '../eventsTable/eventCard';
+import EventCard from '../events-table/eventCard';
 import Modal from '../../components/modal';
 import Accordion from '../../components/accordion';
 import { mockEvent } from '../../mockData/mockEvents';
