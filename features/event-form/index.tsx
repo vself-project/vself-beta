@@ -132,7 +132,7 @@ const NewEventForm: React.FC = () => {
           if (urls[index] === undefined) return;
           // Setting URLS of Uploaded Images To Quests
           const hashedPrefix = hash(quest.qr_prefix_enc);
-          const prefixLength = hashedPrefix.length;
+          const prefixLength = quest.qr_prefix_enc.length;
           return {
             ...quest,
             qr_prefix_enc: hashedPrefix,
@@ -157,6 +157,7 @@ const NewEventForm: React.FC = () => {
         dispatch(setAppLoadingState(false));
       } catch (err) {
         console.log('Connection to contract ended with errors: ', err);
+        dispatch(setAppLoadingState(false));
       }
     };
     if (is_starting) {

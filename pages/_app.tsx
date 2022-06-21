@@ -30,7 +30,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         <ThemeProvider attribute="class">
           {/* <Wrapper apiKey={String(process.env.GOOGLE_MAPS_API_KEY)}> */}
           <Header />
-          <div className="text-gray-900 dark:text-white">
+          <div className="text-gray-900 dark:text-white font-rational">
             <AnyComponent {...pageProps} />
           </div>
           {/* </Wrapper> */}
@@ -40,9 +40,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   );
 }
 
-export function reportWebVitals(metric: NextWebVitalsMetric) {
-  console.log('metric: ', metric);
-}
+// export function reportWebVitals(metric: NextWebVitalsMetric) {
+//   console.log('metric: ', metric);
+// }
 
 export default withTRPC<AppRouter>({
   config({ ctx }) {

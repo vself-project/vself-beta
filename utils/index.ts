@@ -70,7 +70,7 @@ export const getNearAccountAndContract = async (): Promise<any> => {
   };
 
   const signIn = () => {
-    wallet.requestSignIn({ contractId: Endpoints.MAINNET_CONTRACT_URI });
+    wallet.requestSignIn({ contractId: Endpoints.TEST_TESTNET_CONTRACT_URI });
   };
 
   const walletAccountId = wallet.getAccountId();
@@ -78,13 +78,12 @@ export const getNearAccountAndContract = async (): Promise<any> => {
   const account = await near.account(walletAccountId);
 
   const contract = new Contract(
-    wallet.account(), // the account object that is connecting
-    Endpoints.MAINNET_CONTRACT_URI,
+    account, // the account object that is connecting
+    Endpoints.TEST_TESTNET_CONTRACT_URI,
     {
       // name of contract you're connecting to
       viewMethods: ['is_active', 'get_actions', 'get_event_data', 'get_event_stats'], // view methods do not change state but usually return a value
       changeMethods: ['start_event', 'stop_event'], // change methods modify state
-      sender: wallet.account(),
     }
   );
 

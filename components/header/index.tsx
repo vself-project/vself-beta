@@ -12,7 +12,7 @@ import {
 } from '../../store/reducers/appStateReducer/actions';
 import { getNearAccountAndContract } from '../../utils';
 // import ThemeChanger from '../themeChanger';
-import HashDoxLogo from '../icons/HashDoxLogo';
+// import HashDoxLogo from '../icons/HashDoxLogo';
 
 const Header: React.FC = () => {
   const { account_id } = useAppSelector((state) => state.userAccountReducer);

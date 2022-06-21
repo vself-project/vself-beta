@@ -10,7 +10,11 @@ const LoginForm: React.FC<LoginFormProps> = ({ loginCallback }) => {
     <div className="grid place-items-center h-screen">
       <div className="text-center" style={{ maxWidth: 600 }}>
         <h2 className="text-black font-rational">Welcome to VSELF</h2>
-        <button type="button" className="uppercase bg-white text-black font-rational" onClick={loginCallback}>
+        <button
+          type="button"
+          className="uppercase cursor-pointer hover:opacity-70 underline-offset-8 underline bg-white text-black font-rational"
+          onClick={loginCallback}
+        >
           SIGN IN
         </button>
       </div>
