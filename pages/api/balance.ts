@@ -2,6 +2,9 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getEventsConnectedContract } from '../../utils/events-contract';
 
 /// Return user balance or NFTs list
+/// Request examples:
+/// -- http://localhost:3000/api/balance
+/// -- http://localhost:3000/api/balance?nearid='ilerik.testnet'
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     // Create contract instance
@@ -15,6 +18,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // If username is provided we need to return user balance
     if (nearid) {
       // Extract account id
+      nearid = String(nearid).toLowerCase();
       let account_id = nearid.slice(1, -1);
       console.log("Account ID: ", account_id);
       const balance_data = await contract.get_user_balance_extra({ account_id });

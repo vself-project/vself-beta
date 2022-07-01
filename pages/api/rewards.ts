@@ -2,6 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getEventsConnectedContract } from '../../utils/events-contract';
 
 /// Return list of NFT rewards
+/// Request example: http://localhost:3000/api/rewards
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     // Create contract instance

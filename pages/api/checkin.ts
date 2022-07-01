@@ -1,20 +1,37 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { checkNearAccount } from '../../utils';
 import { getEventsConnectedContract } from '../../utils/events-contract';
 
 /// Call checkin method of the contract managing events
+/// Request example: http://localhost:3000/api/checkin?nearid='ilerik.testnet'&qr='some_qr_coded_string'
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     let result = "None";
-
-    // Create contract instance
-    const connection: any = await getEventsConnectedContract();
-    const { contract } = connection;
 
     // Parse query
     let { nearid, qr } = req.query;
     console.log("Query: ", req.query);
     nearid = nearid.slice(1, -1); // trim quotes
     qr = qr.slice(1, -1);
+
+    // Check that near id exists
+    nearid = String(nearid).toLowerCase();
+    // Switch between MAINNET and TESTNET
+    let account_exists = await checkNearAccount(nearid, 'testnet');
+    if (!account_exists) {
+      res.status(500).json({
+        index: -1,
+        got: false,
+        title: "nothing",
+        description: "nothing",
+        errorMessage: String("User ID isn't valid"),
+      });
+      return;
+    }
+
+    // Create contract instance
+    const connection: any = await getEventsConnectedContract();
+    const { contract } = connection;
 
     // Set appropriate gas and storage cost
     const gas_cost = 300000000000000;
