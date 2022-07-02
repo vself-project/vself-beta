@@ -1,7 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
-import { getNearAccountAndContract, getPOWAccountAndContract } from '../../utils';
+import { getNearAccountAndContract } from '../../utils';
 import { getUserAccountData } from '../../store/reducers/userAccountReducer/actions';
 import { setAppLoadingState, signInApp } from '../../store/reducers/appStateReducer/actions';
 

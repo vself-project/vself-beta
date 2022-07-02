@@ -7,7 +7,7 @@ import { connect, ConnectConfig, keyStores, Contract, WalletConnection, utils } 
 import Resizer from 'react-image-file-resizer';
 
 import { Endpoints } from '../constants/endpoints';
-import { mockUserAccount } from '../mockData/mockUserAccount';
+// import { mockUserAccount } from '../mockData/mockUserAccount';
 
 // SHA-256 hash
 export const hash = (msg: string) => {

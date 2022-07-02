@@ -6,7 +6,7 @@ import TransactionsBlock from '../../features/dashboard/transactionsBlock';
 import URLImageComponent from '../../components/urlImage';
 import EvidenceBlock from '../../features/dashboard/evidenceBlock';
 import { Evidence } from '../../models/Evidence';
-import MapBlock from '../../features/dashboard/mapBlock';
+// import MapBlock from '../../features/dashboard/mapBlock';
 import HashDoxIcon from '../../components/icons/HashDoxIcon';
 
 const DashboardPage: NextPage = () => {
@@ -136,10 +136,10 @@ const DashboardPage: NextPage = () => {
       </div>
       <div className="flex flex-1 flex-col sm:flex-row">
         {/* {getMapBlock()} */}
-        <div className="flex flex-1 justify-center pb-[40px]" style={{ minWidth: '50%' }}>
+        {/* <div className="flex flex-1 justify-center pb-[40px]" style={{ minWidth: '50%' }}>
           <MapBlock evidence={evidences[activeEvidenceIndex]} />
-        </div>
-        {/* <div
+        </div> */}
+        <div
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -153,7 +153,7 @@ const DashboardPage: NextPage = () => {
           <div className="animate-spin-slow">
             <HashDoxIcon />
           </div>
-        </div> */}
+        </div>
         <div className="flex flex-1 justify-center pb-[40px]" style={{ minWidth: '50%' }}>
           <EvidenceBlock evidence={evidences[activeEvidenceIndex]} />
         </div>
