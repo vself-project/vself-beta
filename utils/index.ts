@@ -193,3 +193,17 @@ export const getCoords = async () => {
     return null;
   }
 };
+
+// Check that near account exists (using near explorer).
+// 'network' should be one of 'mainnet' or 'testnet'
+export const checkNearAccount = async (nearid: any, network: string) => {
+  try {
+    const response = await fetch('https://explorer.' + network + '.near.org/accounts/' + nearid);
+    const resText = await response.text();
+    return !resText.includes('check if the account name');
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+
