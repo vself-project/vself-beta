@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect } from 'react';
 import HashDoxIcon from '../icons/HashDoxIcon';

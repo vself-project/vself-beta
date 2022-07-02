@@ -1,6 +1,5 @@
 /* eslint-disable @next/next/no-img-element */
 import React from 'react';
-import HashDoxLogo from '../icons/HashDoxLogo';
 
 interface LoginFormProps {
   loginCallback: () => void;
@@ -9,9 +8,13 @@ interface LoginFormProps {
 const LoginForm: React.FC<LoginFormProps> = ({ loginCallback }) => {
   return (
     <div className="grid place-items-center h-screen">
-      <div className="" style={{ maxWidth: 600 }}>
-        <HashDoxLogo />
-        <button type="button" className="uppercase px-5 bg-white text-black font-rational" onClick={loginCallback}>
+      <div className="text-center" style={{ maxWidth: 600 }}>
+        <h2 className="text-black font-rational">Welcome to VSELF</h2>
+        <button
+          type="button"
+          className="uppercase cursor-pointer hover:opacity-70 underline-offset-8 underline bg-white text-black font-rational"
+          onClick={loginCallback}
+        >
           SIGN IN
         </button>
       </div>

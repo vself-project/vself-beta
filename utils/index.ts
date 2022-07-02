@@ -7,7 +7,7 @@ import { connect, ConnectConfig, keyStores, Contract, WalletConnection, utils } 
 import Resizer from 'react-image-file-resizer';
 
 import { Endpoints } from '../constants/endpoints';
-import { mockUserAccount } from '../mockData/mockUserAccount';
+// import { mockUserAccount } from '../mockData/mockUserAccount';
 
 // SHA-256 hash
 export const hash = (msg: string) => {
@@ -51,7 +51,7 @@ export const getRandomHashString = (): string => {
   }).join('');
 };
 
-export const getNearAccountAndContract = async (account_id: string): Promise<any> => {
+export const getNearAccountAndContract = async (): Promise<any> => {
   const config: ConnectConfig = {
     networkId: 'testnet',
     keyStore: new keyStores.BrowserLocalStorageKeyStore(),
@@ -60,13 +60,26 @@ export const getNearAccountAndContract = async (account_id: string): Promise<any
     helperUrl: 'https://helper.testnet.near.org',
     headers: {},
   };
-  const near = await connect(config);
 
-  const account = await near.account(account_id);
+  const near = await connect(config);
+  const wallet = new WalletConnection(near, '');
+  const isSignedIn = wallet.isSignedIn();
+
+  const signOut = () => {
+    wallet.signOut();
+  };
+
+  const signIn = () => {
+    wallet.requestSignIn({ contractId: Endpoints.TEST_TESTNET_CONTRACT_URI });
+  };
+
+  const walletAccountId = wallet.getAccountId();
+
+  const account = await near.account(walletAccountId);
 
   const contract = new Contract(
     account, // the account object that is connecting
-    Endpoints.TESTNET_CONTRACT_URI,
+    Endpoints.TEST_TESTNET_CONTRACT_URI,
     {
       // name of contract you're connecting to
       viewMethods: ['is_active', 'get_actions', 'get_event_data', 'get_event_stats'], // view methods do not change state but usually return a value
@@ -74,7 +87,7 @@ export const getNearAccountAndContract = async (account_id: string): Promise<any
     }
   );
 
-  return { account, contract };
+  return { account, contract, signOut, signIn, walletAccountId, isSignedIn };
 };
 
 export const getPOWAccountAndContract = async (): Promise<any> => {
@@ -180,3 +193,17 @@ export const getCoords = async () => {
     return null;
   }
 };
+
+// Check that near account exists (using near explorer).
+// 'network' should be one of 'mainnet' or 'testnet'
+export const checkNearAccount = async (nearid: any, network: string) => {
+  try {
+    const response = await fetch('https://explorer.' + network + '.near.org/accounts/' + nearid);
+    const resText = await response.text();
+    return !resText.includes('check if the account name');
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+}
+

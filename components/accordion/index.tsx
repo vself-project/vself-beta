@@ -36,7 +36,7 @@ const Accordion: React.FC<AccordionProps> = ({
       <button
         type="button"
         onClick={toggleCollapsed}
-        className={`${!isCollapsed && 'font-bold'} flex`}
+        className={`${!isCollapsed && 'font-bold'} flex text-black`}
         id={`accordion_${currentIndex}`}
       >
         {accordionTitle}

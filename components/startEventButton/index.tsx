@@ -7,12 +7,11 @@ import { getNearAccountAndContract } from '../../utils';
 
 const StartEventButton: React.FC = () => {
   const { is_active } = useAppSelector((state) => state.eventReducer);
-  const { account_id } = useAppSelector((state) => state.userAccountReducer);
   const dispatch = useAppDispatch();
 
   const toggleEvent = async (): Promise<void> => {
     try {
-      const { contract } = await getNearAccountAndContract(account_id);
+      const { contract } = await getNearAccountAndContract();
       if (!is_active) {
         dispatch(createEvent());
       } else {

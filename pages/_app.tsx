@@ -13,8 +13,8 @@ import Head from 'next/head';
 import { store } from '../store';
 
 import Header from '../components/header';
-import { Wrapper } from '@googlemaps/react-wrapper';
-// import AppLayout from '../components/appLayout';
+// import { Wrapper } from '@googlemaps/react-wrapper';
+import AppLayout from '../components/appLayout';
 import { appWithTranslation } from 'next-i18next';
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -22,27 +22,27 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <Provider store={store}>
       <Head>
-        <title>Hashdox</title>
-        <meta name="description" content="instant and spoof-proof registration of metadata and image hashing" />
+        <title>VSELF</title>
+        {/* <meta name="description" content="instant and spoof-proof registration of metadata and image hashing" /> */}
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <AppLayout> */}
-      <ThemeProvider attribute="class">
-        <Wrapper apiKey={String(process.env.GOOGLE_MAPS_API_KEY)}>
+      <AppLayout>
+        <ThemeProvider attribute="class">
+          {/* <Wrapper apiKey={String(process.env.GOOGLE_MAPS_API_KEY)}> */}
           <Header />
-          <div className="dark:bg-black text-gray-900 dark:text-white">
+          <div className="text-gray-900 dark:text-white font-rational">
             <AnyComponent {...pageProps} />
           </div>
-        </Wrapper>
-      </ThemeProvider>
-      {/* </AppLayout> */}
+          {/* </Wrapper> */}
+        </ThemeProvider>
+      </AppLayout>
     </Provider>
   );
 }
 
-export function reportWebVitals(metric: NextWebVitalsMetric) {
-  console.log('metric: ', metric);
-}
+// export function reportWebVitals(metric: NextWebVitalsMetric) {
+//   console.log('metric: ', metric);
+// }
 
 export default withTRPC<AppRouter>({
   config({ ctx }) {

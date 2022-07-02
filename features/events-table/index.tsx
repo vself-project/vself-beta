@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setEvent } from '../../store/reducers/eventReducer/actions';
-import { getNearAccountAndContract } from '../../utils';
+import { getNearAccountAndContract, hash } from '../../utils';
 // Components
 import EventActionsTable from './eventAcionsTable';
 import EventCard from './eventCard';
@@ -14,7 +14,7 @@ const EventsTable: React.FC = () => {
 
   useEffect(() => {
     const getEventsStats = async (): Promise<void> => {
-      const { contract } = await getNearAccountAndContract(account_id);
+      const { contract } = await getNearAccountAndContract();
       const actions = await contract.get_actions({ from_index: 0, limit: 100 });
       const stats = await contract.get_event_stats();
       const data = await contract.get_event_data();
