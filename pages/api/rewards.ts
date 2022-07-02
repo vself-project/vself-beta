@@ -11,8 +11,8 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Fetch event data
     let result = [];
-    let event_data = await contract.get_event_data();
-    console.log("Event Data: ", event_data);
+    const event_data = await contract.get_event_data();
+    console.log('Event Data: ', event_data);
     result = event_data.quests.map((quest: any) => quest.reward_uri);
 
     // Response

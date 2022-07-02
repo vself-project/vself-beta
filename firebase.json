@@ -7,23 +7,6 @@
         "source": "**",
         "function": "nextServer"
       }
-    ],
-    "redirects": [
-      {
-        "source": "/api/status",
-        "destination": "https://nodeserver-bfu3nibnoq-lz.a.run.app/status",
-        "type": 301
-      },
-      {
-        "source": "/api/rewards",
-        "destination": "https://nodeserver-bfu3nibnoq-lz.a.run.app/rewards",
-        "type": 301
-      },
-      {
-        "source": "/api/checkin",
-        "destination": "https://nodeserver-bfu3nibnoq-lz.a.run.app/checkin",
-        "type": 301
-      }
     ]
   },
   "functions": {

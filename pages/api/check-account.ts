@@ -9,7 +9,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { nearid } = query;
   try {
     // Switch between MAINNET and TESTNET
-    let result_m = false;
+    const result_m = false;
     //result_m = await checkNearAccount(nearid, 'mainnet');
     let result_t = false;
     result_t = await checkNearAccount(nearid, 'testnet');

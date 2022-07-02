@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { contract } = connection;
 
     // Fetch contract version
-    let result = await contract.version();
+    const result = await contract.version();
     res.status(200).json(result);
   } catch (err) {
     res.status(500).json({ error: 'failed to fetch contract version' });

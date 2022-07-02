@@ -10,7 +10,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     const { contract } = connection;
 
     // Fetch event data
-    let result = await contract.get_event_data();
+    const result = await contract.get_event_data();
     res.status(200).json(result.quests.length);
   } catch (err) {
     res.status(500).json(0);
