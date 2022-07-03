@@ -14,7 +14,7 @@ import { store } from '../store';
 
 import Header from '../components/header';
 // import { Wrapper } from '@googlemaps/react-wrapper';
-import AppLayout from '../components/appLayout';
+// import AppLayout from '../components/appLayout';
 import { appWithTranslation } from 'next-i18next';
 
 function MyApp({ Component, pageProps }: AppProps) {
@@ -26,16 +26,16 @@ function MyApp({ Component, pageProps }: AppProps) {
         {/* <meta name="description" content="instant and spoof-proof registration of metadata and image hashing" /> */}
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AppLayout>
-        <ThemeProvider attribute="class">
-          {/* <Wrapper apiKey={String(process.env.GOOGLE_MAPS_API_KEY)}> */}
-          <Header />
-          <div className="text-gray-900 dark:text-white font-rational">
-            <AnyComponent {...pageProps} />
-          </div>
-          {/* </Wrapper> */}
-        </ThemeProvider>
-      </AppLayout>
+      {/* <AppLayout> */}
+      <ThemeProvider attribute="class">
+        {/* <Wrapper apiKey={String(process.env.GOOGLE_MAPS_API_KEY)}> */}
+        <Header />
+        <div className="text-gray-900 dark:text-white font-rational">
+          <AnyComponent {...pageProps} />
+        </div>
+        {/* </Wrapper> */}
+      </ThemeProvider>
+      {/* </AppLayout> */}
     </Provider>
   );
 }
