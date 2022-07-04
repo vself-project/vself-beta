@@ -119,6 +119,7 @@ const NewEventForm: React.FC = () => {
   // Uploading Images to Firebase and Start New Event after success
   useEffect(() => {
     const startNewEvent = async () => {
+      console.log('submitedEvent: ', submitedEvent);
       try {
         // Resize Images Before Upload
         const resizedImgsPromises = files.map(resizeFile);
