@@ -3,6 +3,7 @@ import React from 'react';
 import { EventData } from '../../models/Event';
 import { formatTimeStampToLocaleDateString } from '../../utils';
 import StartEventButton from '../../components/startEventButton';
+import { useAppSelector } from '../../hooks';
 
 interface EventCardProps {
   eventData: EventData | undefined;
@@ -11,12 +12,14 @@ interface EventCardProps {
 }
 
 const EventCard: React.FC<EventCardProps> = ({ eventData, detailed, files }) => {
+  const { is_authed } = useAppSelector((state) => state.appStateReducer);
+
   return (
     <div className="flex justify-center">
       <div className="rounded-lg shadow-lg bg-white max-w-sm relative" style={{ minHeight: 600 }}>
-        <a href="#!" data-mdb-ripple="true" data-mdb-ripple-color="light">
-          <img className="rounded-t-lg" src="/meta.jpg" alt="" />
-        </a>
+        <div className="justify-center w-full flex mt-2">
+          <img className="rounded-t-lg" src="/vvs.png" alt="" />
+        </div>
         <div className="p-6 mb-10">
           <h5 className="text-gray-900 text-xl font-medium mb-2">{eventData?.event_name}</h5>
           {detailed &&
@@ -48,9 +51,11 @@ const EventCard: React.FC<EventCardProps> = ({ eventData, detailed, files }) => 
             Finish Time: {eventData?.finish_time && formatTimeStampToLocaleDateString(eventData.finish_time)}
           </p>
         </div>
-        <div className="absolute bottom-6 left-6">
-          <StartEventButton />
-        </div>
+        {is_authed && (
+          <div className="absolute bottom-6 left-6">
+            <StartEventButton />
+          </div>
+        )}
       </div>
     </div>
   );

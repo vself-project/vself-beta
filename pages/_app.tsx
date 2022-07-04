@@ -12,13 +12,43 @@ import Head from 'next/head';
 
 import { store } from '../store';
 
-import Header from '../components/header';
+// import Header from '../components/header';
 // import { Wrapper } from '@googlemaps/react-wrapper';
 // import AppLayout from '../components/appLayout';
 import { appWithTranslation } from 'next-i18next';
+import { useEffect } from 'react';
+import { getNearAccountAndContract } from '../utils';
+import { signInApp, setAppLoadingState } from '../store/reducers/appStateReducer/actions';
+import { setEventStatus } from '../store/reducers/eventReducer/actions';
+import { getUserAccountData } from '../store/reducers/userAccountReducer/actions';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const AnyComponent = Component as any;
+
+  useEffect(() => {
+    const initVselfWebApp = async () => {
+      try {
+        const { isSignedIn, walletAccountId, contract } = await getNearAccountAndContract();
+        console.log('isSignedIn: ', contract);
+        if (isSignedIn) {
+          store.dispatch(signInApp());
+          store.dispatch(getUserAccountData({ account_id: walletAccountId }));
+        }
+        console.log('in the middle');
+        const is_active = await contract.is_active();
+        console.log('is_active: ', is_active);
+        store.dispatch(setEventStatus(is_active));
+      } catch (err) {
+        console.log('Cannot connect to contract: ', err);
+      } finally {
+        setTimeout(() => {
+          store.dispatch(setAppLoadingState(false));
+        }, 1000);
+      }
+    };
+    initVselfWebApp();
+  }, []);
+
   return (
     <Provider store={store}>
       <Head>
@@ -29,8 +59,11 @@ function MyApp({ Component, pageProps }: AppProps) {
       {/* <AppLayout> */}
       <ThemeProvider attribute="class">
         {/* <Wrapper apiKey={String(process.env.GOOGLE_MAPS_API_KEY)}> */}
-        <Header />
-        <div className="text-gray-900 dark:text-white font-rational">
+        {/* <Header /> */}
+        <div
+          className="text-gray-900 dark:text-white font-rational"
+          style={{ backgroundImage: 'url(/gradient2.png)', backgroundSize: 'cover' }}
+        >
           <AnyComponent {...pageProps} />
         </div>
         {/* </Wrapper> */}

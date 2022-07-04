@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element */
 import type { NextPage } from 'next';
 import AppLayout from '../components/appLayout';
+import Header from '../components/header';
 // import { serverSideTranslations } from 'next-i18next/serverSideTranslations';
 // import { useTranslation } from 'next-i18next';
 // import Link from 'next/link';
@@ -12,9 +13,12 @@ const Home: NextPage = () => {
   // const { t } = useTranslation(['hashdox', 'common']);
   const { is_active } = useAppSelector((state) => state.eventReducer);
   return (
-    <AppLayout>
-      <div className="grid place-items-center h-screen">{!is_active ? <NewEventForm /> : <EventsTable />}</div>
-    </AppLayout>
+    <>
+      <Header />
+      <div className="grid place-items-center h-screen">
+        <EventsTable />
+      </div>
+    </>
   );
 };
 

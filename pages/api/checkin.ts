@@ -17,7 +17,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     // Check that near id exists
     nearid = String(nearid).toLowerCase();
     // Switch between MAINNET and TESTNET
-    const account_exists = await checkNearAccount(nearid, 'testnet');
+    const account_exists = await checkNearAccount(nearid, 'mainnet');
     if (!account_exists) {
       res.status(500).json({
         index: -1,
@@ -35,7 +35,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Set appropriate gas and storage cost
     const gas_cost = 300000000000000;
-    const minting_cost = '30000000000000000000000'; // 0.01 NEAR
+    const minting_cost = '25000000000000000000000'; // 0.01 NEAR
     console.log('Incoming action: {} {}', nearid, qr);
 
     // Call checkin

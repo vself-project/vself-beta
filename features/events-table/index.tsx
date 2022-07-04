@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
+import { SpinnerLoader } from '../../components/loader';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setEvent } from '../../store/reducers/eventReducer/actions';
-import { getNearAccountAndContract, hash } from '../../utils';
+import { getNearAccountAndContract } from '../../utils';
 // Components
 import EventActionsTable from './eventAcionsTable';
 import EventCard from './eventCard';
@@ -18,17 +19,20 @@ const EventsTable: React.FC = () => {
       const actions = await contract.get_actions({ from_index: 0, limit: 100 });
       const stats = await contract.get_event_stats();
       const data = await contract.get_event_data();
-
-      dispatch(
-        setEvent({
-          event_data: data,
-          event_stats: stats,
-          event_actions: actions,
-        })
-      );
+      setTimeout(() => {
+        dispatch(
+          setEvent({
+            event_data: data,
+            event_stats: stats,
+            event_actions: actions,
+          })
+        );
+      }, 1000);
     };
     getEventsStats();
   }, [account_id, dispatch]);
+
+  if (!event_data) return <SpinnerLoader />;
 
   return (
     <div className="flex-row flex flex-wrap ">

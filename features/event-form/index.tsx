@@ -12,7 +12,7 @@ import QuestComponent, { QuestChangeCallback } from './quests';
 import EventCard from '../events-table/eventCard';
 import Modal from '../../components/modal';
 import Accordion from '../../components/accordion';
-import { mockEvent } from '../../mockData/mockEvents';
+import { mockBarcelonaEvent, mockEvent } from '../../mockData/mockEvents';
 import { uploadImageToFirebase } from '../../utils/firebase';
 import { StylesCSS } from '../../constants/styles';
 import { SpinnerLoader } from '../../components/loader';
@@ -34,7 +34,7 @@ const initialEventFormState: EventData = {
 };
 
 const NewEventForm: React.FC = () => {
-  const [eventFormState, setEventFormState] = useState<EventData>(initialEventFormState);
+  const [eventFormState, setEventFormState] = useState<EventData>(mockBarcelonaEvent);
   const { event_name, event_description, quests, start_time, finish_time } = eventFormState;
   const [files, setFiles] = useState<File[]>([]);
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -179,7 +179,9 @@ const NewEventForm: React.FC = () => {
       <form onSubmit={onNewEventSubmit} className="flex-row flex container">
         <div className="mb-6 p-5 rounded-lg shadow-lg bg-white min-w-1/3 w-1/3 relative">
           <h5 className="text-gray-900 text-xl font-medium mb-2">New Event</h5>
-          <img className="rounded mb-4" src="/meta.jpg" alt="" />
+          <div className="justify-center w-full flex mt-2">
+            <img className="rounded-t-lg mb-3" src="/vvs.png" alt="" style={{ height: 180 }} />
+          </div>
           <input
             autoComplete="off"
             type="text"

@@ -17,32 +17,32 @@ export const hash = (msg: string) => {
 export const amountInYocto = (amount: string) => utils.format.parseNearAmount(amount);
 export const amountInNEAR = (amount: string) => utils.format.formatNearAmount(amount);
 
-const provider = new providers.JsonRpcProvider(Endpoints.TESTNET_RPC_ENDPOINT_URI);
+const provider = new providers.JsonRpcProvider(Endpoints.MAINNET_RPC_ENDOINT_URI);
 
 // const contractEndPoint =
 //   process.env.NODE_ENV !== 'production' ? Endpoints.TESTNET_CONTRACT_URI : Endpoints.MAINNET_CONTRACT_URI;
 
-export const getContractState = async (methodName: string): Promise<boolean> => {
-  try {
-    const request = {
-      request: '{}',
-    };
-    const encodedText = encode(JSON.stringify(request));
-    const rawResult = await provider.query({
-      request_type: 'call_function',
-      account_id: Endpoints.TESTNET_CONTRACT_URI,
-      method_name: methodName,
-      args_base64: encodedText,
-      finality: 'optimistic',
-    });
-    // format result
-    const result = JSON.parse(Buffer.from(rawResult.result).toString());
-    return result;
-  } catch (err) {
-    console.log(err);
-    return false;
-  }
-};
+// export const getContractState = async (methodName: string): Promise<boolean> => {
+//   try {
+//     const request = {
+//       request: '{}',
+//     };
+//     const encodedText = encode(JSON.stringify(request));
+//     const rawResult = await provider.query({
+//       request_type: 'call_function',
+//       account_id: Endpoints.MAINNET_CONTRACT_URI,
+//       method_name: methodName,
+//       args_base64: encodedText,
+//       finality: 'optimistic',
+//     });
+//     // format result
+//     const result = JSON.parse(Buffer.from(rawResult.result).toString());
+//     return result;
+//   } catch (err) {
+//     console.log(err);
+//     return false;
+//   }
+// };
 
 export const getRandomHashString = (): string => {
   const randomBytes = nacl.randomBytes(64);
@@ -55,9 +55,9 @@ export const getNearAccountAndContract = async (): Promise<any> => {
   const config: ConnectConfig = {
     networkId: 'testnet',
     keyStore: new keyStores.BrowserLocalStorageKeyStore(),
-    nodeUrl: 'https://rpc.testnet.near.org',
-    walletUrl: 'https://wallet.testnet.near.org',
-    helperUrl: 'https://helper.testnet.near.org',
+    nodeUrl: 'https://rpc.mainnet.near.org',
+    walletUrl: 'https://wallet.mainnet.near.org',
+    helperUrl: 'https://helper.mainnet.near.org',
     headers: {},
   };
 
@@ -70,7 +70,7 @@ export const getNearAccountAndContract = async (): Promise<any> => {
   };
 
   const signIn = () => {
-    wallet.requestSignIn({ contractId: Endpoints.TEST_TESTNET_CONTRACT_URI });
+    wallet.requestSignIn({ contractId: Endpoints.MAINNET_CONTRACT_URI });
   };
 
   const walletAccountId = wallet.getAccountId();
@@ -79,7 +79,7 @@ export const getNearAccountAndContract = async (): Promise<any> => {
 
   const contract = new Contract(
     account, // the account object that is connecting
-    Endpoints.TEST_TESTNET_CONTRACT_URI,
+    Endpoints.MAINNET_CONTRACT_URI,
     {
       // name of contract you're connecting to
       viewMethods: ['is_active', 'get_actions', 'get_event_data', 'get_event_stats'], // view methods do not change state but usually return a value
@@ -131,27 +131,27 @@ export const getPOWAccountAndContract = async (): Promise<any> => {
   return { account, contract, signOut, signIn, walletAccountId };
 };
 
-export const getNftTokens = async (account_id: string): Promise<object[]> => {
-  try {
-    const request = { account_id };
-    const encodedText = encode(JSON.stringify(request));
+// export const getNftTokens = async (account_id: string): Promise<object[]> => {
+//   try {
+//     const request = { account_id };
+//     const encodedText = encode(JSON.stringify(request));
 
-    const rawResult = await provider.query({
-      request_type: 'call_function',
-      account_id,
-      method_name: 'nft_tokens_for_owner',
-      args_base64: encodedText,
-      finality: 'optimistic',
-    });
+//     const rawResult = await provider.query({
+//       request_type: 'call_function',
+//       account_id,
+//       method_name: 'nft_tokens_for_owner',
+//       args_base64: encodedText,
+//       finality: 'optimistic',
+//     });
 
-    // format result
-    const res = JSON.parse(Buffer.from(rawResult.result).toString());
-    return res;
-  } catch (error) {
-    console.log(error);
-    return [];
-  }
-};
+//     // format result
+//     const res = JSON.parse(Buffer.from(rawResult.result).toString());
+//     return res;
+//   } catch (error) {
+//     console.log(error);
+//     return [];
+//   }
+// };
 
 export const formatTimeStampToLocaleDateString = (timestamp: number) => {
   return new Date(timestamp / 1000000).toLocaleDateString();
@@ -205,5 +205,4 @@ export const checkNearAccount = async (nearid: any, network: string) => {
     console.log(err);
     return false;
   }
-}
-
+};

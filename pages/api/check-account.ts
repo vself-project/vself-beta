@@ -9,11 +9,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   const { nearid } = query;
   try {
     // Switch between MAINNET and TESTNET
-    const result_m = false;
-    //result_m = await checkNearAccount(nearid, 'mainnet');
-    let result_t = false;
-    result_t = await checkNearAccount(nearid, 'testnet');
-    result = result_m || result_t;
+    let result_m = false;
+    result_m = await checkNearAccount(nearid, 'mainnet');
+    // let result_t = false;
+    // result_t = await checkNearAccount(nearid, 'testnet');
+    result = result_m;
   } catch (err) {
     res.status(500).json({
       err,

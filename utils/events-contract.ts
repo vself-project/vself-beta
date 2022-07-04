@@ -3,10 +3,10 @@ import { Near, Account, keyStores, Contract, KeyPair } from 'near-api-js';
 import getConfig from '../config/near';
 import { Endpoints } from '../constants/endpoints';
 // Mocks
-import { mockUserAccount } from '../mockData/mockUserAccount';
+import { mockMainNetUserAccount } from '../mockData/mockUserAccount';
 
 // Constants
-const contractName = Endpoints.TEST_TESTNET_CONTRACT_URI;
+const contractName = Endpoints.MAINNET_CONTRACT_URI;
 const contractMethods = {
   viewMethods: ['version', 'is_active', 'get_actions', 'get_event_data', 'get_event_stats', 'get_user_balance_extra'],
   changeMethods: ['start_event', 'stop_event', 'checkin'],
@@ -17,15 +17,15 @@ export const getEventsConnectedContract = async () => {
 
   // Wallet credentials
   const credentials = {
-    account_id: mockUserAccount.account_id,
-    public_key: mockUserAccount.public_key,
-    private_key: String(mockUserAccount.private_key),
+    account_id: mockMainNetUserAccount.account_id,
+    public_key: mockMainNetUserAccount.public_key,
+    private_key: String(mockMainNetUserAccount.private_key),
   };
 
   // Create keyStore object
   const keyStore = new InMemoryKeyStore();
-  const { nodeUrl, networkId } = getConfig('testnet');
-  keyStore.setKey(networkId, mockUserAccount.account_id, KeyPair.fromString(credentials.private_key));
+  const { nodeUrl, networkId } = getConfig('mainnet');
+  keyStore.setKey(networkId, mockMainNetUserAccount.account_id, KeyPair.fromString(credentials.private_key));
 
   // Add access key into calling contract account
   const { connection } = new Near({
@@ -35,7 +35,7 @@ export const getEventsConnectedContract = async () => {
     headers: {},
   });
 
-  const account = new Account(connection, mockUserAccount.account_id);
+  const account = new Account(connection, mockMainNetUserAccount.account_id);
 
   // Create callable contract instance
   const contract = new Contract(account, contractName, contractMethods);
