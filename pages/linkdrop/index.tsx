@@ -1,11 +1,16 @@
+import React from 'react';
 import type { NextPage } from 'next';
 import * as nearAPI from "near-api-js";
 import { Contract } from 'near-api-js';
+import { StylesCSS } from '../../constants/styles';
+import { checkNearAccount } from '../../utils';
 
 import { mockUserAccount } from '../../mockData/mockUserAccount';
 
 const { generateSeedPhrase } = require('near-seed-phrase');
 const { connect, WalletConnection, keyStores, KeyPair, utils } = nearAPI;
+
+const MAIN_TEXT = 'If you want to create near account or If you want to create near account or If you want to create near account. Then just use this simple form.'
 
 // Wallet credentials (caesai.testnet) // sega
 const credentials = {
@@ -56,22 +61,64 @@ const createAccount = async (creatorAccountId: any, newAccountId: any, amount: a
     "300000000000000",
     utils.format.parseNearAmount(amount)
   );
-  console.log(result);
-  console.log(seedPhrase);
 
   return { result, seedPhrase};
 }
 
 const LinkDrop: NextPage = () => {
-  const someContractMethod = async () => {    
-    const new_account_id = "hashdox6.testnet";
-    const { result, seedPhrase } = await createAccount(credentials.account_id, new_account_id, '1');
+  const [nearid, setNearid] = React.useState('');
+  const [message, setMessage] = React.useState('');
+
+  // Call contract method 
+  const callCreateAccount = async () => {    
+    const amount = '1';
+
+    // If account is busy show the message
+    // const accountExists = await checkNearAccount(nearid, 'testnet');
+    // if (accountExists) {
+    //   setMessage('This account is busy');
+    //   setTimeout(() => {setMessage('')}, 5000);
+    //   return;
+    // }
+
+    const { result, seedPhrase } = await createAccount(credentials.account_id, nearid, amount);
+    if (result) {
+      setMessage('Success');
+      setTimeout(() => {setMessage('')}, 5000);
+    } else {
+      setMessage('Failure');
+      setTimeout(() => {setMessage('')}, 5000);
+    }
+    console.log({ result });
+    console.log({ seedPhrase });
     return;
   };
+
+  // User ID input handler
+  const onEventNearIDChange = (event: React.FormEvent<HTMLInputElement>): void => {
+    const { value } = event.currentTarget;
+    setNearid(value);
+  };
+
   return (
     <div className="grid place-items-center h-screen">
       <div className="text-center text-black">
-        <button type="button" onClick={someContractMethod}>
+        <div className="w-96 mb-8">
+          {MAIN_TEXT}
+        </div>
+        <input
+            autoComplete="off"
+            type="text"
+            name="nearid"
+            onChange={onEventNearIDChange}
+            value={nearid}
+            className={`${StylesCSS.INPUT}`}
+            placeholder="new_account.testnet"
+          />
+        <div className="w-96 h-8">
+          {message}
+        </div>
+        <button type="button" onClick={callCreateAccount}>
           Claim Near Account
         </button>
       </div>
