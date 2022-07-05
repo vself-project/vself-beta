@@ -118,13 +118,12 @@ export const getPOWAccountAndContract = async (): Promise<any> => {
   const account = await near.account(walletAccountId);
 
   const contract = new Contract(
-    wallet.account(), // the account object that is connecting
+    account, // the account object that is connecting
     Endpoints.TESTNET_POW_CONTRACT_NAME,
     {
       // name of contract you're connecting to
       viewMethods: ['get_evidences', 'version', 'get_evidences_amount'], // view methods do not change state but usually return a value
       changeMethods: ['upload_evidence'], // change methods modify state
-      sender: wallet.account(),
     }
   );
 
