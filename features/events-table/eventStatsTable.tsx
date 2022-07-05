@@ -8,7 +8,7 @@ interface EventStatsTableProps {
 
 const EventStatsTable: React.FC<EventStatsTableProps> = ({ eventStats }) => {
   return (
-    <table className="min-w-full">
+    <table>
       <thead className="bg-white border-b">
         <tr>
           <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">Start Date</th>

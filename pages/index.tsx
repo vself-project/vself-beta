@@ -15,7 +15,7 @@ const Home: NextPage = () => {
   return (
     <>
       <Header />
-      <div className="grid place-items-center h-screen">
+      <div className="grid place-items-center min-h-screen">
         <EventsTable />
       </div>
     </>

@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-target-blank */
 /* eslint-disable @typescript-eslint/no-var-requires */
 import React from 'react';
 import type { NextPage } from 'next';
@@ -108,18 +109,42 @@ const createAccount = async (creatorAccountId: any, newAccountId: any, amount: a
 
 const LinkDrop: NextPage = () => {
   const [nearid, setNearid] = React.useState('');
-  const [message, setMessage] = React.useState('');
+  const [message, setMessage] = React.useState<JSX.Element | null>(null);
   const [seed, setSeed] = React.useState(null);
   const [showSeed, setShowSeed] = React.useState(true);
+  const [isError, setIsError] = React.useState(false);
 
   const dispatch = useAppDispatch();
 
-  const FAILURE_MESSAGE =
-    'Sorry, it seems desired name has already been taken or we ran out of free accounts. ' +
-    'Please contact us on social media or email info@vself.app and we will guide you through onboarding.';
-  const SUCCESS_MESSAGE =
-    'Success! You have claimed your free NEAR account!' +
-    ' Please dont forget to write down your mnemonic phrase and use official NEAR wallet in the future';
+  const FAILURE_MESSAGE = () => {
+    return (
+      <>
+        <p>Sorry, it seems desired name has already been taken or we ran out of free accounts. </p>
+        <p>
+          Please contact us on social media or email{' '}
+          <a className="underline" href="mailto:info@vself.app">
+            info@vself.app
+          </a>{' '}
+          and we will guide you through onboarding.
+        </p>
+      </>
+    );
+  };
+  '' + '';
+  const SUCCESS_MESSAGE = () => {
+    return (
+      <p>
+        Congrats! You have claimed your free NEAR account! Click here{' '}
+        <a href="https://wallet.near.org/" className="hover:underline" target="_blank">
+          `🖤`NEAR`🖤`
+        </a>
+        , if you want to login to your account now. Please don’t forget to write down your mnemonic phrase and use the
+        official NEAR wallet in the future. That is where your reward will be stored.
+      </p>
+    );
+  };
+
+  const ACCOUNT_IS_BUSY = () => <p>This account is busy</p>;
 
   const ONBOARDING_COST = 1.17923 - 0;
 
@@ -135,9 +160,9 @@ const LinkDrop: NextPage = () => {
       // const accountExists = await checkNearAccount(nearid, 'testnet');
       const accountExists = await checkNearAccount(nearid, 'mainnet');
       if (accountExists) {
-        setMessage('This account is busy');
+        setMessage(ACCOUNT_IS_BUSY);
         setTimeout(() => {
-          setMessage('');
+          setMessage(null);
         }, 5000);
         return;
       }
@@ -145,21 +170,22 @@ const LinkDrop: NextPage = () => {
       if (result) {
         setMessage(SUCCESS_MESSAGE);
         setSeed(seedPhrase);
-        setTimeout(() => {
-          setMessage('');
-        }, 10000);
       } else {
+        setIsError(true);
         setMessage(FAILURE_MESSAGE);
         setTimeout(() => {
-          setMessage('');
+          setMessage(null);
+          setIsError(false);
         }, 10000);
       }
       return;
     } catch (err) {
       console.log(err);
+      setIsError(true);
       setMessage(FAILURE_MESSAGE);
       setTimeout(() => {
-        setMessage('');
+        setMessage(null);
+        setIsError(false);
       }, 10000);
     } finally {
       setTimeout(() => {
@@ -178,30 +204,47 @@ const LinkDrop: NextPage = () => {
   //const placeholder = 'new_account.testnet';
   const placeholder = 'new_account.near';
 
+  const closeModal = () => {
+    setMessage(null);
+  };
+
   return (
     <Loader>
       <>
-        <Modal isOpened={message !== ''}>
-          <p className="text-black">{message}</p>
+        <Modal isOpened={!!message} isError={isError} closeCallback={closeModal}>
+          <p className="text-black" style={{ color: !isError ? '#000' : '#D8000C' }}>
+            {message}
+          </p>
         </Modal>
         <div className="grid place-items-center h-screen">
           <div className="text-center text-black">
-            <div className="w-96 mb-8">{MAIN_TEXT}</div>
             <div className="w-96 mb-8">
-              To operate your newly registered account use your mnemonic to login to{' '}
-              <a href="https://wallet.near.org/">official NEAR wallet</a>
+              {!seed && (
+                <p>
+                  Welcome to the page which will guide you through the onboarding process. To receive your NFT rewards
+                  in the vSelf app, you should first create a NEAR account. If you do not have one, we’ve got your back!
+                  Just choose a nickname with the format “newaccount.near” and type in below.
+                </p>
+              )}
+            </div>
+            <div className="w-96 mb-8">
+              To operate your newly registered account use your mnemonic seed phrase to login to{' '}
+              <a href="https://wallet.near.org/" target="_blank" className="underline">
+                official NEAR wallet
+              </a>
             </div>
 
-            <input
-              autoComplete="off"
-              type="text"
-              name="nearid"
-              onChange={onEventNearIDChange}
-              value={nearid}
-              className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 mb-2 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-              placeholder={placeholder}
-            />
-
+            {!seed && (
+              <input
+                autoComplete="off"
+                type="text"
+                name="nearid"
+                onChange={onEventNearIDChange}
+                value={nearid}
+                className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 mb-2 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                placeholder={placeholder}
+              />
+            )}
             {seed === null ? (
               <div>
                 <div
@@ -249,8 +292,10 @@ const LinkDrop: NextPage = () => {
               <div>
                 {showSeed && (
                   <div className="w-96 mb-2">
-                    <h3>Seed Phrase:</h3>
-                    <p>{seed}</p>
+                    <h3>Your Seed Phrase:</h3>
+                    <div className="border-2 p-2 my-4 border-amber-300">
+                      <p className="text-red-700">{seed}</p>
+                    </div>
                   </div>
                 )}
                 {showSeed ? (

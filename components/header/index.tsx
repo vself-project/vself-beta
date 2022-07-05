@@ -39,7 +39,7 @@ const Header: React.FC = () => {
 
   return (
     <nav
-      className="flex fixed w-full justify-center top-0 z-50 py-4 text-gray-500"
+      className="flex xl:fixed w-full justify-center top-0 z-50 py-4 text-gray-500"
       style={{ backgroundColor: '#95e474' }}
     >
       <div className="container flex justify-between items-center">

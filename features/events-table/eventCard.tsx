@@ -16,7 +16,7 @@ const EventCard: React.FC<EventCardProps> = ({ eventData, detailed, files }) => 
 
   return (
     <div className="flex justify-center">
-      <div className="rounded-lg shadow-lg bg-white max-w-sm relative" style={{ minHeight: 600 }}>
+      <div className="rounded-lg shadow-lg bg-white relative" style={{ minHeight: 600 }}>
         <div className="justify-center w-full flex mt-2">
           <img className="rounded-t-lg" src="/vvs.png" alt="" />
         </div>
