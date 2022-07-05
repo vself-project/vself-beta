@@ -10,7 +10,23 @@ import { mockUserAccount, mockMainNetUserAccount } from '../../mockData/mockUser
 const { generateSeedPhrase } = require('near-seed-phrase');
 const { connect, WalletConnection, keyStores, KeyPair, utils } = nearAPI;
 
-const MAIN_TEXT = 'If you want to create near account or If you want to create near account or If you want to create near account. Then just use this simple form.'
+const MAIN_TEXT = 'Enter an Account ID to use with your NEAR account. Your Account ID will be used for all NEAR operations, including sending and receiving assets.';
+const RULES = 'Your account ID can contain any of the following:';
+const RULE1 = 'Lowercase characters (a-z)';
+const RULE2 = 'Digits (0-9)';
+const RULE3 = 'Characters (_-) can be used as separators';
+const RULES2 = 'Your account ID CANNOT contain:';
+const RULE4 = 'Characters "@" or "."';
+const RULE5 = 'Fewer than 2 characters';
+const RULE6 = 'More than 64 characters (including .near)';
+
+// Digits (0-9)
+// Characters (_-) can be used as separators
+// Your account ID CANNOT contain:
+
+// Characters "@" or "."
+// Fewer than 2 characters
+// More than 64 characters (including .near)'
 
 // Wallet credentials TESTNET/MAINNET
 // const credentials = {
@@ -148,9 +164,26 @@ const LinkDrop: NextPage = () => {
         </div>
         {
           seed === null?
-            <button type="button" onClick={callCreateAccount}>
-              Claim Near Account
-            </button>
+            <div>
+              <div style={{width: 400, display: 'flex', flexDirection: 'column',alignItems: 'flex-start', marginBottom: 10 }}>
+                <p>{RULES}</p>
+                <p style={{fontSize: 14}}>{' - ' + RULE1}</p>
+                <p style={{fontSize: 14}}>{' - ' + RULE2}</p>
+                <p style={{fontSize: 14}}>{' - ' + RULE3}</p>
+              </div>
+              <div style={{width: 400, display: 'flex', flexDirection: 'column',alignItems: 'flex-start', marginBottom: 14 }}>
+                <p>{RULES2}</p>
+                <p style={{fontSize: 14}}>{' - ' + RULE4}</p>
+                <p style={{fontSize: 14}}>{' - ' + RULE5}</p>
+                <p style={{fontSize: 14}}>{' - ' + RULE6}</p>
+              </div>
+              <button
+                style={{fontSize: 20, backgroundColor: 'rgba(255, 255, 255, 0.15)', borderRadius: 6, padding: '6px 14px 6px 14px'}}
+                type="button"
+                onClick={callCreateAccount}>
+                Claim Near Account
+              </button>
+            </div>
             :
             <div>
               {
