@@ -5,21 +5,29 @@ import { Contract } from 'near-api-js';
 import { StylesCSS } from '../../constants/styles';
 import { checkNearAccount } from '../../utils';
 
-import { mockUserAccount } from '../../mockData/mockUserAccount';
+import { mockUserAccount, mockMainNetUserAccount } from '../../mockData/mockUserAccount';
 
 const { generateSeedPhrase } = require('near-seed-phrase');
 const { connect, WalletConnection, keyStores, KeyPair, utils } = nearAPI;
 
 const MAIN_TEXT = 'If you want to create near account or If you want to create near account or If you want to create near account. Then just use this simple form.'
 
-// Wallet credentials (caesai.testnet) // sega
+// Wallet credentials TESTNET/MAINNET
+// const credentials = {
+//   account_id: mockUserAccount.account_id,
+//   public_key: mockUserAccount.public_key,
+//   private_key: String(mockUserAccount.private_key),
+// };
 const credentials = {
-  account_id: mockUserAccount.account_id,
-  public_key: mockUserAccount.public_key,
-  private_key: String(mockUserAccount.private_key),
+  account_id: mockMainNetUserAccount.account_id,
+  public_key: mockMainNetUserAccount.public_key,
+  private_key: String(mockMainNetUserAccount.private_key),
 };
+// console.log({mockMainNetUserAccount});
 
-const contractName = "testnet"; // mainnet: "near"
+// TESTNET/MAINNET
+// const contractName = "testnet"; // testnet
+const contractName = "near"; // mainnet
 const contractMethods = {
   viewMethods: [''],
   changeMethods: [
@@ -27,12 +35,20 @@ const contractMethods = {
   ],
 };
 
-const config = { // mainnet different
-  networkId: "testnet",
-  nodeUrl: "https://rpc.testnet.near.org",
-  walletUrl: "https://wallet.testnet.near.org",
-  helperUrl: "https://helper.testnet.near.org",
-  explorerUrl: "https://explorer.testnet.near.org",
+// TESTNET/MAINNET
+// const config = { // testnet
+//   networkId: "testnet",
+//   nodeUrl: "https://rpc.testnet.near.org",
+//   walletUrl: "https://wallet.testnet.near.org",
+//   helperUrl: "https://helper.testnet.near.org",
+//   explorerUrl: "https://explorer.testnet.near.org",
+// };
+const config = { // mainnet
+  networkId: 'mainnet',
+  nodeUrl: 'https://rpc.mainnet.near.org',
+  walletUrl: 'https://wallet.near.org',
+  helperUrl: 'https://helper.mainnet.near.org',
+  explorerUrl: "https://explorer.near.org"
 };
 
 // Return boolean result and mnemonic phrase
@@ -52,7 +68,6 @@ const createAccount = async (creatorAccountId: any, newAccountId: any, amount: a
 
   // Create callable contract instance
   const root_contract = new Contract(creatorAccount, contractName, contractMethods);
-  console.log(root_contract);
   const result = await root_contract.create_account(
     {
       new_account_id: newAccountId,
@@ -78,7 +93,9 @@ const LinkDrop: NextPage = () => {
 
       // If account is busy show the message
       // Some problem with COARS
+      // TESTNET/MAINNET
       // const accountExists = await checkNearAccount(nearid, 'testnet');
+      // const accountExists = await checkNearAccount(nearid, 'mainnet');
       // if (accountExists) {
       //   setMessage('This account is busy');
       //   setTimeout(() => {setMessage('')}, 5000);
@@ -108,6 +125,9 @@ const LinkDrop: NextPage = () => {
     setNearid(value);
   };
 
+  // TESTNET/MAINNET
+  //const placeholder = 'new_account.testnet';
+  const placeholder = 'new_account.near';
   return (
     <div className="grid place-items-center h-screen">
       <div className="text-center text-black">
@@ -121,7 +141,7 @@ const LinkDrop: NextPage = () => {
             onChange={onEventNearIDChange}
             value={nearid}
             className={`${StylesCSS.INPUT}`}
-            placeholder="new_account.testnet"
+            placeholder={placeholder}
           />
         <div className="w-96 h-8">
           {message}
