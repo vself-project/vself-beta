@@ -74,7 +74,7 @@ const LinkDrop: NextPage = () => {
   // Call contract method 
   const callCreateAccount = async () => {
     try {
-      const amount = '1';
+      const amount = '0.005';
 
       // If account is busy show the message
       // Some problem with COARS
