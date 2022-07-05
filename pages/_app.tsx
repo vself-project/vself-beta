@@ -53,7 +53,7 @@ function MyApp({ Component, pageProps }: AppProps) {
     <Provider store={store}>
       <Head>
         <title>VSELF</title>
-        {/* <meta name="description" content="instant and spoof-proof registration of metadata and image hashing" /> */}
+        <meta name="description" content="vSelf: web3 identity wallet" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
       {/* <AppLayout> */}

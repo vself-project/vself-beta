@@ -7,6 +7,10 @@ import { StylesCSS } from '../../constants/styles';
 import { checkNearAccount } from '../../utils';
 
 import { mockUserAccount, mockMainNetUserAccount } from '../../mockData/mockUserAccount';
+import Loader from '../../components/loader';
+import { useAppDispatch } from '../../hooks';
+import { setAppLoadingState } from '../../store/reducers/appStateReducer/actions';
+import Modal from '../../components/modal';
 
 const { generateSeedPhrase } = require('near-seed-phrase');
 const { connect, WalletConnection, keyStores, KeyPair, utils } = nearAPI;
@@ -43,7 +47,6 @@ const credentials = {
   public_key: mockMainNetUserAccount.public_key,
   private_key: String(mockMainNetUserAccount.private_key),
 };
-console.log({ mockMainNetUserAccount });
 
 // TESTNET/MAINNET
 // const contractName = "testnet"; // testnet
@@ -109,6 +112,8 @@ const LinkDrop: NextPage = () => {
   const [seed, setSeed] = React.useState(null);
   const [showSeed, setShowSeed] = React.useState(true);
 
+  const dispatch = useAppDispatch();
+
   const FAILURE_MESSAGE =
     'Sorry, it seems desired name has already been taken or we ran out of free accounts. ' +
     'Please contact us on social media or email info@vself.app and we will guide you through onboarding.';
@@ -121,19 +126,21 @@ const LinkDrop: NextPage = () => {
   // Call contract method
   const callCreateAccount = async () => {
     try {
+      dispatch(setAppLoadingState(true));
       const amount = '0.01';
 
       // If account is busy show the message
       // Some problem with COARS
       // TESTNET/MAINNET
       // const accountExists = await checkNearAccount(nearid, 'testnet');
-      // const accountExists = await checkNearAccount(nearid, 'mainnet');
-      // if (accountExists) {
-      //   setMessage('This account is busy');
-      //   setTimeout(() => {setMessage('')}, 5000);
-      //   return;
-      // }
-
+      const accountExists = await checkNearAccount(nearid, 'mainnet');
+      if (accountExists) {
+        setMessage('This account is busy');
+        setTimeout(() => {
+          setMessage('');
+        }, 5000);
+        return;
+      }
       const { result, seedPhrase } = await createAccount(credentials.account_id, nearid, amount);
       if (result) {
         setMessage(SUCCESS_MESSAGE);
@@ -154,6 +161,10 @@ const LinkDrop: NextPage = () => {
       setTimeout(() => {
         setMessage('');
       }, 10000);
+    } finally {
+      setTimeout(() => {
+        dispatch(setAppLoadingState(false));
+      }, 1000);
     }
   };
 
@@ -166,115 +177,132 @@ const LinkDrop: NextPage = () => {
   // TESTNET/MAINNET
   //const placeholder = 'new_account.testnet';
   const placeholder = 'new_account.near';
-  return (
-    <div className="grid place-items-center h-screen">
-      <div className="text-center text-black">
-        <div className="w-96 mb-8">{MAIN_TEXT}</div>
-        <div className="w-96 mb-8">
-          To operate your newly registered account use your mnemonic to login to{' '}
-          <a href="https://wallet.near.org/">official NEAR wallet</a>
-        </div>
 
-        <input
-          autoComplete="off"
-          type="text"
-          name="nearid"
-          onChange={onEventNearIDChange}
-          value={nearid}
-          className={`${StylesCSS.INPUT}`}
-          placeholder={placeholder}
-        />
-        <div className="w-96 h-8">{message}</div>
-        {seed === null ? (
-          <div>
-            <div
-              style={{
-                width: 400,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                marginBottom: 10,
-              }}
-            >
-              <p>{RULES}</p>
-              <p style={{ fontSize: 14 }}>{' - ' + RULE1}</p>
-              <p style={{ fontSize: 14 }}>{' - ' + RULE2}</p>
-              <p style={{ fontSize: 14 }}>{' - ' + RULE3}</p>
+  return (
+    <Loader>
+      <>
+        <Modal isOpened={message !== ''}>
+          <p className="text-black">{message}</p>
+        </Modal>
+        <div className="grid place-items-center h-screen">
+          <div className="text-center text-black">
+            <div className="w-96 mb-8">{MAIN_TEXT}</div>
+            <div className="w-96 mb-8">
+              To operate your newly registered account use your mnemonic to login to{' '}
+              <a href="https://wallet.near.org/">official NEAR wallet</a>
             </div>
-            <div
-              style={{
-                width: 400,
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'flex-start',
-                marginBottom: 14,
-              }}
-            >
-              <p>{RULES2}</p>
-              <p style={{ fontSize: 14 }}>{' - ' + RULE4}</p>
-              <p style={{ fontSize: 14 }}>{' - ' + RULE5}</p>
-              <p style={{ fontSize: 14 }}>{' - ' + RULE6}</p>
-            </div>
-            <button
-              style={{
-                fontSize: 20,
-                backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                borderRadius: 6,
-                padding: '6px 14px 6px 14px',
-              }}
-              type="button"
-              onClick={callCreateAccount}
-            >
-              Claim Near Account
-            </button>
-          </div>
-        ) : (
-          <div>
-            {showSeed && <div className="w-96 mb-2">{seed}</div>}
-            {showSeed ? (
-              <button
-                style={{
-                  margin: '0 10px 0 10px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                  borderRadius: 5,
-                  padding: '5px 10px 5px 10px',
-                }}
-                type="button"
-                onClick={() => {
-                  setShowSeed(false);
-                }}
-              >
-                Hide Seed Phrase
-              </button>
+
+            <input
+              autoComplete="off"
+              type="text"
+              name="nearid"
+              onChange={onEventNearIDChange}
+              value={nearid}
+              className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 mb-2 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+              placeholder={placeholder}
+            />
+
+            {seed === null ? (
+              <div>
+                <div
+                  style={{
+                    width: 400,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    marginBottom: 10,
+                  }}
+                >
+                  <p>{RULES}</p>
+                  <p style={{ fontSize: 14 }}>{' - ' + RULE1}</p>
+                  <p style={{ fontSize: 14 }}>{' - ' + RULE2}</p>
+                  <p style={{ fontSize: 14 }}>{' - ' + RULE3}</p>
+                </div>
+                <div
+                  style={{
+                    width: 400,
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'flex-start',
+                    marginBottom: 14,
+                  }}
+                >
+                  <p>{RULES2}</p>
+                  <p style={{ fontSize: 14 }}>{' - ' + RULE4}</p>
+                  <p style={{ fontSize: 14 }}>{' - ' + RULE5}</p>
+                  <p style={{ fontSize: 14 }}>{' - ' + RULE6}</p>
+                </div>
+                <button
+                  style={{
+                    fontSize: 20,
+                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                    borderRadius: 6,
+                    padding: '6px 14px 6px 14px',
+                  }}
+                  type="button"
+                  onClick={callCreateAccount}
+                >
+                  Claim Near Account
+                </button>
+              </div>
             ) : (
-              <button
-                style={{
-                  margin: '0 10px 0 10px',
-                  backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                  borderRadius: 5,
-                  padding: '5px 10px 5px 10px',
-                }}
-                type="button"
-                onClick={() => {
-                  setShowSeed(true);
-                }}
-              >
-                Show Seed Phrase
-              </button>
+              <div>
+                {showSeed && (
+                  <div className="w-96 mb-2">
+                    <h3>Seed Phrase:</h3>
+                    <p>{seed}</p>
+                  </div>
+                )}
+                {showSeed ? (
+                  <button
+                    style={{
+                      margin: '0 10px 0 10px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                      borderRadius: 5,
+                      padding: '5px 10px 5px 10px',
+                    }}
+                    type="button"
+                    onClick={() => {
+                      setShowSeed(false);
+                    }}
+                  >
+                    Hide Seed Phrase
+                  </button>
+                ) : (
+                  <button
+                    style={{
+                      margin: '0 10px 0 10px',
+                      backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                      borderRadius: 5,
+                      padding: '5px 10px 5px 10px',
+                    }}
+                    type="button"
+                    onClick={() => {
+                      setShowSeed(true);
+                    }}
+                  >
+                    Show Seed Phrase
+                  </button>
+                )}
+                <button
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                    borderRadius: 5,
+                    padding: '5px 10px 5px 10px',
+                  }}
+                  type="button"
+                  onClick={() => {
+                    navigator.clipboard.writeText(seed);
+                  }}
+                >
+                  Copy Seed Phrase
+                </button>
+              </div>
             )}
-            <button
-              style={{ backgroundColor: 'rgba(255, 255, 255, 0.15)', borderRadius: 5, padding: '5px 10px 5px 10px' }}
-              type="button"
-              onClick={() => {
-                navigator.clipboard.writeText(seed);
-              }}
-            >
-              Copy Seed Phrase
-            </button>
           </div>
-        )}
-      </div>
-    </div>
+        </div>
+      </>
+    </Loader>
   );
 };
 

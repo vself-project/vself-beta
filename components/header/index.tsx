@@ -40,7 +40,7 @@ const Header: React.FC = () => {
   return (
     <nav
       className="flex fixed w-full justify-center top-0 z-50 py-4 text-gray-500"
-      style={{ backgroundImage: 'url(/green.png)', backgroundSize: 'contain' }}
+      style={{ backgroundColor: '#95e474' }}
     >
       <div className="container flex justify-between items-center">
         <img src="/dude4.png" width={50} height={50} className="rounded-md float-left" alt="logo" />
@@ -53,7 +53,7 @@ const Header: React.FC = () => {
           aria-expanded="false"
           onClick={signOut}
         >
-          <span className="mr-2 text-black">{is_authed ? 'Sign Out' : 'Sign In'}</span>
+          <span className="mr-2 text-white">{is_authed ? 'Sign Out' : 'Sign In'}</span>
         </a>
       </div>
     </nav>
