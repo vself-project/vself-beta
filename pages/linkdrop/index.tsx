@@ -68,30 +68,38 @@ const createAccount = async (creatorAccountId: any, newAccountId: any, amount: a
 const LinkDrop: NextPage = () => {
   const [nearid, setNearid] = React.useState('');
   const [message, setMessage] = React.useState('');
+  const [seed, setSeed] = React.useState(null);
+  const [showSeed, setShowSeed] = React.useState(false);
 
   // Call contract method 
-  const callCreateAccount = async () => {    
-    const amount = '1';
+  const callCreateAccount = async () => {
+    try {
+      const amount = '1';
 
-    // If account is busy show the message
-    // const accountExists = await checkNearAccount(nearid, 'testnet');
-    // if (accountExists) {
-    //   setMessage('This account is busy');
-    //   setTimeout(() => {setMessage('')}, 5000);
-    //   return;
-    // }
-
-    const { result, seedPhrase } = await createAccount(credentials.account_id, nearid, amount);
-    if (result) {
-      setMessage('Success');
-      setTimeout(() => {setMessage('')}, 5000);
-    } else {
+      // If account is busy show the message
+      // Some problem with COARS
+      // const accountExists = await checkNearAccount(nearid, 'testnet');
+      // if (accountExists) {
+      //   setMessage('This account is busy');
+      //   setTimeout(() => {setMessage('')}, 5000);
+      //   return;
+      // }
+  
+      const { result, seedPhrase } = await createAccount(credentials.account_id, nearid, amount);
+      if (result) {
+        setMessage('Success');
+        setSeed(seedPhrase);
+        setTimeout(() => {setMessage('')}, 5000);
+      } else {
+        setMessage('Failure');
+        setTimeout(() => {setMessage('')}, 5000);
+      }
+      return;
+    } catch (err) {
+      console.log(err);
       setMessage('Failure');
       setTimeout(() => {setMessage('')}, 5000);
     }
-    console.log({ result });
-    console.log({ seedPhrase });
-    return;
   };
 
   // User ID input handler
@@ -118,9 +126,43 @@ const LinkDrop: NextPage = () => {
         <div className="w-96 h-8">
           {message}
         </div>
-        <button type="button" onClick={callCreateAccount}>
-          Claim Near Account
-        </button>
+        {
+          seed === null?
+            <button type="button" onClick={callCreateAccount}>
+              Claim Near Account
+            </button>
+            :
+            <div>
+              {
+                showSeed &&
+                  <div className="w-96 mb-2">
+                    {seed}
+                  </div>
+              }
+              {
+                showSeed ?
+                  <button
+                    style={{margin: '0 10px 0 10px', backgroundColor: 'rgba(255, 255, 255, 0.15)', borderRadius: 5, padding: '5px 10px 5px 10px'}}
+                    type="button"
+                    onClick={() => {setShowSeed(false)}}>
+                    Hide Seed Phrase
+                  </button>
+                  :
+                  <button
+                    style={{margin: '0 10px 0 10px', backgroundColor: 'rgba(255, 255, 255, 0.15)', borderRadius: 5, padding: '5px 10px 5px 10px'}}
+                    type="button"
+                    onClick={() => {setShowSeed(true)}}>
+                    Show Seed Phrase
+                  </button>
+              }
+              <button
+                style={{backgroundColor: 'rgba(255, 255, 255, 0.15)', borderRadius: 5, padding: '5px 10px 5px 10px'}}
+                type="button"
+                onClick={() => {navigator.clipboard.writeText(seed)}}>
+                Copy Seed Phrase
+              </button>
+            </div>
+        }
       </div>
     </div>
   );
