@@ -8,13 +8,13 @@ import { checkNearAccount } from '../../utils';
 
 import { mockUserAccount, mockMainNetUserAccount } from '../../mockData/mockUserAccount';
 
-// import { generateSeedPhrase } from 'near-seed-phrase';
 const { generateSeedPhrase } = require('near-seed-phrase');
-
 const { connect, WalletConnection, keyStores, KeyPair, utils } = nearAPI;
 
 const MAIN_TEXT =
-  'Enter an Account ID to use with your NEAR account. Your Account ID will be used for all NEAR operations, including sending and receiving assets.';
+  'Hello dear traveler welcome to the page which will guide you through the onboarding process! ' +
+  'Your Account ID will be used for all NEAR operations, including sending and receiving assets (e.g. NFTS).' +
+  'Please enter an account ID you want to claim and use with your free NEAR account.';
 const RULES = 'Your account ID can contain any of the following:';
 const RULE1 = 'Lowercase characters (a-z)';
 const RULE2 = 'Digits (0-9)';
@@ -43,7 +43,7 @@ const credentials = {
   public_key: mockMainNetUserAccount.public_key,
   private_key: String(mockMainNetUserAccount.private_key),
 };
-// console.log({mockMainNetUserAccount});
+console.log({ mockMainNetUserAccount });
 
 // TESTNET/MAINNET
 // const contractName = "testnet"; // testnet
@@ -109,6 +109,15 @@ const LinkDrop: NextPage = () => {
   const [seed, setSeed] = React.useState(null);
   const [showSeed, setShowSeed] = React.useState(true);
 
+  const FAILURE_MESSAGE =
+    'Sorry, it seems desired name has already been taken or we ran out of free accounts. ' +
+    'Please contact us on social media or email info@vself.app and we will guide you through onboarding.';
+  const SUCCESS_MESSAGE =
+    'Success! You have claimed your free NEAR account!' +
+    ' Please dont forget to write down your mnemonic phrase and use official NEAR wallet in the future';
+
+  const ONBOARDING_COST = 1.17923 - 0;
+
   // Call contract method
   const callCreateAccount = async () => {
     try {
@@ -127,24 +136,24 @@ const LinkDrop: NextPage = () => {
 
       const { result, seedPhrase } = await createAccount(credentials.account_id, nearid, amount);
       if (result) {
-        setMessage('Success');
+        setMessage(SUCCESS_MESSAGE);
         setSeed(seedPhrase);
         setTimeout(() => {
           setMessage('');
-        }, 5000);
+        }, 10000);
       } else {
-        setMessage('Failure');
+        setMessage(FAILURE_MESSAGE);
         setTimeout(() => {
           setMessage('');
-        }, 5000);
+        }, 10000);
       }
       return;
     } catch (err) {
       console.log(err);
-      setMessage('Failure');
+      setMessage(FAILURE_MESSAGE);
       setTimeout(() => {
         setMessage('');
-      }, 5000);
+      }, 10000);
     }
   };
 
@@ -161,6 +170,11 @@ const LinkDrop: NextPage = () => {
     <div className="grid place-items-center h-screen">
       <div className="text-center text-black">
         <div className="w-96 mb-8">{MAIN_TEXT}</div>
+        <div className="w-96 mb-8">
+          To operate your newly registered account use your mnemonic to login to{' '}
+          <a href="https://wallet.near.org/">official NEAR wallet</a>
+        </div>
+
         <input
           autoComplete="off"
           type="text"
