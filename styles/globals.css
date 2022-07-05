@@ -12,6 +12,11 @@
   src: url("../public/fonts/WorkSans-VariableFont_wght.ttf");
 }
 
+@font-face {
+  font-family: "Druk";
+  src: url("../public/fonts/Inter-Light.ttf");
+}
+
 html,
 body {
   padding: 0;

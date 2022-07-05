@@ -14,7 +14,7 @@ class MyDocument extends Document {
           <meta name="theme-color" content="#ffffff" />
           {/* <meta httpEquiv="Content-Security-Policy" content="upgrade-insecure-requests"></meta> */}
         </Head>
-        <body className="text-gray-900 dark:text-white bg-white">
+        <body className="text-gray-900 dark:text-white bg-white font-druk">
           <Main />
           <NextScript />
         </body>

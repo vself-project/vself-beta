@@ -16,7 +16,7 @@ const EventCard: React.FC<EventCardProps> = ({ eventData, detailed, files }) => 
 
   return (
     <div className="flex justify-center">
-      <div className="rounded-lg shadow-lg bg-white relative" style={{ minHeight: 600 }}>
+      <div className="rounded-lg shadow-lg bg-white relative overflow-auto" style={{ maxHeight: 550 }}>
         <div className="justify-center w-full flex mt-2">
           <img className="rounded-t-lg" src="/vvs.png" alt="" />
         </div>
@@ -51,11 +51,7 @@ const EventCard: React.FC<EventCardProps> = ({ eventData, detailed, files }) => 
             Finish Time: {eventData?.finish_time && formatTimeStampToLocaleDateString(eventData.finish_time)}
           </p>
         </div>
-        {is_authed && (
-          <div className="absolute bottom-6 left-6">
-            <StartEventButton />
-          </div>
-        )}
+        {is_authed && <div className="absolute bottom-6 left-6">{/* <StartEventButton /> */}</div>}
       </div>
     </div>
   );

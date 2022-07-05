@@ -12,6 +12,7 @@ module.exports = {
       fontFamily: {
         worksans: ['WorkSans', 'sans-serif'],
         rational: ['Rational', 'sans-serif'],
+        druk: ['Druk', 'sans-serif'],
       },
       animation: {
         fadein: 'fadein .5s',

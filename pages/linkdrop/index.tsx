@@ -217,7 +217,7 @@ const LinkDrop: NextPage = () => {
           </p>
         </Modal>
         <div className="grid place-items-center h-screen">
-          <div className="text-center text-black">
+          <div className="text-black">
             <div className="w-96 mb-8">
               {!seed && (
                 <p>
@@ -227,12 +227,14 @@ const LinkDrop: NextPage = () => {
                 </p>
               )}
             </div>
-            <div className="w-96 mb-8">
-              To operate your newly registered account use your mnemonic seed phrase to login to{' '}
-              <a href="https://wallet.near.org/" target="_blank" className="underline">
-                official NEAR wallet
-              </a>
-            </div>
+            {seed && (
+              <div className="w-96 mb-8">
+                To operate your newly registered account use your mnemonic seed phrase to login to{' '}
+                <a href="https://wallet.near.org/" target="_blank" className="underline">
+                  official NEAR wallet
+                </a>
+              </div>
+            )}
 
             {!seed && (
               <input
@@ -241,7 +243,7 @@ const LinkDrop: NextPage = () => {
                 name="nearid"
                 onChange={onEventNearIDChange}
                 value={nearid}
-                className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 mb-2 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                className="mb-4 form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                 placeholder={placeholder}
               />
             )}
@@ -275,18 +277,21 @@ const LinkDrop: NextPage = () => {
                   <p style={{ fontSize: 14 }}>{' - ' + RULE5}</p>
                   <p style={{ fontSize: 14 }}>{' - ' + RULE6}</p>
                 </div>
-                <button
-                  style={{
-                    fontSize: 20,
-                    backgroundColor: 'rgba(255, 255, 255, 0.15)',
-                    borderRadius: 6,
-                    padding: '6px 14px 6px 14px',
-                  }}
-                  type="button"
-                  onClick={callCreateAccount}
-                >
-                  Claim Near Account
-                </button>
+                <div className="text-center mt-8">
+                  <button
+                    style={{
+                      fontSize: 20,
+                      backgroundColor: 'rgba(255, 255, 255, 0.15)',
+                      borderRadius: 6,
+                      padding: '6px 14px 6px 14px',
+                    }}
+                    type="button"
+                    className="hover:opacity-75"
+                    onClick={callCreateAccount}
+                  >
+                    Claim Near Account
+                  </button>
+                </div>
               </div>
             ) : (
               <div>

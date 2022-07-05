@@ -61,7 +61,7 @@ function MyApp({ Component, pageProps }: AppProps) {
         {/* <Wrapper apiKey={String(process.env.GOOGLE_MAPS_API_KEY)}> */}
         {/* <Header /> */}
         <div
-          className="text-gray-900 dark:text-white font-rational"
+          className="text-gray-900 dark:text-white font-druk"
           style={{ backgroundImage: 'url(/gradient2.png)', backgroundSize: 'cover' }}
         >
           <AnyComponent {...pageProps} />

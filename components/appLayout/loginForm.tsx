@@ -12,7 +12,7 @@ const LoginForm: React.FC<LoginFormProps> = ({ loginCallback }) => {
         <h2 className="text-white font-rational">Welcome to VSELF</h2>
         <button
           type="button"
-          className="uppercase cursor-pointer hover:opacity-70 underline-offset-8 underline text-white font-rational"
+          className="uppercase cursor-pointer hover:opacity-70 underline-offset-8 underline text-white font-druk"
           onClick={loginCallback}
         >
           SIGN IN
