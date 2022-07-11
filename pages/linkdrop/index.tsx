@@ -197,7 +197,7 @@ const LinkDrop: NextPage = () => {
   // User ID input handler
   const onEventNearIDChange = (event: React.FormEvent<HTMLInputElement>): void => {
     const { value } = event.currentTarget;
-    setNearid(value);
+    setNearid(value.toLowerCase());
   };
 
   // TESTNET/MAINNET
