@@ -2,10 +2,11 @@
 import { useState, useEffect } from 'react';
 import type { NextPage } from 'next';
 import { getDateFromTimestamp, TRX_HASH_EXAMPLE } from '../../features/dashboard';
-import { getPOWAccountAndContract } from '../../utils';
 import HashDoxLogo from '../../components/icons/HashDoxLogo';
 import { txHashes } from '../../mockData/mockEvidences';
 import Link from 'next/link';
+import { getAccountAndContract } from '../../utils/contract';
+import { powContractMethods, powContractName } from '../../utils/contract-methods';
 
 const ExplorerPage: NextPage = () => {
   const [evidences, setEvidences] = useState([]);
@@ -16,7 +17,7 @@ const ExplorerPage: NextPage = () => {
     let timeOutID: any;
     const getEvidences = async (from: number, limit: number) => {
       try {
-        const { contract } = await getPOWAccountAndContract();
+        const { contract } = await getAccountAndContract(powContractName, powContractMethods);
         const response = await contract.get_evidences({
           from_index: from,
           limit,

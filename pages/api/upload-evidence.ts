@@ -1,5 +1,6 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getCrowdConnectedContract } from '../../utils/crowd-contract';
+import { getConnectedContract } from '../../utils/contract';
+import { powContractMethods, powContractName } from '../../utils/contract-methods';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
@@ -12,7 +13,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     parsedData = JSON.stringify(parsedData);
 
     // Create contract instance to use its method
-    const connection: any = await getCrowdConnectedContract();
+    const connection: any = await getConnectedContract(powContractName, powContractMethods);
     const { contract, account } = connection;
     const { transaction } = await account.functionCall({
       contractId: contract.contractId,

@@ -1,6 +1,7 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { checkNearAccount } from '../../utils';
-import { getEventsConnectedContract } from '../../utils/events-contract';
+import { getConnectedContract } from '../../utils/contract';
+import { mainContractMethods, mainContractName } from '../../utils/contract-methods';
+import { checkNearAccount } from '../../utils/near';
 
 /// Call checkin method of the contract managing events
 /// Request example: http://localhost:3000/api/checkin?nearid='ilerik.testnet'&qr='some_qr_coded_string'
@@ -10,14 +11,15 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     // Parse query
     let { nearid, qr } = req.query;
-    console.log('Query: ', req.query);
+    const network_id = nearid.includes('.near') ? 'mainnet' : 'testnet';
+
     nearid = nearid.slice(1, -1); // trim quotes
     qr = qr.slice(1, -1);
 
     // Check that near id exists
     nearid = String(nearid).toLowerCase();
     // Switch between MAINNET and TESTNET
-    const account_exists = await checkNearAccount(nearid, 'mainnet');
+    const account_exists = await checkNearAccount(nearid, network_id);
     if (!account_exists) {
       res.status(500).json({
         index: -1,
@@ -30,13 +32,11 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     }
 
     // Create contract instance
-    const connection: any = await getEventsConnectedContract();
-    const { contract } = connection;
+    const { contract }: any = await getConnectedContract(mainContractName, mainContractMethods);
 
     // Set appropriate gas and storage cost
     const gas_cost = 300000000000000;
     const minting_cost = '25000000000000000000000'; // 0.01 NEAR
-    console.log('Incoming action: {} {}', nearid, qr);
 
     // Call checkin
     result = await contract
@@ -56,7 +56,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
         return;
       });
-    console.log('Result: ', result);
 
     // Special case
     if (result === null) {

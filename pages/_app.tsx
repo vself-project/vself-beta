@@ -1,6 +1,9 @@
 import '../styles/globals.css';
 import 'react-datepicker/dist/react-datepicker.css';
-import type { AppProps, NextWebVitalsMetric } from 'next/app';
+import type {
+  AppProps,
+  // NextWebVitalsMetric
+} from 'next/app';
 
 import { withTRPC } from '@trpc/next';
 import { AppRouter } from './api/trpc/[trpc]';
@@ -17,10 +20,11 @@ import { store } from '../store';
 // import AppLayout from '../components/appLayout';
 import { appWithTranslation } from 'next-i18next';
 import { useEffect } from 'react';
-import { getNearAccountAndContract } from '../utils';
 import { signInApp, setAppLoadingState } from '../store/reducers/appStateReducer/actions';
 import { setEventStatus } from '../store/reducers/eventReducer/actions';
 import { getUserAccountData } from '../store/reducers/userAccountReducer/actions';
+import { mainContractMethods, mainContractName } from '../utils/contract-methods';
+import { getAccountAndContract } from '../utils/contract';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const AnyComponent = Component as any;
@@ -28,8 +32,10 @@ function MyApp({ Component, pageProps }: AppProps) {
   useEffect(() => {
     const initVselfWebApp = async () => {
       try {
-        const { isSignedIn, walletAccountId, contract } = await getNearAccountAndContract();
-        console.log('isSignedIn: ', contract);
+        const { isSignedIn, walletAccountId, contract } = await getAccountAndContract(
+          mainContractName,
+          mainContractMethods
+        );
         if (isSignedIn) {
           store.dispatch(signInApp());
           store.dispatch(getUserAccountData({ account_id: walletAccountId }));
@@ -56,7 +62,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         <meta name="description" content="vSelf: web3 identity wallet" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      {/* <AppLayout> */}
       <ThemeProvider attribute="class">
         {/* <Wrapper apiKey={String(process.env.GOOGLE_MAPS_API_KEY)}> */}
         {/* <Header /> */}
@@ -68,7 +73,6 @@ function MyApp({ Component, pageProps }: AppProps) {
         </div>
         {/* </Wrapper> */}
       </ThemeProvider>
-      {/* </AppLayout> */}
     </Provider>
   );
 }

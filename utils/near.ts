@@ -1,5 +1,3 @@
-const CONTRACT_NAME = process.env.CONTRACT_NAME;
-
 const getConfig = (env: string) => {
   switch (env) {
     case 'production':
@@ -7,7 +5,6 @@ const getConfig = (env: string) => {
       return {
         networkId: 'mainnet',
         nodeUrl: 'https://rpc.mainnet.near.org',
-        contractName: CONTRACT_NAME,
         walletUrl: 'https://wallet.near.org',
         helperUrl: 'https://helper.mainnet.near.org',
       };
@@ -16,7 +13,6 @@ const getConfig = (env: string) => {
       return {
         networkId: 'testnet',
         nodeUrl: 'https://rpc.testnet.near.org',
-        contractName: CONTRACT_NAME,
         walletUrl: 'https://wallet.testnet.near.org',
         helperUrl: 'https://helper.testnet.near.org',
       };
@@ -24,7 +20,6 @@ const getConfig = (env: string) => {
       return {
         networkId: 'devnet',
         nodeUrl: 'https://rpc.devnet.near.org',
-        contractName: CONTRACT_NAME,
         walletUrl: 'https://wallet.devnet.near.org',
         helperUrl: 'https://helper.devnet.near.org',
       };
@@ -32,7 +27,6 @@ const getConfig = (env: string) => {
       return {
         networkId: 'betanet',
         nodeUrl: 'https://rpc.betanet.near.org',
-        contractName: CONTRACT_NAME,
         walletUrl: 'https://wallet.betanet.near.org',
         helperUrl: 'https://helper.betanet.near.org',
       };
@@ -42,21 +36,18 @@ const getConfig = (env: string) => {
         nodeUrl: 'http://localhost:3030',
         keyPath: `${process.env.HOME}/.near/validator_key.json`,
         walletUrl: 'http://localhost:4000/wallet',
-        contractName: CONTRACT_NAME,
       };
     case 'test':
     case 'ci':
       return {
         networkId: 'shared-test',
         nodeUrl: 'https://rpc.ci-testnet.near.org',
-        contractName: CONTRACT_NAME,
         masterAccount: 'test.near',
       };
     case 'ci-betanet':
       return {
         networkId: 'shared-test-staging',
         nodeUrl: 'https://rpc.ci-betanet.near.org',
-        contractName: CONTRACT_NAME,
         masterAccount: 'test.near',
       };
     default:
@@ -65,3 +56,16 @@ const getConfig = (env: string) => {
 };
 
 export default getConfig;
+
+// Check that near account exists (using near explorer).
+// 'network' should be one of 'mainnet' or 'testnet'
+export const checkNearAccount = async (nearid: any, network: string) => {
+  try {
+    const response = await fetch('https://explorer.' + network + '.near.org/accounts/' + nearid);
+    const resText = await response.text();
+    return !resText.includes('check if the account name');
+  } catch (err) {
+    console.log(err);
+    return false;
+  }
+};

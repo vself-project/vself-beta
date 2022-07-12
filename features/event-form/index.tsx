@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setAppLoadingState } from '../../store/reducers/appStateReducer/actions';
 import { setEventStatus, stopCreateEvent } from '../../store/reducers/eventReducer/actions';
-import { getNearAccountAndContract, hash, resizeFile } from '../../utils';
+import { hash, resizeFile } from '../../utils';
 // Models and types
 import { Quest, EventData } from '../../models/Event';
 import QuestComponent, { QuestChangeCallback } from './quests';
@@ -16,6 +16,8 @@ import { mockBarcelonaEvent, mockEvent } from '../../mockData/mockEvents';
 import { uploadImageToFirebase } from '../../utils/firebase';
 import { StylesCSS } from '../../constants/styles';
 import { SpinnerLoader } from '../../components/loader';
+import { getAccountAndContract } from '../../utils/contract';
+import { mainContractMethods, mainContractName } from '../../utils/contract-methods';
 
 const initialQuest: Quest = {
   qr_prefix_enc: '',
@@ -119,7 +121,6 @@ const NewEventForm: React.FC = () => {
   // Uploading Images to Firebase and Start New Event after success
   useEffect(() => {
     const startNewEvent = async () => {
-      console.log('submitedEvent: ', submitedEvent);
       try {
         // Resize Images Before Upload
         const resizedImgsPromises = files.map(resizeFile);
@@ -143,7 +144,7 @@ const NewEventForm: React.FC = () => {
         });
         // Starting New Event In NEAR
 
-        const { contract } = await getNearAccountAndContract();
+        const { contract } = await getAccountAndContract(mainContractName, mainContractMethods);
         await contract.start_event({
           event: {
             event_description,

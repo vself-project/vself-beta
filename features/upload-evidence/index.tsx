@@ -5,7 +5,7 @@ import exifr from 'exifr';
 import { sha3_256 } from 'js-sha3';
 import ReactPageScroller from 'react-page-scroller';
 import { useAppSelector } from '../../hooks';
-import { getCoords, getPOWAccountAndContract } from '../../utils';
+import { getCoords } from '../../utils';
 import { uploadImageToFirebase } from '../../utils/firebase';
 // Components
 import MapComponent from '../../components/mapcomponent';
@@ -17,6 +17,8 @@ import { Steps } from './enums';
 import ArrowsIcon from '../../components/icons/ArrowsIcon';
 import { cutHash, getDateFromTimestamp, TRX_HASH_EXAMPLE } from '../dashboard';
 import HashDoxLogo from '../../components/icons/HashDoxLogo';
+import { powContractMethods, powContractName } from '../../utils/contract-methods';
+import { getAccountAndContract } from '../../utils/contract';
 
 interface ImageLocation {
   latitude: number;
@@ -57,7 +59,7 @@ const WebImageUploadForm = () => {
     if (imgFile) {
       setIsLoading(true);
       const downloadUrl = await uploadImageToFirebase(imgFile);
-      const { contract } = await getPOWAccountAndContract();
+      const { contract } = await getAccountAndContract(powContractName, powContractMethods);
       // TODO: add callbackUrl https://docs.near.org/docs/api/naj-quick-reference#call-contract
       await contract.upload_evidence({
         evidence: {

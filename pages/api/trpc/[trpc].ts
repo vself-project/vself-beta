@@ -4,7 +4,7 @@ import { z } from 'zod';
 import * as nearAPI from 'near-api-js';
 import { readFileSync } from 'fs';
 
-import getConfig from '../../../config/near';
+import getConfig from '../../../utils/near';
 import { Endpoints } from '../../../constants/endpoints';
 
 const contractName = Endpoints.TESTNET_POW_CONTRACT_NAME;

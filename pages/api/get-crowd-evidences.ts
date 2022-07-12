@@ -1,12 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getCrowdConnectedContract } from '../../utils/crowd-contract';
+import { getConnectedContract } from '../../utils/contract';
+import { powContractMethods, powContractName } from '../../utils/contract-methods';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   let result: any[] = [];
   const { query } = req;
   const { from_index, limit } = query;
   try {
-    const connection: any = await getCrowdConnectedContract();
+    const connection: any = await getConnectedContract(powContractName, powContractMethods);
     const { contract } = connection;
 
     const evidences = await contract.get_evidences({

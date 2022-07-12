@@ -1,12 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
-import { getEventsConnectedContract } from '../../utils/events-contract';
+import { getConnectedContract } from '../../utils/contract';
+import { mainContractMethods, mainContractName } from '../../utils/contract-methods';
 
 /// Return number of quests in current event
 /// Request example: http://localhost:3000/api/status
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
     // Create contract instance
-    const connection: any = await getEventsConnectedContract();
+    const connection: any = await getConnectedContract(mainContractName, mainContractMethods);
     const { contract } = connection;
 
     // Fetch event data

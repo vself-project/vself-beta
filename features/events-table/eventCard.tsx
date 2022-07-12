@@ -2,7 +2,7 @@
 import React from 'react';
 import { EventData } from '../../models/Event';
 import { formatTimeStampToLocaleDateString } from '../../utils';
-import StartEventButton from '../../components/startEventButton';
+// import StartEventButton from '../../components/startEventButton';
 import { useAppSelector } from '../../hooks';
 
 interface EventCardProps {

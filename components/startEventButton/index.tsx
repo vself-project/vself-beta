@@ -3,7 +3,8 @@ import React from 'react';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setAppLoadingState } from '../../store/reducers/appStateReducer/actions';
 import { createEvent, setEventStatus } from '../../store/reducers/eventReducer/actions';
-import { getNearAccountAndContract } from '../../utils';
+import { getAccountAndContract } from '../../utils/contract';
+import { mainContractMethods, mainContractName } from '../../utils/contract-methods';
 
 const StartEventButton: React.FC = () => {
   const { is_active } = useAppSelector((state) => state.eventReducer);
@@ -11,7 +12,7 @@ const StartEventButton: React.FC = () => {
 
   const toggleEvent = async (): Promise<void> => {
     try {
-      const { contract } = await getNearAccountAndContract();
+      const { contract } = await getAccountAndContract(mainContractName, mainContractMethods);
       if (!is_active) {
         dispatch(createEvent());
       } else {

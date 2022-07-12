@@ -1,37 +1,18 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { SpinnerLoader } from '../../components/loader';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setEvent } from '../../store/reducers/eventReducer/actions';
-import { getNearAccountAndContract } from '../../utils';
+import { EventAction, EventData, EventStats } from '../../models/Event';
 // Components
 import EventActionsTable from './eventAcionsTable';
 import EventCard from './eventCard';
 import EventStatsTable from './eventStatsTable';
 
-const EventsTable: React.FC = () => {
-  const { account_id } = useAppSelector((state) => state.userAccountReducer);
-  const { event_stats, event_data, event_actions } = useAppSelector((state) => state.eventReducer);
-  const dispatch = useAppDispatch();
+interface EventsTableProps {
+  event_stats: EventStats | undefined;
+  event_data: EventData | undefined;
+  event_actions: EventAction[];
+}
 
-  useEffect(() => {
-    const getEventsStats = async (): Promise<void> => {
-      const { contract } = await getNearAccountAndContract();
-      const actions = await contract.get_actions({ from_index: 0, limit: 100 });
-      const stats = await contract.get_event_stats();
-      const data = await contract.get_event_data();
-      setTimeout(() => {
-        dispatch(
-          setEvent({
-            event_data: data,
-            event_stats: stats,
-            event_actions: actions,
-          })
-        );
-      }, 1000);
-    };
-    getEventsStats();
-  }, [account_id, dispatch]);
-
+const EventsTable: React.FC<EventsTableProps> = ({ event_stats, event_data, event_actions }) => {
   if (!event_data) return <SpinnerLoader />;
 
   return (

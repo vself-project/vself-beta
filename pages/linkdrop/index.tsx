@@ -2,19 +2,14 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import React from 'react';
 import type { NextPage } from 'next';
-import * as nearAPI from 'near-api-js';
-import { Contract } from 'near-api-js';
-import { StylesCSS } from '../../constants/styles';
 import { checkNearAccount } from '../../utils';
 
-import { mockUserAccount, mockMainNetUserAccount } from '../../mockData/mockUserAccount';
 import Loader from '../../components/loader';
 import { useAppDispatch } from '../../hooks';
 import { setAppLoadingState } from '../../store/reducers/appStateReducer/actions';
 import Modal from '../../components/modal';
-
-const { generateSeedPhrase } = require('near-seed-phrase');
-const { connect, WalletConnection, keyStores, KeyPair, utils } = nearAPI;
+import { linkDropMethods, linkDropName } from '../../utils/contract-methods';
+import { createNearAccount } from '../../utils/contract';
 
 const MAIN_TEXT =
   'Hello dear traveler welcome to the page which will guide you through the onboarding process! ' +
@@ -28,84 +23,6 @@ const RULES2 = 'Your account ID CANNOT contain:';
 const RULE4 = 'Characters "@" or "."';
 const RULE5 = 'Fewer than 2 characters';
 const RULE6 = 'More than 64 characters (including .near)';
-
-// Digits (0-9)
-// Characters (_-) can be used as separators
-// Your account ID CANNOT contain:
-
-// Characters "@" or "."
-// Fewer than 2 characters
-// More than 64 characters (including .near)'
-
-// Wallet credentials TESTNET/MAINNET
-// const credentials = {
-//   account_id: mockUserAccount.account_id,
-//   public_key: mockUserAccount.public_key,
-//   private_key: String(mockUserAccount.private_key),
-// };
-const credentials = {
-  account_id: mockMainNetUserAccount.account_id,
-  public_key: mockMainNetUserAccount.public_key,
-  private_key: String(mockMainNetUserAccount.private_key),
-};
-
-// TESTNET/MAINNET
-// const contractName = "testnet"; // testnet
-const contractName = 'near'; // mainnet
-const contractMethods = {
-  viewMethods: [''],
-  changeMethods: ['create_account'],
-};
-
-// TESTNET/MAINNET
-// const config = { // testnet
-//   networkId: "testnet",
-//   nodeUrl: "https://rpc.testnet.near.org",
-//   walletUrl: "https://wallet.testnet.near.org",
-//   helperUrl: "https://helper.testnet.near.org",
-//   explorerUrl: "https://explorer.testnet.near.org",
-// };
-const config = {
-  // mainnet
-  networkId: 'mainnet',
-  nodeUrl: 'https://rpc.mainnet.near.org',
-  walletUrl: 'https://wallet.near.org',
-  helperUrl: 'https://helper.mainnet.near.org',
-  explorerUrl: 'https://explorer.near.org',
-};
-
-// Return boolean result and mnemonic phrase
-const createAccount = async (creatorAccountId: any, newAccountId: any, amount: any) => {
-  // Prepare keystore and funding account
-  const keyStore = new keyStores.InMemoryKeyStore();
-  await keyStore.setKey(config.networkId, creatorAccountId, KeyPair.fromString(credentials.private_key));
-
-  // Generate new keypair
-  // to create a seed phrase with its corresponding Keys
-  const { seedPhrase, publicKey, secretKey } = generateSeedPhrase();
-  // const keyPair = KeyPair.fromString(secretKey);
-  // await keyStore.setKey(config.networkId, newAccountId, keyPair);
-
-  const near = await connect({
-    ...config,
-    keyStore,
-    headers: {},
-  });
-  const creatorAccount = await near.account(creatorAccountId);
-
-  // Create callable contract instance
-  const root_contract: any = new Contract(creatorAccount, contractName, contractMethods);
-  const result = await root_contract.create_account(
-    {
-      new_account_id: newAccountId,
-      new_public_key: publicKey,
-    },
-    '300000000000000',
-    utils.format.parseNearAmount(amount)
-  );
-
-  return { result, seedPhrase };
-};
 
 const LinkDrop: NextPage = () => {
   const [nearid, setNearid] = React.useState('');
@@ -146,18 +63,13 @@ const LinkDrop: NextPage = () => {
 
   const ACCOUNT_IS_BUSY = () => <p>This account is busy</p>;
 
-  const ONBOARDING_COST = 1.17923 - 0;
-
   // Call contract method
   const callCreateAccount = async () => {
     try {
       dispatch(setAppLoadingState(true));
-      const amount = '0.01';
 
       // If account is busy show the message
       // Some problem with COARS
-      // TESTNET/MAINNET
-      // const accountExists = await checkNearAccount(nearid, 'testnet');
       const accountExists = await checkNearAccount(nearid, 'mainnet');
       if (accountExists) {
         setMessage(ACCOUNT_IS_BUSY);
@@ -166,7 +78,7 @@ const LinkDrop: NextPage = () => {
         }, 5000);
         return;
       }
-      const { result, seedPhrase } = await createAccount(credentials.account_id, nearid, amount);
+      const { result, seedPhrase } = await createNearAccount(nearid, linkDropName, linkDropMethods);
       if (result) {
         setMessage(SUCCESS_MESSAGE);
         setSeed(seedPhrase);

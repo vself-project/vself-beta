@@ -10,7 +10,8 @@ import {
   // setAppStateDevMode,
   signOutApp,
 } from '../../store/reducers/appStateReducer/actions';
-import { getNearAccountAndContract } from '../../utils';
+import { getAccountAndContract } from '../../utils/contract';
+import { mainContractMethods, mainContractName } from '../../utils/contract-methods';
 // import ThemeChanger from '../themeChanger';
 // import HashDoxLogo from '../icons/HashDoxLogo';
 
@@ -25,7 +26,7 @@ const Header: React.FC = () => {
   // };
 
   const signOut = async () => {
-    const { signOut, signIn } = await getNearAccountAndContract();
+    const { signOut, signIn } = await getAccountAndContract(mainContractName, mainContractMethods);
     dispatch(setAppLoadingState(true));
     if (is_authed) {
       signOut();
