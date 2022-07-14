@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @next/next/no-img-element */
 import React, { useState, useEffect } from 'react';
-import HashDoxIcon from '../icons/HashDoxIcon';
 
 interface FileImageComponentProps {
   url: string;
@@ -37,9 +36,7 @@ const URLImageComponent: React.FC<FileImageComponentProps> = ({ url, className }
   return (
     <div className="grid place-items-center h-full">
       <div className="text-center">
-        <div className="animate-spin-slow">
-          <HashDoxIcon />
-        </div>
+        <div className="animate-spin-slow"></div>
       </div>
     </div>
   );

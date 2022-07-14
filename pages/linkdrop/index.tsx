@@ -2,14 +2,15 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 import React from 'react';
 import type { NextPage } from 'next';
-import { checkNearAccount } from '../../utils';
 
 import Loader from '../../components/loader';
 import { useAppDispatch } from '../../hooks';
 import { setAppLoadingState } from '../../store/reducers/appStateReducer/actions';
 import Modal from '../../components/modal';
 import { linkDropMethods, linkDropName } from '../../utils/contract-methods';
-import { createNearAccount } from '../../utils/contract';
+import { createNearAccount, network_id } from '../../utils/contract';
+import { checkNearAccount } from '../../utils/near';
+import Header from '../../components/header';
 
 const MAIN_TEXT =
   'Hello dear traveler welcome to the page which will guide you through the onboarding process! ' +
@@ -70,7 +71,7 @@ const LinkDrop: NextPage = () => {
 
       // If account is busy show the message
       // Some problem with COARS
-      const accountExists = await checkNearAccount(nearid, 'mainnet');
+      const accountExists = await checkNearAccount(nearid, network_id);
       if (accountExists) {
         setMessage(ACCOUNT_IS_BUSY);
         setTimeout(() => {
@@ -123,6 +124,7 @@ const LinkDrop: NextPage = () => {
   return (
     <Loader>
       <>
+        <Header />
         <Modal isOpened={!!message} isError={isError} closeCallback={closeModal}>
           <p className="text-black" style={{ color: !isError ? '#000' : '#D8000C' }}>
             {message}

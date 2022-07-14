@@ -23,8 +23,8 @@ import { useEffect } from 'react';
 import { signInApp, setAppLoadingState } from '../store/reducers/appStateReducer/actions';
 import { setEventStatus } from '../store/reducers/eventReducer/actions';
 import { getUserAccountData } from '../store/reducers/userAccountReducer/actions';
-import { mainContractMethods, mainContractName } from '../utils/contract-methods';
 import { getAccountAndContract } from '../utils/contract';
+import { mainContractMethods, mainContractName } from '../utils/contract-methods';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const AnyComponent = Component as any;

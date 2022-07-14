@@ -1,11 +1,13 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
 // import * as nearAPI from 'near-api-js';
 import { Near, Account, keyStores, Contract, KeyPair, connect, WalletConnection, utils } from 'near-api-js';
 import { isEnvProd } from '.';
 import getConfig from './near';
+const { generateSeedPhrase }: any = require('near-seed-phrase');
 // Mocks
 import { mockMainNetUserAccount, mockUserAccount } from '../mockData/mockUserAccount';
 
-const network_id = isEnvProd ? 'mainnet' : 'testnet';
+export const network_id = isEnvProd ? 'mainnet' : 'testnet';
 const connected_user = isEnvProd ? mockMainNetUserAccount : mockUserAccount;
 // Wallet credentials
 const credentials = {
@@ -102,7 +104,3 @@ export const createNearAccount = async (newAccountId: string, contractName: stri
 
   return { result, seedPhrase };
 };
-
-function generateSeedPhrase(): { seedPhrase: any; publicKey: any; secretKey: any } {
-  throw new Error('Function not implemented.');
-}

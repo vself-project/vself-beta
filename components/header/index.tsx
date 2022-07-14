@@ -12,6 +12,7 @@ import {
 } from '../../store/reducers/appStateReducer/actions';
 import { getAccountAndContract } from '../../utils/contract';
 import { mainContractMethods, mainContractName } from '../../utils/contract-methods';
+import ActiveLink from '../active-link';
 // import ThemeChanger from '../themeChanger';
 // import HashDoxLogo from '../icons/HashDoxLogo';
 
@@ -45,17 +46,31 @@ const Header: React.FC = () => {
     >
       <div className="container flex justify-between items-center">
         <img src="/dude4.png" width={50} height={50} className="rounded-md float-left" alt="logo" />
-        <a
-          className="flex-row flex hidden-arrow"
-          href="#"
-          id="dropdownMenuButton2"
-          role="button"
-          data-bs-toggle="dropdown"
-          aria-expanded="false"
-          onClick={signOut}
-        >
-          <span className="mr-2 text-white">{is_authed ? 'Sign Out' : 'Sign In'}</span>
-        </a>
+        <div className="flex flex-row">
+          <ActiveLink href="/event">
+            <span className="mx-1">New Event</span>
+          </ActiveLink>
+
+          <ActiveLink href="/linkdrop">
+            <span className="mx-1">LinkDrop</span>
+          </ActiveLink>
+
+          <ActiveLink href="/">
+            <span className="mx-1">Stats</span>
+          </ActiveLink>
+
+          <a
+            className="flex-row flex hidden-arrow ml-1"
+            href="#"
+            id="dropdownMenuButton2"
+            role="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false"
+            onClick={signOut}
+          >
+            <span className="mr-2 text-white">{is_authed ? 'Sign Out' : 'Sign In'}</span>
+          </a>
+        </div>
       </div>
     </nav>
   );

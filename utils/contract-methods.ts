@@ -28,21 +28,3 @@ export const ldMethods = {
     'on_account_created_and_claimed',
   ],
 };
-
-// HashD0x Contracts
-// TODO: Remove
-
-// POW Contract Settings
-export const powContractName = Endpoints.TESTNET_POW_CONTRACT_NAME;
-export const powContractNameV1 = Endpoints.TESTNET_POW_CONTRACT_NAME_V1;
-export const powContractMethods = {
-  viewMethods: ['get_evidences', 'version', 'get_evidences_amount'],
-  changeMethods: ['upload_evidence'],
-};
-
-// POW Reward Contract Settings
-export const powRewardContractName = Endpoints.MAINNET_POW_PRIZES_CONTRACT_NAME;
-export const powRewardContractMethods = {
-  viewMethods: [],
-  changeMethods: ['send_reward'],
-};
