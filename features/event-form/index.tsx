@@ -10,9 +10,8 @@ import { Quest, EventData } from '../../models/Event';
 import QuestComponent, { QuestChangeCallback } from './quests';
 // Components
 import Modal from '../../components/modal';
-import { mockBarcelonaEvent, mockEvent } from '../../mockData/mockEvents';
+import { mockEvent } from '../../mockData/mockEvents';
 import { uploadImageToFirebase } from '../../utils/firebase';
-import { StylesCSS } from '../../constants/styles';
 import { SpinnerLoader } from '../../components/loader';
 import { getAccountAndContract } from '../../utils/contract';
 import { mainContractMethods, mainContractName } from '../../utils/contract-methods';
@@ -37,7 +36,7 @@ const initialEventFormState: EventData = {
 };
 
 const NewEventForm: React.FC = () => {
-  const [eventFormState, setEventFormState] = useState<EventData>(mockBarcelonaEvent);
+  const [eventFormState, setEventFormState] = useState<EventData>(initialEventFormState);
   const { event_name, event_description, quests, start_time, finish_time } = eventFormState;
   const [files, setFiles] = useState<File[]>([]);
   const [activeIndex, setActiveIndex] = useState<number>(0);
@@ -190,14 +189,14 @@ const NewEventForm: React.FC = () => {
             name="title"
             onChange={onEventTitleChange}
             value={event_name}
-            className={`${StylesCSS.INPUT}`}
+            className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 mb-2 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
             placeholder="Event title"
           />
           <textarea
             name="description"
             value={event_description}
             onChange={onEventDescriptionChange}
-            className={`${StylesCSS.TEXTAREA}`}
+            className="form-control block w-full mb-2 px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
             placeholder="Event description"
           />
           <span className="mb-2 text-black">Start Date:</span>
@@ -206,7 +205,7 @@ const NewEventForm: React.FC = () => {
               onChange={onStartTimeChange}
               selected={new Date(start_time / 1000000)}
               dateFormat="dd/MM/yyyy"
-              className={`${StylesCSS.DATEPICKER}`}
+              className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
             />
             {/* <CalendarIcon /> */}
           </span>
@@ -216,7 +215,7 @@ const NewEventForm: React.FC = () => {
               onChange={onFinishTimeChange}
               selected={new Date(finish_time / 1000000)}
               dateFormat="dd/MM/yyyy"
-              className={`${StylesCSS.DATEPICKER}`}
+              className="form-control block w-full px-3 py-1.5 text-base font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
             />
             {/* <CalendarIcon /> */}
           </span>

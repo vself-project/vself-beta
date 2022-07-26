@@ -1,5 +1,4 @@
 import React from 'react';
-// import { StylesCSS } from '../../constants/styles';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setAppLoadingState } from '../../store/reducers/appStateReducer/actions';
 import { createEvent, setEventStatus } from '../../store/reducers/eventReducer/actions';
