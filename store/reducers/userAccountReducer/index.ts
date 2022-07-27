@@ -3,7 +3,7 @@ import { UserAccount } from '../../../models/UserAccount';
 import { UserAccountTypes } from './types';
 
 const initialState: UserAccount = {
-  account_id: '',
+  account_id: undefined,
   balance: 0,
   public_key: '',
   private_key: '',

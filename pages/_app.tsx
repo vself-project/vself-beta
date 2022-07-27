@@ -21,7 +21,7 @@ import { store } from '../store';
 import { appWithTranslation } from 'next-i18next';
 import { useEffect } from 'react';
 import { signInApp, setAppLoadingState } from '../store/reducers/appStateReducer/actions';
-import { setEventStatus } from '../store/reducers/eventReducer/actions';
+// import { setActiveEventStatus } from '../store/reducers/eventReducer/actions';
 import { getUserAccountData } from '../store/reducers/userAccountReducer/actions';
 import { getAccountAndContract } from '../utils/contract';
 import { mainContractMethods, mainContractName } from '../utils/contract-methods';
@@ -41,9 +41,9 @@ function MyApp({ Component, pageProps }: AppProps) {
           store.dispatch(getUserAccountData({ account_id: walletAccountId }));
         }
         console.log('in the middle');
-        const is_active = await contract.is_active();
-        console.log('is_active: ', is_active);
-        store.dispatch(setEventStatus(is_active));
+        // const is_active = await contract.is_active();
+        // console.log('is_active: ', is_active);
+        // store.dispatch(setActiveEventStatus(is_active));
       } catch (err) {
         console.log('Cannot connect to contract: ', err);
       } finally {

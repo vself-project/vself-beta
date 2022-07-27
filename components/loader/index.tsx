@@ -15,7 +15,7 @@ export const SpinnerLoader: React.FC = () => {
         style={{
           height: '7rem',
           width: '7rem',
-          backgroundImage: 'url(g6.png)',
+          backgroundImage: 'url(/g6.png)',
           backgroundSize: '100% 100%',
           backgroundPosition: 'center',
           backgroundBlendMode: 'overlay',

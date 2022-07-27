@@ -5,7 +5,17 @@ import { Endpoints } from '../constants/endpoints';
 export const mainContractName = isEnvProd ? Endpoints.MAINNET_CONTRACT_URI : Endpoints.TESTNET_CONTRACT_URI;
 export const mainContractMethods = {
   // name of contract you're connecting to
-  viewMethods: ['version', 'is_active', 'get_actions', 'get_event_data', 'get_event_stats', 'get_user_balance_extra'], // view methods do not change state but usually return a value
+  viewMethods: [
+    'version',
+    'is_active',
+    'get_actions',
+    'get_event_actions',
+    'get_event_data',
+    'get_event_stats',
+    'get_user_balance_extra',
+    'get_ongoing_events',
+    'get_ongoing_user_events',
+  ], // view methods do not change state but usually return a value
   changeMethods: ['start_event', 'stop_event', 'checkin'], // change methods modify state
 };
 

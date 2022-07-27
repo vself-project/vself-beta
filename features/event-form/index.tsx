@@ -44,14 +44,14 @@ const NewEventForm: React.FC = () => {
   const { is_starting } = useAppSelector((state) => state.eventReducer);
   const { account_id } = useAppSelector((state) => state.userAccountReducer);
   const { is_dev } = useAppSelector((state) => state.appStateReducer);
+  const dispatch = useAppDispatch();
 
   useEffect(() => {
     if (is_dev) {
       setEventFormState(mockEvent);
     }
-  }, [is_dev]);
-
-  const dispatch = useAppDispatch();
+    dispatch(setAppLoadingState(false));
+  }, [is_dev, dispatch]);
 
   // New Event Form Handlers
   const onEventTitleChange = (event: React.FormEvent<HTMLInputElement>): void => {
@@ -146,7 +146,7 @@ const NewEventForm: React.FC = () => {
 
         const { contract } = await getAccountAndContract(mainContractName, mainContractMethods);
         await contract.start_event({
-          event: {
+          event_data: {
             event_description,
             event_name,
             finish_time,

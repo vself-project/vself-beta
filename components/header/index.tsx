@@ -47,9 +47,11 @@ const Header: React.FC = () => {
       <div className="container flex justify-between items-center">
         <img src="/dude4.png" width={50} height={50} className="rounded-md float-left" alt="logo" />
         <div className="flex flex-row">
-          <ActiveLink href="/event">
-            <span className="mx-1">New Event</span>
-          </ActiveLink>
+          {is_authed && (
+            <ActiveLink href="/add">
+              <span className="mx-1">Add Event</span>
+            </ActiveLink>
+          )}
 
           <ActiveLink href="/linkdrop">
             <span className="mx-1">LinkDrop</span>
