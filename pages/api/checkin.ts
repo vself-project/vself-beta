@@ -3,7 +3,7 @@ import { getConnectedContract } from '../../utils/contract';
 import { mainContractMethodsNew, mainContractName } from '../../utils/contract-methods';
 import { checkNearAccount } from '../../utils/near';
 
-const CONTRACT_NAME = 'dev-1658885548400-28320018147245';
+const CONTRACT_NAME = 'dev-1658904401423-22477147689565';
 
 /// Call checkin method of the contract managing events
 /// Request example: http://localhost:3000/api/checkin?eventid='my_event'&nearid='ilerik.testnet'&qr='some_string'

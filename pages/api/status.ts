@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getConnectedContract } from '../../utils/contract';
 import { mainContractMethodsNew, mainContractName } from '../../utils/contract-methods';
 
-const CONTRACT_NAME = 'dev-1658885548400-28320018147245';
+const CONTRACT_NAME = 'dev-1658904401423-22477147689565';
 
 /// Returns event data
 /// Request example: http://localhost:3000/api/status?eventid='my_event'
