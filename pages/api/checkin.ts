@@ -1,24 +1,25 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getConnectedContract } from '../../utils/contract';
-import { mainContractMethods, mainContractName } from '../../utils/contract-methods';
+import { mainContractMethodsNew, mainContractName } from '../../utils/contract-methods';
 import { checkNearAccount } from '../../utils/near';
 
+const CONTRACT_NAME = 'dev-1658885548400-28320018147245';
+
 /// Call checkin method of the contract managing events
-/// Request example: http://localhost:3000/api/checkin?nearid='ilerik.testnet'&qr='some_qr_coded_string'
+/// Request example: http://localhost:3000/api/checkin?eventid='my_event'&nearid='ilerik.testnet'&qr='some_string'
+// http://localhost:3000/api/checkin?eventid='3090415815'&nearid='ilerik.testnet'&qr='some_string'
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
-    let result = 'None';
-
     // Parse query
-    let { nearid, qr } = req.query;
-    const network_id = nearid.includes('.near') ? 'mainnet' : 'testnet';
-
+    let { eventid, nearid, qr } = req.query;
     nearid = nearid.slice(1, -1); // trim quotes
+    eventid = eventid.slice(1, -1);
     qr = qr.slice(1, -1);
 
     // Check that near id exists
     nearid = String(nearid).toLowerCase();
     // Switch between MAINNET and TESTNET
+    const network_id = nearid.includes('.near') ? 'mainnet' : 'testnet';
     const account_exists = await checkNearAccount(nearid, network_id);
     if (!account_exists) {
       res.status(500).json({
@@ -26,22 +27,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         got: false,
         title: 'nothing',
         description: 'nothing',
-        errorMessage: String('User ID isn&amp;t valid'),
+        errorMessage: String(`User ID isn't valid`),
       });
       return;
     }
 
     // Create contract instance
-    const { contract }: any = await getConnectedContract(mainContractName, mainContractMethods);
+    const { contract }: any = await getConnectedContract(CONTRACT_NAME, mainContractMethodsNew);
 
     // Set appropriate gas and storage cost
     const gas_cost = 300000000000000;
     const minting_cost = '25000000000000000000000'; // 0.01 NEAR
 
     // Call checkin
-    result = await contract
+    let result = await contract
       .checkin({
-        args: { username: String(nearid), request: String(qr) },
+        args: { event_id: Number(eventid), username: String(nearid), request: String(qr) },
         gas: gas_cost,
         amount: minting_cost,
       })
@@ -56,6 +57,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
         return;
       });
+    console.log({result});
 
     // Special case
     if (result === null) {
