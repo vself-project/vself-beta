@@ -2,8 +2,10 @@ import type { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
 import Header from '../../components/header';
-import Loader from '../../components/loader';
-import EventsTable from '../../features/events-table';
+import Loader, { SpinnerLoader } from '../../components/loader';
+import EventActionsTable from '../../features/events-table/eventAcionsTable';
+import EventCard from '../../features/events-table/eventCard';
+import EventStatsTable from '../../features/events-table/eventStatsTable';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setAppLoadingState } from '../../store/reducers/appStateReducer/actions';
 import { setActiveEvent } from '../../store/reducers/eventReducer/actions';
@@ -35,12 +37,31 @@ const EventPage: NextPage = () => {
     };
     getEventsStats();
   }, [dispatch, event_id]);
+
+  if (!event_data) return <SpinnerLoader />;
+
   return (
     <Loader>
       <>
         <Header />
         <div className="grid place-items-center min-h-screen">
-          <EventsTable event_stats={event_stats} event_data={event_data} event_actions={event_actions} />
+          <div className="flex-row flex flex-wrap container">
+            <div className="flex-1 xl:w-1/5 sm:my-4">
+              {event_data !== undefined && <EventCard eventData={event_data} />}
+            </div>
+
+            <div className="flex-1 xl:ml-4 xl:w-4/5 sm:my-4">
+              <div className="block p-6 rounded-lg shadow-lg bg-white mb-4 overflow-x-auto">
+                <EventStatsTable eventStats={event_stats} />
+              </div>
+              <div
+                className="block p-6 rounded-lg shadow-lg bg-white mb-4 w-full overflow-x-auto overflow-y-auto"
+                style={{ maxHeight: 350, minHeight: 350 }}
+              >
+                <EventActionsTable eventActions={event_actions.slice(0).reverse()} eventData={event_data} />
+              </div>
+            </div>
+          </div>
         </div>
       </>
     </Loader>
