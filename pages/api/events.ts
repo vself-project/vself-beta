@@ -8,6 +8,8 @@ const CONTRACT_NAME = 'dev-1658904401423-22477147689565';
 /// Request example: http://localhost:3000/api/events
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
+    console.log('query: ', req.query);
+    
     // Create contract instance
     const connection: any = await getConnectedContract(CONTRACT_NAME, mainContractMethodsNew);
     const { contract } = connection;

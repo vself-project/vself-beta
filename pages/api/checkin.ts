@@ -10,6 +10,8 @@ const CONTRACT_NAME = 'dev-1658904401423-22477147689565';
 // http://localhost:3000/api/checkin?eventid='3090415815'&nearid='ilerik.testnet'&qr='some_string'
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   try {
+    console.log('query: ', req.query);
+
     // Parse query
     let { eventid, nearid, qr } = req.query;
     nearid = nearid.slice(1, -1); // trim quotes
