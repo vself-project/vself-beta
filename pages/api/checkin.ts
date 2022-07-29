@@ -3,7 +3,7 @@ import { getConnectedContract } from '../../utils/contract';
 import { mainContractMethodsNew, mainContractName } from '../../utils/contract-methods';
 import { checkNearAccount } from '../../utils/near';
 
-const CONTRACT_NAME = 'dev-1658904401423-22477147689565';
+// const CONTRACT_NAME = 'dev-1658904401423-22477147689565';
 
 /// Call checkin method of the contract managing events
 /// Request example: http://localhost:3000/api/checkin?eventid='my_event'&nearid='ilerik.testnet'&qr='some_string'
@@ -29,20 +29,20 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         got: false,
         title: 'nothing',
         description: 'nothing',
-        errorMessage: String(`User ID isn't valid`),
+        errorMessage: String('User ID isn&apos;t valid'),
       });
       return;
     }
 
     // Create contract instance
-    const { contract }: any = await getConnectedContract(CONTRACT_NAME, mainContractMethodsNew);
+    const { contract }: any = await getConnectedContract(mainContractName, mainContractMethodsNew);
 
     // Set appropriate gas and storage cost
     const gas_cost = 300000000000000;
     const minting_cost = '25000000000000000000000'; // 0.01 NEAR
 
     // Call checkin
-    let result = await contract
+    const result = await contract
       .checkin({
         args: { event_id: Number(eventid), username: String(nearid), request: String(qr) },
         gas: gas_cost,
@@ -59,7 +59,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
         });
         return;
       });
-    console.log({result});
+    console.log({ result });
 
     // Special case
     if (result === null) {

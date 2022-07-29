@@ -2,7 +2,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { getConnectedContract } from '../../utils/contract';
 import { mainContractMethodsNew, mainContractName } from '../../utils/contract-methods';
 
-const CONTRACT_NAME = 'dev-1658904401423-22477147689565';
+// const CONTRACT_NAME = 'dev-1658904401423-22477147689565';
 
 /// Returns quests number
 /// Request examples:
@@ -16,7 +16,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     eventid = eventid.slice(1, -1); // trim quotes
 
     // Create contract instance
-    const connection: any = await getConnectedContract(CONTRACT_NAME, mainContractMethodsNew);
+    const connection: any = await getConnectedContract(mainContractName, mainContractMethodsNew);
     const { contract } = connection;
 
     // Fetch event data
