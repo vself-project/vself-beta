@@ -19,6 +19,11 @@ export const mainContractMethods = {
   ], // view methods do not change state but usually return a value
   changeMethods: ['start_event', 'stop_event', 'checkin'], // change methods modify state
 };
+export const mainContractMethodsNew = {
+  // name of contract you're connecting to
+  viewMethods: ['version', 'get_ongoing_events', 'get_ongoing_user_events', 'get_event_data', 'get_event_stats', 'get_user_balance', 'get_event_actions'], // view methods do not change state but usually return a value
+  changeMethods: ['start_event', 'stop_event', 'checkin'], // change methods modify state
+};
 
 // LinkDrop Settings
 export const linkDropName = isEnvProd ? 'near' : 'testnet';
