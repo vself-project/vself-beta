@@ -1,13 +1,13 @@
 /* eslint-disable @next/next/no-img-element */
-import React, { useRef, useState } from 'react';
-import { StylesCSS } from '../../constants/styles';
+import React, { useRef, useState, useEffect } from 'react';
 import UploadIcon from '../icons/UploadIcon';
 
 interface UploadImageButtonProps {
   onImageSet: (file: File) => void;
+  file?: File;
 }
 
-const UploadImageButton: React.FC<UploadImageButtonProps> = ({ onImageSet }) => {
+const UploadImageButton: React.FC<UploadImageButtonProps> = ({ onImageSet, file }) => {
   const [imgSrc, setImgSrc] = useState<string | null>(null);
   const inputFileRef = useRef<HTMLInputElement | null>(null);
 
@@ -24,8 +24,23 @@ const UploadImageButton: React.FC<UploadImageButtonProps> = ({ onImageSet }) => 
     }
   };
 
+  useEffect(() => {
+    if (file) {
+      setImgSrc(URL.createObjectURL(file));
+    } else {
+      setImgSrc(null);
+    }
+  }, [file]);
+
   return (
-    <button type="button" onClick={handleBtnClick} style={{ minWidth: 400 }} className={StylesCSS.UPLOAD_IMAGE_BUTTON}>
+    <button
+      type="button"
+      onClick={handleBtnClick}
+      style={{ minHeight: 300 }}
+      className={`${
+        imgSrc ? 'bg-transparent' : 'bg-slate-100'
+      } flex justify-center items-center rounded-lg w-full shadow-lg  max-w-sm mb-2 hover:bg-gray-200 text-gray-400 hover:text-white transition ease-in-out delay-150 border-0`}
+    >
       <input
         type="file"
         ref={inputFileRef}
@@ -34,11 +49,19 @@ const UploadImageButton: React.FC<UploadImageButtonProps> = ({ onImageSet }) => 
         onChange={handleImageChange}
       />
       {imgSrc ? (
-        <img src={imgSrc} alt="Uploading Image" className="object-cover h-96 w-96 rounded-lg" />
+        <div
+          style={{
+            width: '100%',
+            height: '100%',
+            maxHeight: 300,
+            backgroundImage: `url(${imgSrc})`,
+            backgroundSize: 'contain',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+          }}
+        />
       ) : (
-        <div className="p-20">
-          <UploadIcon />
-        </div>
+        <UploadIcon />
       )}
     </button>
   );

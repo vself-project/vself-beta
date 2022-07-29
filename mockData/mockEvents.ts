@@ -38,3 +38,41 @@ export const mockEvent: EventData = {
     },
   ],
 };
+
+export const mockBarcelonaEvent: EventData = {
+  event_description:
+    'WOW3 meetup at ETH Barcelona is focusing on inclusivity and diversity in Web3 communities. For our guests, vSelf suggests an interactive experience, supported by our platform and prepared custom attendance certificates and NFT rewards.',
+  event_name: 'ETH Barcelona NFTs',
+  finish_time: 1657539102000000000,
+  quests: [
+    {
+      qr_prefix_enc: 'https://vself.app/ethbarcelona?1',
+      qr_prefix_len: 0,
+      reward_description: 'Thank you for joining our event! Enjoy the kudos to WOW3 meetup participants',
+      reward_title: 'WOW3 & vSelf Community',
+      reward_uri: '',
+    },
+    {
+      qr_prefix_enc: 'https://vself.app/ethbarcelona?2',
+      qr_prefix_len: 0,
+      reward_description: 'Glad to see you getting to the essence of things. All effort should be rewarded!',
+      reward_title: 'Tech Deep Dive',
+      reward_uri: '',
+    },
+    {
+      qr_prefix_enc: 'https://vself.app/ethbarcelona?3',
+      qr_prefix_len: 0,
+      reward_description: 'Thank you for giving us feedback! We appreciate your contribution. ',
+      reward_title: 'vSelf Supporter',
+      reward_uri: '',
+    },
+    {
+      qr_prefix_enc: 'https://vself.app/ethbarcelona?4',
+      qr_prefix_len: 0,
+      reward_description: 'Synergy between people makes things possible! Thank you for being a part of this journey. ',
+      reward_title: 'Collaboration & Creativity',
+      reward_uri: '',
+    },
+  ],
+  start_time: 1656934302915000000,
+};

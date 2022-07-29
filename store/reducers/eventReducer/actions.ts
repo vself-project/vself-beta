@@ -1,13 +1,20 @@
 import { EventTypes } from './types';
 
-export const setEvent = (data: any) => {
+export const setOngoingEvents = (data: any) => {
   return {
-    type: EventTypes.SetEvent,
+    type: EventTypes.SetOngoingEvents,
     payload: { ...data },
   };
 };
 
-export const setEventStatus = (is_active: boolean) => {
+export const setActiveEvent = (data: any) => {
+  return {
+    type: EventTypes.SetActiveEvent,
+    payload: { ...data },
+  };
+};
+
+export const setActiveEventStatus = (is_active: boolean) => {
   return {
     type: EventTypes.GetEventStatus,
     payload: { is_active },

@@ -4,10 +4,10 @@ import { z } from 'zod';
 import * as nearAPI from 'near-api-js';
 import { readFileSync } from 'fs';
 
-import getConfig from '../../../config/near';
 import { Endpoints } from '../../../constants/endpoints';
+import getConfig from 'next/config';
 
-const contractName = Endpoints.TESTNET_POW_CONTRACT_NAME;
+const contractName = Endpoints.TESTNET_CONTRACT_URI;
 const accountName = 'pow_v1.sergantche.testnet';
 const contractMethods = {
   viewMethods: ['get_evidences', 'version', 'get_evidences_amount'],
@@ -31,7 +31,7 @@ const credentials = JSON.parse(String(creds));
 
 // Create keyStore object
 const keyStore = new InMemoryKeyStore();
-const { nodeUrl, networkId } = getConfig('testnet');
+const { nodeUrl, networkId } = getConfig();
 keyStore.setKey(networkId, accountName, KeyPair.fromString(credentials.private_key));
 
 // Add access key into calling contract account

@@ -13,21 +13,27 @@ const EventActionsTable: React.FC<EventActionsTableProps> = ({ eventActions, eve
     <table className="min-w-full text-center">
       <thead className="border-b bg-gray-800">
         <tr>
-          <th className="text-sm font-medium text-white px-6 py-4">User</th>
-          <th className="text-sm font-medium text-white px-6 py-4">QR</th>
-          <th className="text-sm font-medium text-white px-6 py-4">Date</th>
-          <th className="text-sm font-medium text-white px-6 py-4">Reward</th>
+          <th className="text-sm font-medium text-white px-4 py-2">User</th>
+          <th className="text-sm font-medium text-white px-4 py-2">QR</th>
+          <th className="text-sm font-medium text-white px-4 py-2">Date</th>
+          <th className="text-sm font-medium text-white px-4 py-2">Reward</th>
         </tr>
       </thead>
       <tbody>
         {eventActions.map(({ username, qr_string, timestamp, reward_index }, index) => (
-          <tr key={index} className="bg-white border-b hover:bg-gray-100 cursor-pointer">
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{username}</td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{qr_string}</td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+          <tr
+            // onMouseOver={(evt) => console.log('holy moly: ', evt)}
+            key={index}
+            className="bg-white border-b hover:bg-gray-100 cursor-pointer"
+          >
+            <td className="text-sm text-gray-900 font-light px-4 py-2 whitespace-nowrap">{username}</td>
+            <td className="text-sm text-gray-900 font-light px-4 py-2 whitespace-nowrap overflow-x-auto max-w-[300px]">
+              {qr_string}
+            </td>
+            <td className="text-sm text-gray-900 font-light px-4 py-2 whitespace-nowrap">
               {formatTimeStampToLocaleDateString(timestamp) + ' ' + formatTimeStampToLocaleTimeString(timestamp)}
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap text-center">
+            <td className="text-sm text-gray-900 font-light px-4 py-2 whitespace-nowrap text-center">
               {eventData?.quests[reward_index] ? (
                 <img src={`${eventData?.quests[reward_index].reward_uri}`} alt="reward" width={50} height={50} />
               ) : (

@@ -8,35 +8,35 @@ interface EventStatsTableProps {
 
 const EventStatsTable: React.FC<EventStatsTableProps> = ({ eventStats }) => {
   return (
-    <table className="min-w-full">
+    <table>
       <thead className="bg-white border-b">
         <tr>
-          <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">Start Date</th>
-          <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">End Date</th>
-          <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">Total Actions</th>
-          <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">Total Rewards</th>
-          <th className="text-sm font-medium text-gray-900 px-6 py-4 text-left">Total Users</th>
+          <th className="text-sm font-medium text-gray-900 px-4 py-2 text-left">Start Date</th>
+          <th className="text-sm font-medium text-gray-900 px-4 py-2 text-left">End Date</th>
+          <th className="text-sm font-medium text-gray-900 px-4 py-2 text-left">Total Actions</th>
+          <th className="text-sm font-medium text-gray-900 px-4 py-2 text-left">Total Rewards</th>
+          <th className="text-sm font-medium text-gray-900 px-4 py-2 text-left">Total Users</th>
         </tr>
       </thead>
       {eventStats && (
         <tbody>
           <tr className="bg-gray-100 border-b">
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm text-gray-900 font-light px-4 py-2 whitespace-nowrap">
               {eventStats.start_time && formatTimeStampToLocaleDateString(eventStats.start_time)}
             </td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="text-sm text-gray-900 font-light px-4 py-2 whitespace-nowrap">
               {eventStats.finish_time && formatTimeStampToLocaleDateString(eventStats.finish_time)}
             </td>
 
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{eventStats.total_actions}</td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{eventStats.total_rewards}</td>
-            <td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">{eventStats.total_users}</td>
+            <td className="text-sm text-gray-900 font-light px-4 py-2 whitespace-nowrap">{eventStats.total_actions}</td>
+            <td className="text-sm text-gray-900 font-light px-4 py-2 whitespace-nowrap">{eventStats.total_rewards}</td>
+            <td className="text-sm text-gray-900 font-light px-4 py-2 whitespace-nowrap">{eventStats.total_users}</td>
           </tr>
           <tr className="bg-gray-100 border-b">
-            <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+            <td className="px-4 py-2 whitespace-nowrap text-sm font-medium text-gray-900">
               <b>Participants:</b>
             </td>
-            <td className="break-words text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+            <td className="break-words text-sm text-gray-900 font-light px-4 py-2 whitespace-nowrap overflow-x-auto max-w-[300px]">
               {eventStats.participants && eventStats.participants.join(', ')}
             </td>
           </tr>

@@ -12,6 +12,7 @@ module.exports = {
       fontFamily: {
         worksans: ['WorkSans', 'sans-serif'],
         rational: ['Rational', 'sans-serif'],
+        druk: ['Druk', 'sans-serif'],
       },
       animation: {
         fadein: 'fadein .5s',
@@ -37,6 +38,27 @@ module.exports = {
           '40%': { opacity: 1 },
           '80%': { opacity: 0 },
           '100%': { opacity: 0 },
+        },
+        spin: {
+          '0%': {
+            width: '7rem',
+            'animation-timing-function': 'ease-in',
+          },
+          '49.999%': {
+            width: '0.1rem',
+            transform: 'translateX(-0.375rem)',
+            'animation-timing-function': 'linear',
+          },
+
+          '50.001%': {
+            width: '0.1rem',
+            transform: 'translateX(0.375rem)',
+            'animation-timing-function': 'ease-out',
+          },
+
+          '100%': {
+            width: '7rem',
+          },
         },
       },
       colors: {

@@ -2,7 +2,7 @@ import React from 'react';
 
 const RemoveIcon: React.FC = () => (
   <svg
-    className="h-8 w-8 text-gray-500"
+    className="h-4 w-4 text-gray-500"
     viewBox="0 0 24 24"
     fill="none"
     stroke="currentColor"

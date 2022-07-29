@@ -10,13 +10,15 @@ import {
   // setAppStateDevMode,
   signOutApp,
 } from '../../store/reducers/appStateReducer/actions';
-import { getNearAccountAndContract } from '../../utils';
+import { getAccountAndContract } from '../../utils/contract';
+import { mainContractMethods, mainContractName } from '../../utils/contract-methods';
+import ActiveLink from '../active-link';
 // import ThemeChanger from '../themeChanger';
 // import HashDoxLogo from '../icons/HashDoxLogo';
 
 const Header: React.FC = () => {
-  const { account_id } = useAppSelector((state) => state.userAccountReducer);
-  // const { is_dev } = useAppSelector((state) => state.appStateReducer);
+  // const { account_id } = useAppSelector((state) => state.userAccountReducer);
+  const { is_authed } = useAppSelector((state) => state.appStateReducer);
   const router = useRouter();
   const dispatch = useAppDispatch();
 
@@ -25,43 +27,42 @@ const Header: React.FC = () => {
   // };
 
   const signOut = async () => {
-    const { signOut } = await getNearAccountAndContract();
-    signOut();
+    const { signOut, signIn } = await getAccountAndContract(mainContractName, mainContractMethods);
     dispatch(setAppLoadingState(true));
-    dispatch(signOutApp());
+    if (is_authed) {
+      signOut();
+      dispatch(signOutApp());
+    } else {
+      signIn();
+    }
     router.replace('/');
     dispatch(setAppLoadingState(false));
   };
 
   return (
     <nav
-      className="
-          fixed
-          w-full
-          flex flex-wrap
-          items-center
-          justify-between
-          top-0 z-50
-          py-4
-          bg-gray-100
-          text-gray-500
-          hover:text-gray-700
-          focus:text-gray-700
-          dark:bg-black
-          dark:text-white
-          shadow-lg
-          navbar navbar-expand-lg navbar-light
-          "
+      className="flex xl:fixed w-full justify-center top-0 z-50 py-4 text-gray-500"
+      style={{ backgroundColor: '#95e474' }}
     >
-      <div className="container-fluid w-full flex flex-wrap items-center justify-between px-6">
-        <img src="/robot.jpg" width={50} height={50} className="rounded-md float-left" alt="logo" />
-        {/* <button type="button" onClick={setDevMode}>
-          Dev
-        </button> */}
-        {/* <ThemeChanger /> */}
-        <div className="flex items-center relative font-rational">
+      <div className="container flex justify-between items-center">
+        <img src="/dude4.png" width={50} height={50} className="rounded-md float-left" alt="logo" />
+        <div className="flex flex-row">
+          {is_authed && (
+            <ActiveLink href="/add">
+              <span className="mx-1">Add Event</span>
+            </ActiveLink>
+          )}
+
+          <ActiveLink href="/linkdrop">
+            <span className="mx-1">LinkDrop</span>
+          </ActiveLink>
+
+          <ActiveLink href="/">
+            <span className="mx-1">Stats</span>
+          </ActiveLink>
+
           <a
-            className="flex-row flex hidden-arrow"
+            className="flex-row flex hidden-arrow ml-1"
             href="#"
             id="dropdownMenuButton2"
             role="button"
@@ -69,14 +70,7 @@ const Header: React.FC = () => {
             aria-expanded="false"
             onClick={signOut}
           >
-            <span className="mr-2 text-white">{account_id}</span>
-            <img
-              src="https://mdbootstrap.com/img/new/avatars/2.jpg"
-              className="rounded-full"
-              style={{ height: 25, width: 25 }}
-              alt=""
-              loading="lazy"
-            />
+            <span className="mr-2 text-white">{is_authed ? 'Sign Out' : 'Sign In'}</span>
           </a>
         </div>
       </div>

@@ -1,6 +1,9 @@
 import '../styles/globals.css';
 import 'react-datepicker/dist/react-datepicker.css';
-import type { AppProps, NextWebVitalsMetric } from 'next/app';
+import type {
+  AppProps,
+  // NextWebVitalsMetric
+} from 'next/app';
 
 import { withTRPC } from '@trpc/next';
 import { AppRouter } from './api/trpc/[trpc]';
@@ -12,30 +15,64 @@ import Head from 'next/head';
 
 import { store } from '../store';
 
-import Header from '../components/header';
+// import Header from '../components/header';
 // import { Wrapper } from '@googlemaps/react-wrapper';
-import AppLayout from '../components/appLayout';
+// import AppLayout from '../components/appLayout';
 import { appWithTranslation } from 'next-i18next';
+import { useEffect } from 'react';
+import { signInApp, setAppLoadingState } from '../store/reducers/appStateReducer/actions';
+// import { setActiveEventStatus } from '../store/reducers/eventReducer/actions';
+import { getUserAccountData } from '../store/reducers/userAccountReducer/actions';
+import { getAccountAndContract } from '../utils/contract';
+import { mainContractMethods, mainContractName } from '../utils/contract-methods';
 
 function MyApp({ Component, pageProps }: AppProps) {
   const AnyComponent = Component as any;
+
+  useEffect(() => {
+    const initVselfWebApp = async () => {
+      try {
+        const { isSignedIn, walletAccountId, contract } = await getAccountAndContract(
+          mainContractName,
+          mainContractMethods
+        );
+        if (isSignedIn) {
+          store.dispatch(signInApp());
+          store.dispatch(getUserAccountData({ account_id: walletAccountId }));
+        }
+        console.log('in the middle');
+        // const is_active = await contract.is_active();
+        // console.log('is_active: ', is_active);
+        // store.dispatch(setActiveEventStatus(is_active));
+      } catch (err) {
+        console.log('Cannot connect to contract: ', err);
+      } finally {
+        setTimeout(() => {
+          store.dispatch(setAppLoadingState(false));
+        }, 1000);
+      }
+    };
+    initVselfWebApp();
+  }, []);
+
   return (
     <Provider store={store}>
       <Head>
         <title>VSELF</title>
-        {/* <meta name="description" content="instant and spoof-proof registration of metadata and image hashing" /> */}
+        <meta name="description" content="vSelf: web3 identity wallet" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <AppLayout>
-        <ThemeProvider attribute="class">
-          {/* <Wrapper apiKey={String(process.env.GOOGLE_MAPS_API_KEY)}> */}
-          <Header />
-          <div className="text-gray-900 dark:text-white font-rational">
-            <AnyComponent {...pageProps} />
-          </div>
-          {/* </Wrapper> */}
-        </ThemeProvider>
-      </AppLayout>
+      <ThemeProvider attribute="class">
+        {/* <Wrapper apiKey={String(process.env.GOOGLE_MAPS_API_KEY)}> */}
+        {/* <Header /> */}
+        <div
+          className="text-gray-900 dark:text-white font-druk"
+          style={{ backgroundImage: 'url(/gradient2.png)', backgroundSize: 'cover' }}
+        >
+          <AnyComponent {...pageProps} />
+        </div>
+        {/* </Wrapper> */}
+      </ThemeProvider>
     </Provider>
   );
 }

@@ -46,6 +46,7 @@ yarn-error.log*
 
 # Firebase cache
 /.firebase/
+firebase-debug.log
 
 # Gun DB data
 /data

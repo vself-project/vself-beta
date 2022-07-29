@@ -1,7 +1,7 @@
 export interface Event {
   is_active: boolean;
   is_starting: boolean;
-  event_data: EventData;
+  event_data: EventData | null;
   event_stats: EventStats | Record<string, unknown>;
   event_actions: EventAction[];
 }

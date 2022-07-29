@@ -1,48 +1,35 @@
-import React, { useEffect } from 'react';
-import { useAppDispatch, useAppSelector } from '../../hooks';
-import { setEvent } from '../../store/reducers/eventReducer/actions';
-import { getNearAccountAndContract, hash } from '../../utils';
+import React from 'react';
+import { SpinnerLoader } from '../../components/loader';
+import { EventAction, EventData, EventStats } from '../../models/Event';
 // Components
 import EventActionsTable from './eventAcionsTable';
 import EventCard from './eventCard';
 import EventStatsTable from './eventStatsTable';
 
-const EventsTable: React.FC = () => {
-  const { account_id } = useAppSelector((state) => state.userAccountReducer);
-  const { event_stats, event_data, event_actions } = useAppSelector((state) => state.eventReducer);
-  const dispatch = useAppDispatch();
+interface EventsTableProps {
+  event_stats: EventStats | undefined;
+  event_data: EventData | undefined;
+  event_actions: EventAction[];
+}
 
-  useEffect(() => {
-    const getEventsStats = async (): Promise<void> => {
-      const { contract } = await getNearAccountAndContract();
-      const actions = await contract.get_actions({ from_index: 0, limit: 100 });
-      const stats = await contract.get_event_stats();
-      const data = await contract.get_event_data();
-
-      dispatch(
-        setEvent({
-          event_data: data,
-          event_stats: stats,
-          event_actions: actions,
-        })
-      );
-    };
-    getEventsStats();
-  }, [account_id, dispatch]);
+const EventsTable: React.FC<EventsTableProps> = ({ event_stats, event_data, event_actions }) => {
+  if (!event_data) return <SpinnerLoader />;
 
   return (
-    <div className="flex-row flex flex-wrap ">
-      <div className="flex-1 w-1/5 relative">{event_data !== undefined && <EventCard eventData={event_data} />}</div>
+    <div className="flex-row flex flex-wrap container">
+      <div className="flex-1 xl:w-1/5 sm:my-4 relative">
+        {event_data !== undefined && <EventCard eventData={event_data} />}
+      </div>
 
-      <div className="flex-1 ml-4 w-4/5">
-        <div className="block p-6 rounded-lg shadow-lg bg-white  mb-4">
+      <div className="flex-1 xl:ml-4 xl:w-3/5 sm:my-4">
+        <div className="block p-6 rounded-lg shadow-lg bg-white  mb-4 overflow-x-auto">
           <EventStatsTable eventStats={event_stats} />
         </div>
         <div
-          className="block p-6 rounded-lg shadow-lg bg-white  mb-4 w-full overflow-y-auto"
+          className="block p-6 rounded-lg shadow-lg bg-white  mb-4 w-full overflow-x-auto overflow-y-auto"
           style={{ maxHeight: 350, minHeight: 350 }}
         >
-          <EventActionsTable eventActions={event_actions} eventData={event_data} />
+          <EventActionsTable eventActions={event_actions.slice(0).reverse()} eventData={event_data} />
         </div>
       </div>
     </div>

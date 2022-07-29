@@ -1,12 +1,13 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import { getConnectedContract } from '../../utils/contract';
+import { mainContractMethods, mainContractName } from '../../utils/contract-methods';
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   let tokenId = false;
   const { query } = req;
   const { nearid } = query;
   try {
-    const connection: any = await getConnectedContract();
+    const connection: any = await getConnectedContract(mainContractName, mainContractMethods);
     const { contract } = connection;
     tokenId = await contract.send_reward({
       args: { username: nearid },
