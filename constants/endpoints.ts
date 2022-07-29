@@ -3,7 +3,7 @@ export enum Endpoints {
   MAINNET_RPC_ENDOINT_URI = 'https://rpc.mainnet.near.org',
 
   // vSelf Event Contracts
-  TESTNET_CONTRACT_URI = 'dev-1658844924518-48514567707457',
+  TESTNET_CONTRACT_URI = 'dev-1658904401423-22477147689565',
   TESTNET_CONTRACT_URI_V32 = 'v32.prod.vself.sergantche.testnet',
   MAINNET_CONTRACT_URI = 'v1.event.vself.near',
 

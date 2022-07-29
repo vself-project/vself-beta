@@ -7,11 +7,13 @@ const { generateSeedPhrase }: any = require('near-seed-phrase');
 // Mocks
 import { mockMainNetUserAccount, mockUserAccount } from '../mockData/mockUserAccount';
 
-export const network_id = isEnvProd ? 'mainnet' : 'testnet';
-const connected_user = isEnvProd ? mockMainNetUserAccount : mockUserAccount;
+// export const network_id = isEnvProd ? 'mainnet' : 'testnet';
+export const network_id = 'testnet';
+// const connected_user = isEnvProd ? mockMainNetUserAccount : mockUserAccount;
+const connected_user = mockUserAccount;
 // Wallet credentials
 const credentials = {
-  account_id: connected_user.account_id,
+  account_id: String(connected_user.account_id),
   public_key: connected_user.public_key,
   private_key: String(connected_user.private_key),
 };

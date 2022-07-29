@@ -3,7 +3,10 @@ import React, { useState, useEffect } from 'react';
 import DatePicker from 'react-datepicker';
 import { useAppDispatch, useAppSelector } from '../../hooks';
 import { setAppLoadingState } from '../../store/reducers/appStateReducer/actions';
-import { setEventStatus, stopCreateEvent } from '../../store/reducers/eventReducer/actions';
+import {
+  // setActiveEventStatus,
+  stopCreateEvent,
+} from '../../store/reducers/eventReducer/actions';
 import { hash, resizeFile } from '../../utils';
 // Models and types
 import { Quest, EventData } from '../../models/Event';
@@ -154,7 +157,7 @@ const NewEventForm: React.FC = () => {
             quests: questsWithUrls,
           },
         });
-        dispatch(setEventStatus(true));
+        // dispatch(setActiveEventStatus(true));
         dispatch(stopCreateEvent());
         dispatch(setAppLoadingState(false));
       } catch (err) {

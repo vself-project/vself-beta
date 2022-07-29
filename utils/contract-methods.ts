@@ -2,7 +2,8 @@ import { isEnvProd } from '.';
 import { Endpoints } from '../constants/endpoints';
 
 // Main Contract Settings
-export const mainContractName = isEnvProd ? Endpoints.MAINNET_CONTRACT_URI : Endpoints.TESTNET_CONTRACT_URI;
+// export const mainContractName = isEnvProd ? Endpoints.MAINNET_CONTRACT_URI : Endpoints.TESTNET_CONTRACT_URI;
+export const mainContractName = Endpoints.TESTNET_CONTRACT_URI;
 export const mainContractMethods = {
   // name of contract you're connecting to
   viewMethods: [
